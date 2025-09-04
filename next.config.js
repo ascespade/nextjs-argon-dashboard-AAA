@@ -9,9 +9,20 @@ module.exports = {
       const nmdFile = path.resolve(__dirname, 'utils/webpack-nmd.js');
       try {
         Object.keys(entries).forEach((key) => {
-          const entry = entries[key];
-          if (Array.isArray(entry) && !entry.includes(nmdFile)) {
-            entry.unshift(nmdFile);
+          let entry = entries[key];
+          // Normalize to array and inject nmdFile at start if not present
+          if (Array.isArray(entry)) {
+            if (!entry.includes(nmdFile)) entries[key] = [nmdFile, ...entry];
+          } else if (typeof entry === 'string') {
+            if (entry !== nmdFile) entries[key] = [nmdFile, entry];
+          } else if (entry && typeof entry === 'object') {
+            // Some entries are objects with import: [] or import: '...'
+            if (Array.isArray(entry.import)) {
+              if (!entry.import.includes(nmdFile)) entry.import = [nmdFile, ...entry.import];
+            } else if (typeof entry.import === 'string') {
+              if (entry.import !== nmdFile) entry.import = [nmdFile, entry.import];
+            }
+            entries[key] = entry;
           }
         });
       } catch (e) {}
