@@ -69,6 +69,24 @@ export default class MyApp extends App {
     } catch (e) {
       console.warn('Error loading Google Maps script', e);
     }
+
+    // Client-side shim for __webpack_require__.nmd to support legacy UMD modules
+    try {
+      if (typeof window !== 'undefined' && typeof __webpack_require__ !== 'undefined') {
+        if (typeof __webpack_require__.nmd !== 'function') {
+          __webpack_require__.nmd = function(module) {
+            try {
+              if (!module) return module;
+              module.paths = module.paths || [];
+              module.children = module.children || [];
+            } catch (e) {}
+            return module;
+          };
+        }
+      }
+    } catch (e) {
+      // Non-critical
+    }
   }
   static async getInitialProps({ Component, router, ctx }) {
     let pageProps = {};
