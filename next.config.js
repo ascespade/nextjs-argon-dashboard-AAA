@@ -6,7 +6,7 @@ module.exports = {
   webpack(config, options) {
     // Handle images imported via require/import
     config.module.rules.push({
-      test: /\.(png|jpe?g|gif|svg)$/i,
+      test: /\.(png|jpe?g|gif|svg|ico|webp|bmp)$/i,
       type: "asset/resource",
       generator: { filename: "static/media/[name].[hash][ext]" },
     });
