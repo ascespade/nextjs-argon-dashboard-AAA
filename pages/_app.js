@@ -47,6 +47,28 @@ export default class MyApp extends App {
 
 `);
     document.insertBefore(comment, document.documentElement);
+
+    // Dynamically load Google Maps only when a valid API key is provided.
+    try {
+      const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+      if (key && key !== 'YOUR_KEY_HERE') {
+        const existing = document.querySelector('script[data-google-maps]');
+        if (!existing) {
+          const s = document.createElement('script');
+          s.src = `https://maps.googleapis.com/maps/api/js?key=${key}`;
+          s.async = true;
+          s.defer = true;
+          s.setAttribute('data-google-maps', 'true');
+          s.onerror = () => console.warn('Failed to load Google Maps script');
+          document.head.appendChild(s);
+        }
+      } else {
+        // Avoid loading placeholder key which causes InvalidKeyMapError
+        console.warn('Google Maps API key not set. To enable maps, set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY.');
+      }
+    } catch (e) {
+      console.warn('Error loading Google Maps script', e);
+    }
   }
   static async getInitialProps({ Component, router, ctx }) {
     let pageProps = {};
