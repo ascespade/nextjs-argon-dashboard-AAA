@@ -1,4 +1,3 @@
-const withPlugins = require("next-compose-plugins");
 const webpack = require("webpack");
 const path = require("path");
 
