@@ -87,6 +87,31 @@ export default class MyApp extends App {
     } catch (e) {
       // Non-critical
     }
+
+    // Global client-side handlers to avoid noisy aborts/crashes in dev tooling
+    try {
+      if (typeof window !== 'undefined') {
+        window.addEventListener('unhandledrejection', (ev) => {
+          // swallow AbortError from overlays or HMR which are non-critical in dev
+          try {
+            const reason = ev && ev.reason;
+            if (reason && reason.name === 'AbortError') {
+              console.warn('Suppressed AbortError from dev overlay/HMR');
+              ev.preventDefault && ev.preventDefault();
+            }
+          } catch (e) {}
+        });
+        window.addEventListener('error', (ev) => {
+          // prevent dev overlay from stopping execution on non-critical errors
+          try {
+            const msg = ev && ev.message;
+            if (msg && msg.indexOf('React Dev Overlay') !== -1) {
+              ev.preventDefault && ev.preventDefault();
+            }
+          } catch (e) {}
+        });
+      }
+    } catch (e) {}
   }
   static async getInitialProps({ Component, router, ctx }) {
     let pageProps = {};
