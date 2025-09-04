@@ -1,0 +1,8 @@
+.editor-wrapper{position:relative}
+.editor-controls{position:absolute;top:6px;right:6px;display:flex;gap:6px;z-index:2}
+.editor-drag-handle{cursor:move}
+.editor-selected{outline:2px dashed rgba(0,0,0,.3)}
+.editor-device-frame{border:1px solid rgba(0,0,0,.1);box-shadow:0 2px 12px rgba(0,0,0,.08);border-radius:6px;overflow:hidden}
+.editor-toolbar{background:var(--editor-toolbar-bg, #172b4d);color:#fff}
+.editor-sidebar{background:#fff;border-left:1px solid rgba(0,0,0,.1)}
+.editor-iframe{width:100%;height:100%;border:0}
