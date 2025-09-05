@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { SidebarProvider, useSidebar } from "contexts/SidebarContext";
 // core components
 import AdminNavbar from "components/Navbars/AdminNavbarPreline.js";
-import AdminFooter from "components/Footers/AdminFooterPreline.js";
+import AdminFooter from "components/Footers/AdminFooterPreline.tsx";
 import Sidebar from "components/Sidebar/SidebarPreline.js";
 
 import routes from "routes.js";

@@ -1,7 +1,8 @@
 const webpack = require("webpack");
 const path = require("path");
 
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   webpack(config, options) {
     // Handle images imported via require/import
     config.module.rules.push({
@@ -20,8 +21,90 @@ module.exports = {
     config.resolve.modules = config.resolve.modules || [];
     config.resolve.modules.push(path.resolve("./"));
 
+    // Optimize bundle splitting
+    if (!options.isServer) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+            priority: 10,
+          },
+          common: {
+            name: 'common',
+            minChunks: 2,
+            chunks: 'all',
+            priority: 5,
+            reuseExistingChunk: true,
+          },
+          react: {
+            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+            name: 'react',
+            chunks: 'all',
+            priority: 20,
+          },
+          charts: {
+            test: /[\\/]node_modules[\\/](chart\.js|react-chartjs-2)[\\/]/,
+            name: 'charts',
+            chunks: 'all',
+            priority: 15,
+          },
+        },
+      };
+    }
+
     return config;
   },
   // Disable Next's static image handling so webpack asset modules handle imports
-  images: { disableStaticImages: true },
+  images: { 
+    disableStaticImages: true,
+    formats: ['image/webp', 'image/avif'],
+  },
+  // Enable experimental features for better performance
+  experimental: {
+    optimizePackageImports: [
+      '@fortawesome/fontawesome-free', 
+      'chart.js', 
+      'reactstrap',
+      'bootstrap',
+      'moment',
+      'axios'
+    ],
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
+  },
+  // Enable compression
+  compress: true,
+  // Enable SWC minification
+  swcMinify: true,
+  // Enable static optimization
+  trailingSlash: false,
+  // Enable source maps in development
+  productionBrowserSourceMaps: false,
+  // Optimize bundle analyzer
+  ...(process.env.ANALYZE === 'true' && {
+    webpack: (config, { isServer }) => {
+      if (!isServer) {
+        const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+        config.plugins.push(
+          new BundleAnalyzerPlugin({
+            analyzerMode: 'static',
+            openAnalyzer: false,
+            reportFilename: './bundle-analysis.html',
+          })
+        );
+      }
+      return config;
+    },
+  }),
 };
+
+module.exports = nextConfig;
