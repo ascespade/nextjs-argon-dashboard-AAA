@@ -145,7 +145,7 @@ export default function Editor() {
       <Toolbar ready={iframeReady} onSave={saveDraft} onPublish={publish} onUndo={undo} onRedo={redo} onZoomIn={zoomIn} onZoomOut={zoomOut} setDevice={setDevice} device={device} onExport={onExport} onImport={onImport} />
       <div className="flex flex-1 overflow-hidden">
         <main className="flex-1 flex items-start justify-center bg-slate-50 p-4" onDrop={handleDropFromLibrary} onDragOver={onDragOver}>
-          <div className={`${iframeWrapperClass} transform origin-top`} style={{ transform: `scale(${scale})` }}>
+          <div className={`${iframeWrapperClass} canvas-frame transform origin-top`} style={{ transform: `scale(${scale})` }}>
             <iframe ref={iframeRef} src="/?edit=1" title="editor-canvas" className="w-full h-[calc(100vh-140px)] bg-white border" onLoad={onIframeLoad} />
           </div>
         </main>
