@@ -1,8 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
-
-const HomeEditorClient = dynamic(() => import('./components/HomeEditorClient'), { ssr: false });
+import HomeEditorWrapper from './components/HomeEditorWrapper';
 
 export default function HomePage() {
   return (
