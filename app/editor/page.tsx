@@ -127,6 +127,19 @@ export default function EditorPage() {
         {/* Canvas area - fixed so it occupies available viewport between sidebars */}
         <div style={{ paddingTop: toolbarHeight }}>
           <div
+            onDragOver={e => e.preventDefault()}
+            onDrop={e => {
+              e.preventDefault();
+              try {
+                const data = e.dataTransfer?.getData('application/json');
+                if (data) {
+                  const payload = JSON.parse(data);
+                  postToIframe({ type: 'ADD_COMPONENT', payload });
+                }
+              } catch (err) {
+                console.error(err);
+              }
+            }}
             style={{
               position: 'fixed',
               zIndex: 20,
