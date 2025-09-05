@@ -54,8 +54,6 @@ export default function RootLayout({
         <SidebarProvider>
           <div className='min-h-screen relative'>
             {children}
-            {/* Only show perf monitor in development */}
-            {process.env.NODE_ENV === 'development' && <PerformanceMonitor />}
           </div>
         </SidebarProvider>
       </body>
