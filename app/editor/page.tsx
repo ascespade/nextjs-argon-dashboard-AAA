@@ -219,9 +219,7 @@ export default function EditorPage() {
                 </div>
               </div>
             ) : (
-              <div className='flex-1 flex items-center justify-center'>
-                <button onClick={() => setRightCollapsed(false)} className='px-2 py-1 border rounded'>Open</button>
-              </div>
+              <div className='flex-1' />
             )}
           </aside>
         </div>
