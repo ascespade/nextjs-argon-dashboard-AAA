@@ -82,17 +82,20 @@ export default function Editor() {
     return { width: 375, height: '100%', border: 0, margin: '0 auto' };
   })();
 
+  const [iframeReady, setIframeReady] = useState(false);
+
   const onIframeLoad = () => {
     try {
       postToEditor(iframeRef.current.contentWindow, Messages.INIT, { mode: 'draft' });
-    } catch (e) {}
+      setIframeReady(true);
+    } catch (e) { console.error(e); }
   };
 
   return (
     <div className="editor-root">
       <Sidebar components={componentsLibrary} onAdd={onAdd} />
       <div className="editor-main">
-        <Toolbar onSave={saveDraft} onPublish={publish} onUndo={undo} onRedo={redo} onExport={exportJSON} onImport={importJSON} onTogglePalette={togglePalette} onToggleFont={toggleFont} />
+        <Toolbar onSave={saveDraft} onPublish={publish} onUndo={undo} onRedo={redo} onExport={exportJSON} onImport={importJSON} onTogglePalette={togglePalette} onToggleFont={toggleFont} ready={iframeReady} />
         <DeviceControls device={device} setDevice={setDevice} />
         <div className="editor-canvas-wrap">
           <div className="editor-device-frame" style={{ flex: device==='desktop'?1:'none' }}>
