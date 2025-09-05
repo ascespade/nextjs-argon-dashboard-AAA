@@ -22,11 +22,9 @@ function AdminNavbar({ brandText }) {
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
         <Container fluid>
-          <Link href="/admin/dashboard">
-            <a className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">
-              {brandText}
-            </a>
-          </Link>
+          <NavbarBrand tag={Link} href="/admin/dashboard" className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">
+            {brandText}
+          </NavbarBrand>
           <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
             <FormGroup className="mb-0">
               <InputGroup className="input-group-alternative">
@@ -58,30 +56,22 @@ function AdminNavbar({ brandText }) {
                 <DropdownItem className="noti-title" header tag="div">
                   <h6 className="text-overflow m-0">Welcome!</h6>
                 </DropdownItem>
-                <Link href="/admin/profile">
-                  <DropdownItem>
+                <DropdownItem tag={Link} href="/admin/profile">
                     <i className="ni ni-single-02" />
                     <span>My profile</span>
                   </DropdownItem>
-                </Link>
-                <Link href="/admin/profile">
-                  <DropdownItem>
+                <DropdownItem tag={Link} href="/admin/profile">
                     <i className="ni ni-settings-gear-65" />
                     <span>Settings</span>
                   </DropdownItem>
-                </Link>
-                <Link href="/admin/profile">
-                  <DropdownItem>
+                <DropdownItem tag={Link} href="/admin/profile">
                     <i className="ni ni-calendar-grid-58" />
                     <span>Activity</span>
                   </DropdownItem>
-                </Link>
-                <Link href="/admin/profile">
-                  <DropdownItem>
+                <DropdownItem tag={Link} href="/admin/profile">
                     <i className="ni ni-support-16" />
                     <span>Support</span>
                   </DropdownItem>
-                </Link>
                 <DropdownItem divider />
                 <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
                   <i className="ni ni-user-run" />
