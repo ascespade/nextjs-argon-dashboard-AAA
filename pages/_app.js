@@ -18,6 +18,7 @@ import "assets/css/custom-home.css";
 
 // Page transition root (reused to avoid createRoot on same container multiple times)
 let pageTransitionRoot = null;
+let pageTransitionTimeout = null;
 
 Router.events.on("routeChangeStart", (url) => {
   console.log(`Loading: ${url}`);
@@ -29,6 +30,14 @@ Router.events.on("routeChangeStart", (url) => {
         pageTransitionRoot = createRoot(container);
       }
       pageTransitionRoot.render(<PageChange path={url} />);
+      // Fallback to clear the transition if routeChangeComplete doesn't fire
+      if (pageTransitionTimeout) clearTimeout(pageTransitionTimeout);
+      pageTransitionTimeout = setTimeout(() => {
+        try { if (pageTransitionRoot) pageTransitionRoot.unmount(); } catch (_e) {}
+        pageTransitionRoot = null;
+        try { container.innerHTML = ''; } catch (_e) {}
+        document.body.classList.remove('body-page-transition');
+      }, 10000);
     } catch (e) {
       // Fallback: ensure container isn't left in a broken state
       try { container.innerHTML = ''; } catch (_e) {}
@@ -38,6 +47,10 @@ Router.events.on("routeChangeStart", (url) => {
 
 const clearPageTransition = () => {
   const container = document.getElementById("page-transition");
+  if (pageTransitionTimeout) {
+    clearTimeout(pageTransitionTimeout);
+    pageTransitionTimeout = null;
+  }
   if (pageTransitionRoot) {
     try {
       pageTransitionRoot.unmount();
