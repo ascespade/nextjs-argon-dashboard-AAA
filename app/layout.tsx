@@ -52,9 +52,7 @@ export default function RootLayout({
       <body className='bg-gray-50 text-gray-900'>
         <div id='page-transition'></div>
         <SidebarProvider>
-          <div className='min-h-screen relative'>
-            {children}
-          </div>
+          <div className='min-h-screen relative'>{children}</div>
         </SidebarProvider>
       </body>
     </html>

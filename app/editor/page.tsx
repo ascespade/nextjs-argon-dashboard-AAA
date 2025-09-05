@@ -52,7 +52,12 @@ export default function EditorPage() {
 
   useEffect(() => {
     // inform iframe about device width so content can adapt
-    const deviceWidth = selectedDevice === 'desktop' ? '100%' : selectedDevice === 'tablet' ? '800px' : '375px';
+    const deviceWidth =
+      selectedDevice === 'desktop'
+        ? '100%'
+        : selectedDevice === 'tablet'
+          ? '800px'
+          : '375px';
     postToIframe({ type: 'SET_DEVICE', width: deviceWidth });
   }, [selectedDevice]);
 
@@ -65,9 +70,15 @@ export default function EditorPage() {
     <div className='min-h-screen relative'>
       <Sidebar />
 
-      <div style={{ marginLeft: leftWidth }} className='flex-1 flex flex-col min-h-screen'>
+      <div
+        style={{ marginLeft: leftWidth }}
+        className='flex-1 flex flex-col min-h-screen'
+      >
         {/* Top toolbar (professional) */}
-        <div style={{ height: toolbarHeight }} className='flex items-center gap-4 px-4 border-b bg-white shadow-sm'>
+        <div
+          style={{ height: toolbarHeight }}
+          className='flex items-center gap-4 px-4 border-b bg-white shadow-sm'
+        >
           <div className='flex items-center gap-3'>
             <button
               onClick={() => postToIframe({ type: 'SAVE_DRAFT' })}
@@ -87,8 +98,18 @@ export default function EditorPage() {
               className='p-2 rounded-md hover:bg-gray-100'
               title='Undo'
             >
-              <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5 text-gray-700' viewBox='0 0 20 20' fill='currentColor' aria-hidden='true'>
-                <path fillRule='evenodd' d='M9.707 4.293a1 1 0 010 1.414L7.414 8H12a4 4 0 110 8 1 1 0 110 2 6 6 0 100-12H7.414l2.293 2.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z' clipRule='evenodd' />
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='h-5 w-5 text-gray-700'
+                viewBox='0 0 20 20'
+                fill='currentColor'
+                aria-hidden='true'
+              >
+                <path
+                  fillRule='evenodd'
+                  d='M9.707 4.293a1 1 0 010 1.414L7.414 8H12a4 4 0 110 8 1 1 0 110 2 6 6 0 100-12H7.414l2.293 2.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z'
+                  clipRule='evenodd'
+                />
               </svg>
             </button>
             <button
@@ -96,8 +117,18 @@ export default function EditorPage() {
               className='p-2 rounded-md hover:bg-gray-100'
               title='Redo'
             >
-              <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5 text-gray-700' viewBox='0 0 20 20' fill='currentColor' aria-hidden='true'>
-                <path fillRule='evenodd' d='M10.293 15.707a1 1 0 010-1.414L12.586 12H8a4 4 0 110-8 1 1 0 110-2 6 6 0 100 12h4.586l-2.293-2.293a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z' clipRule='evenodd' />
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='h-5 w-5 text-gray-700'
+                viewBox='0 0 20 20'
+                fill='currentColor'
+                aria-hidden='true'
+              >
+                <path
+                  fillRule='evenodd'
+                  d='M10.293 15.707a1 1 0 010-1.414L12.586 12H8a4 4 0 110-8 1 1 0 110-2 6 6 0 100 12h4.586l-2.293-2.293a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z'
+                  clipRule='evenodd'
+                />
               </svg>
             </button>
           </div>
@@ -110,7 +141,9 @@ export default function EditorPage() {
             >
               -
             </button>
-            <div className='px-3 text-sm text-gray-600'>{Math.round(zoom * 100)}%</div>
+            <div className='px-3 text-sm text-gray-600'>
+              {Math.round(zoom * 100)}%
+            </div>
             <button
               onClick={() => setZoom(z => Math.min(2, +(z + 0.1).toFixed(2)))}
               className='px-2 py-1 border rounded'
@@ -160,16 +193,30 @@ export default function EditorPage() {
               }
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', width: '100%', height: `calc(100vh - ${toolbarHeight}px)`, overflow: 'auto' }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                width: '100%',
+                height: `calc(100vh - ${toolbarHeight}px)`,
+                overflow: 'auto',
+              }}
+            >
               <iframe
                 ref={iframeRef}
                 src={`/?edit=1`}
                 className='border rounded shadow'
                 style={{
-                  width: selectedDevice === 'desktop' ? '100%' : selectedDevice === 'tablet' ? '800px' : '375px',
+                  width:
+                    selectedDevice === 'desktop'
+                      ? '100%'
+                      : selectedDevice === 'tablet'
+                        ? '800px'
+                        : '375px',
                   height: `calc(100vh - ${toolbarHeight + 32}px)`,
                   border: '1px solid rgba(0,0,0,0.08)',
-                  background: 'white'
+                  background: 'white',
                 }}
                 title='Editor Canvas'
               />
@@ -186,7 +233,7 @@ export default function EditorPage() {
               padding: 12,
               overflow: 'auto',
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
             }}
           >
             <div className='flex items-center justify-between mb-3'>
@@ -207,7 +254,10 @@ export default function EditorPage() {
                 <div
                   draggable
                   onDragStart={e => {
-                    e.dataTransfer?.setData('application/json', JSON.stringify({ type: 'hero_banner' }));
+                    e.dataTransfer?.setData(
+                      'application/json',
+                      JSON.stringify({ type: 'hero_banner' })
+                    );
                   }}
                   className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
                 >
@@ -216,7 +266,10 @@ export default function EditorPage() {
                 <div
                   draggable
                   onDragStart={e => {
-                    e.dataTransfer?.setData('application/json', JSON.stringify({ type: 'feature_card' }));
+                    e.dataTransfer?.setData(
+                      'application/json',
+                      JSON.stringify({ type: 'feature_card' })
+                    );
                   }}
                   className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
                 >
@@ -225,7 +278,10 @@ export default function EditorPage() {
                 <div
                   draggable
                   onDragStart={e => {
-                    e.dataTransfer?.setData('application/json', JSON.stringify({ type: 'stats_counter' }));
+                    e.dataTransfer?.setData(
+                      'application/json',
+                      JSON.stringify({ type: 'stats_counter' })
+                    );
                   }}
                   className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
                 >
@@ -234,7 +290,10 @@ export default function EditorPage() {
                 <div
                   draggable
                   onDragStart={e => {
-                    e.dataTransfer?.setData('application/json', JSON.stringify({ type: 'testimonial' }));
+                    e.dataTransfer?.setData(
+                      'application/json',
+                      JSON.stringify({ type: 'testimonial' })
+                    );
                   }}
                   className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
                 >

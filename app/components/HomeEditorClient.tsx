@@ -63,13 +63,22 @@ export default function HomeEditorClient({
               });
               if (!res.ok) {
                 const text = await res.text().catch(() => '');
-                window.parent.postMessage({ type: 'SAVE_ERROR', error: `Save failed: ${res.status} ${res.statusText} ${text}` }, '*');
+                window.parent.postMessage(
+                  {
+                    type: 'SAVE_ERROR',
+                    error: `Save failed: ${res.status} ${res.statusText} ${text}`,
+                  },
+                  '*'
+                );
                 return;
               }
               await res.json().catch(() => null);
               window.parent.postMessage({ type: 'SAVE_ACK' }, '*');
             } catch (err: any) {
-              window.parent.postMessage({ type: 'SAVE_ERROR', error: err?.message || String(err) }, '*');
+              window.parent.postMessage(
+                { type: 'SAVE_ERROR', error: err?.message || String(err) },
+                '*'
+              );
             }
           })();
           break;
@@ -77,15 +86,28 @@ export default function HomeEditorClient({
           (async () => {
             try {
               const url = `${location.origin}/api/pages/home/publish`;
-              const res = await fetch(url, { method: 'POST', credentials: 'same-origin', mode: 'cors' });
+              const res = await fetch(url, {
+                method: 'POST',
+                credentials: 'same-origin',
+                mode: 'cors',
+              });
               if (!res.ok) {
                 const text = await res.text().catch(() => '');
-                window.parent.postMessage({ type: 'PUBLISH_ERROR', error: `Publish failed: ${res.status} ${res.statusText} ${text}` }, '*');
+                window.parent.postMessage(
+                  {
+                    type: 'PUBLISH_ERROR',
+                    error: `Publish failed: ${res.status} ${res.statusText} ${text}`,
+                  },
+                  '*'
+                );
                 return;
               }
               window.parent.postMessage({ type: 'PUBLISH_ACK' }, '*');
             } catch (err: any) {
-              window.parent.postMessage({ type: 'PUBLISH_ERROR', error: err?.message || String(err) }, '*');
+              window.parent.postMessage(
+                { type: 'PUBLISH_ERROR', error: err?.message || String(err) },
+                '*'
+              );
             }
           })();
           break;
