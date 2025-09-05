@@ -29,6 +29,11 @@ export default function Index() {
     const handler = (ev) => {
       if (!isEditorMessage(ev)) return;
       const { type, payload } = ev.data;
+      if (type === Messages.INIT) {
+        // editor requests initial page state
+        postToEditor(window.parent, Messages.SYNC_STATE, { page: pageRef.current });
+        return;
+      }
       if (type === Messages.UPDATE_FIELD) {
         const { id, field, value } = payload;
         setPage(prev => {
