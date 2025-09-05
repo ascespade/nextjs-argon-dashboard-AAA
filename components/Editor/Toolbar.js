@@ -10,7 +10,7 @@ export default function Toolbar({ onSave, onPublish, onUndo, onRedo, onExport, o
       <button className="btn btn-sm btn-outline-light mr-2" onClick={onExport}>Export JSON</button>
       <label className="btn btn-sm btn-outline-light mr-2 mb-0">
         Import JSON
-        <input type="file" accept="application/json" style={{ display: 'none' }} onChange={onImport} />
+        <input type="file" accept="application/json" className="file-input-hidden" onChange={onImport} />
       </label>
       <button className="btn btn-sm btn-outline-light mr-2" onClick={onTogglePalette}>Palette</button>
       <button className="btn btn-sm btn-outline-light mr-2" onClick={onToggleFont}>Fonts</button>
