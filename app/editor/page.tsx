@@ -54,7 +54,16 @@ export default function EditorPage() {
 
         <div className="flex-1 relative bg-gray-50">
           <div className="absolute inset-0 flex">
-            <div className="flex-1 flex justify-center items-start p-6">
+            <div className="flex-1 flex justify-center items-start p-6" onDragOver={e => e.preventDefault()} onDrop={e => {
+                e.preventDefault();
+                try {
+                  const data = e.dataTransfer?.getData('application/json');
+                  if (data) {
+                    const payload = JSON.parse(data);
+                    postToIframe({ type: 'ADD_COMPONENT', payload });
+                  }
+                } catch (err) { console.error(err); }
+              }}>
               <iframe
                 ref={iframeRef}
                 src={`/?edit=1`}
