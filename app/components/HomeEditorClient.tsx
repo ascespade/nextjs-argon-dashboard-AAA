@@ -11,6 +11,31 @@ export default function HomeEditorClient({
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    function applyZoom(z: number) {
+      try {
+        const el = document.documentElement || document.body;
+        el.style.transformOrigin = 'top left';
+        el.style.transform = `scale(${z})`;
+        // compensate width so scaled content stays within viewport
+        (el as HTMLElement).style.width = `${100 / z}%`;
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    function setDeviceWidth(width: string) {
+      try {
+        const el = document.documentElement || document.body;
+        if (width === '100%') {
+          (el as HTMLElement).style.width = '100%';
+        } else {
+          (el as HTMLElement).style.width = width;
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+
     function onMessage(e: MessageEvent) {
       const { data } = e;
       if (!data || !data.type) return;
@@ -40,6 +65,12 @@ export default function HomeEditorClient({
           break;
         case 'ADD_COMPONENT':
           setComponents(c => [...c, data.payload]);
+          break;
+        case 'SET_ZOOM':
+          if (typeof data.zoom === 'number') applyZoom(data.zoom);
+          break;
+        case 'SET_DEVICE':
+          if (data.width) setDeviceWidth(data.width);
           break;
         default:
           break;
