@@ -172,31 +172,33 @@ const StatsSection = () => {
 };
 
 // CTA Section Component
-const CTASection = () => (
-  <section className='cta-section bg-primary text-white py-5'>
-    <Container>
-      <Row className='text-center'>
-        <Col>
-          <h2 className='display-5 fw-bold mb-3'>Ready to Get Started?</h2>
-          <p className='lead mb-4'>
-            Join thousands of users who trust our dashboard for their business
-            needs.
-          </p>
-          <Button
-            color='light'
-            size='lg'
-            className='px-5 py-3'
-            tag={Link}
-            href='/auth/register'
-          >
-            <i className='fas fa-user-plus me-2'></i>
-            Create Account
-          </Button>
-        </Col>
-      </Row>
-    </Container>
-  </section>
-);
+const CTASection = () => {
+  const router = useRouter();
+  return (
+    <section className='cta-section bg-primary text-white py-5'>
+      <Container>
+        <Row className='text-center'>
+          <Col>
+            <h2 className='display-5 fw-bold mb-3'>Ready to Get Started?</h2>
+            <p className='lead mb-4'>
+              Join thousands of users who trust our dashboard for their business
+              needs.
+            </p>
+            <Button
+              color='light'
+              size='lg'
+              className='px-5 py-3'
+              onClick={() => router.push('/auth/register')}
+            >
+              <i className='fas fa-user-plus me-2'></i>
+              Create Account
+            </Button>
+          </Col>
+        </Row>
+      </Container>
+    </section>
+  );
+};
 
 // Footer Component
 const Footer = () => (
