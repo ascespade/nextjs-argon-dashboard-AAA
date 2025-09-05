@@ -2,8 +2,8 @@ import React from 'react';
 
 export default function Sidebar({ components, onAdd }) {
   return (
-    <div className="p-3 editor-sidebar" style={{ width: 260 }}>
-      <h6>Components</h6>
+    <aside className="editor-sidebar-panel editor-sidebar p-3">
+      <h6 className="editor-sidebar-title">Components</h6>
       <div>
         {components.map(c => (
           <div key={c.id} className="mb-2">
@@ -11,6 +11,6 @@ export default function Sidebar({ components, onAdd }) {
           </div>
         ))}
       </div>
-    </div>
+    </aside>
   );
 }
