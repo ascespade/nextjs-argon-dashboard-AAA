@@ -1,0 +1,19 @@
+{
+    "files.exclude":  {
+                          "**/.hg":  true,
+                          "**/build":  true,
+                          "**/dist":  true,
+                          "**/CVS":  true,
+                          "**/.git":  true,
+                          "**/node_modules":  true,
+                          "**/.DS_Store":  true,
+                          "**/bower_components":  true,
+                          "**/.svn":  true
+                      },
+    "search.exclude":  {
+                           "**/node_modules":  true,
+                           "**/build":  true,
+                           "**/bower_components":  true,
+                           "**/dist":  true
+                       }
+}

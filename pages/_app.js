@@ -6,9 +6,8 @@ import Router from "next/router";
 
 import PageChange from "components/PageChange/PageChange.js";
 
-import "assets/plugins/nucleo/css/nucleo.css";
+// Preline CSS will be loaded via CDN in the Head component
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import "assets/scss/nextjs-argon-dashboard.scss";
 
 Router.events.on("routeChangeStart", (url) => {
   console.log(`Loading: ${url}`);
@@ -29,21 +28,26 @@ Router.events.on("routeChangeError", () => {
 
 export default class MyApp extends App {
   componentDidMount() {
+    // Load Preline from CDN
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.js';
+    script.onload = () => {
+      if (window.HSStaticMethods) {
+        window.HSStaticMethods.autoInit();
+      }
+    };
+    document.head.appendChild(script);
+
     let comment = document.createComment(`
 
 =========================================================
-* * NextJS Argon Dashboard v1.1.0 based on Argon Dashboard React v1.1.0
+* * NextJS Dashboard with Preline UI
 =========================================================
 
-* Product Page: https://www.creative-tim.com/product/nextjs-argon-dashboard
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/nextjs-argon-dashboard/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
+* Converted from Argon Dashboard to use Preline UI components
+* Modern, responsive, and beautiful UI components
 
 =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 `);
     document.insertBefore(comment, document.documentElement);
@@ -74,12 +78,12 @@ export default class MyApp extends App {
     try {
       if (typeof window !== 'undefined' && typeof __webpack_require__ !== 'undefined') {
         if (typeof __webpack_require__.nmd !== 'function') {
-          __webpack_require__.nmd = function(module) {
+          __webpack_require__.nmd = function (module) {
             try {
               if (!module) return module;
               module.paths = module.paths || [];
               module.children = module.children || [];
-            } catch (e) {}
+            } catch (e) { }
             return module;
           };
         }
@@ -99,7 +103,7 @@ export default class MyApp extends App {
               console.warn('Suppressed AbortError from dev overlay/HMR');
               ev.preventDefault && ev.preventDefault();
             }
-          } catch (e) {}
+          } catch (e) { }
         });
         window.addEventListener('error', (ev) => {
           // prevent dev overlay from stopping execution on non-critical errors
@@ -108,10 +112,10 @@ export default class MyApp extends App {
             if (msg && msg.indexOf('React Dev Overlay') !== -1) {
               ev.preventDefault && ev.preventDefault();
             }
-          } catch (e) {}
+          } catch (e) { }
         });
       }
-    } catch (e) {}
+    } catch (e) { }
   }
   static async getInitialProps({ Component, router, ctx }) {
     let pageProps = {};
@@ -134,7 +138,8 @@ export default class MyApp extends App {
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
           />
-          <title>NextJS Argon Dashboard by Creative Tim</title>
+          <title>NextJS Enterprise Dashboard with Preline UI</title>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.css" />
         </Head>
         <Layout>
           <Component {...pageProps} />
