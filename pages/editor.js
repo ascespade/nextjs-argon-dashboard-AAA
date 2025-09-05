@@ -7,10 +7,10 @@ function NewToolbar({ ready, onSave, onPublish, onUndo, onRedo, onExport, onImpo
   return (
     <header className="new-editor-toolbar">
       <div className="toolbar-left">
-        <button className="btn btn-sm btn-light" onClick={onSave} disabled={!ready}>Save</button>
-        <button className="btn btn-sm btn-primary" onClick={onPublish} disabled={!ready}>Publish</button>
-        <button className="btn btn-sm btn-outline-secondary" onClick={onUndo} disabled={!ready}>Undo</button>
-        <button className="btn btn-sm btn-outline-secondary" onClick={onRedo} disabled={!ready}>Redo</button>
+        <button className="btn btn-sm btn-light" onClick={onSave} disabled={!ready}><i className="ni ni-cloud-upload-96 mr-2" />Save</button>
+        <button className="btn btn-sm btn-primary" onClick={onPublish} disabled={!ready}><i className="ni ni-paper-diploma mr-2" />Publish</button>
+        <button className="btn btn-sm btn-outline-secondary" onClick={onUndo} disabled={!ready}><i className="ni ni-curved-next mr-2" />Undo</button>
+        <button className="btn btn-sm btn-outline-secondary" onClick={onRedo} disabled={!ready}><i className="ni ni-fat-add mr-2" />Redo</button>
       </div>
       <div className="toolbar-center">
         <div className="device-controls">
