@@ -74,9 +74,20 @@ export default function HomeEditorClient({
           })();
           break;
         case 'PUBLISH':
-          fetch('/api/pages/home/publish', { method: 'POST' }).then(() =>
-            window.parent.postMessage({ type: 'PUBLISH_ACK' }, '*')
-          );
+          (async () => {
+            try {
+              const url = `${location.origin}/api/pages/home/publish`;
+              const res = await fetch(url, { method: 'POST', credentials: 'same-origin', mode: 'cors' });
+              if (!res.ok) {
+                const text = await res.text().catch(() => '');
+                window.parent.postMessage({ type: 'PUBLISH_ERROR', error: `Publish failed: ${res.status} ${res.statusText} ${text}` }, '*');
+                return;
+              }
+              window.parent.postMessage({ type: 'PUBLISH_ACK' }, '*');
+            } catch (err: any) {
+              window.parent.postMessage({ type: 'PUBLISH_ERROR', error: err?.message || String(err) }, '*');
+            }
+          })();
           break;
         case 'ADD_COMPONENT':
           setComponents(c => [...c, data.payload]);
