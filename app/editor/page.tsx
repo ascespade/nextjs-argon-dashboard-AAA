@@ -50,77 +50,71 @@ export default function EditorPage() {
       <Sidebar />
 
       <div style={{ marginLeft: leftWidth }} className='flex-1 flex flex-col min-h-screen'>
-        {/* Top toolbar (restored to non-fixed flow) */}
-        <div style={{ height: toolbarHeight }} className='flex items-center gap-2 p-3 border-b bg-white'>
-          <div>
+        {/* Top toolbar (professional) */}
+        <div style={{ height: toolbarHeight }} className='flex items-center gap-4 px-4 border-b bg-white shadow-sm'>
+          <div className='flex items-center gap-3'>
             <button
               onClick={() => postToIframe({ type: 'SAVE_DRAFT' })}
-              className='px-3 py-2 bg-indigo-600 text-white rounded'
+              className='px-4 py-2 bg-indigo-600 text-white rounded-md font-medium shadow'
             >
               Save Draft
             </button>
             <button
               onClick={() => postToIframe({ type: 'PUBLISH' })}
-              className='px-3 py-2 bg-green-600 text-white rounded ml-2'
+              className='px-4 py-2 bg-green-600 text-white rounded-md font-medium shadow'
             >
               Publish
             </button>
+            <div className='ml-2 h-8 w-px bg-gray-200' />
             <button
               onClick={() => postToIframe({ type: 'UNDO' })}
-              className='px-3 py-2 bg-gray-100 rounded ml-2'
+              className='p-2 rounded-md hover:bg-gray-100'
+              title='Undo'
             >
-              Undo
+              <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5 text-gray-700' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
+              </svg>
             </button>
             <button
               onClick={() => postToIframe({ type: 'REDO' })}
-              className='px-3 py-2 bg-gray-100 rounded ml-2'
+              className='p-2 rounded-md hover:bg-gray-100'
+              title='Redo'
             >
-              Redo
+              <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5 text-gray-700' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
+              </svg>
             </button>
           </div>
 
-          <div className='ml-6 flex items-center gap-2'>
+          <div className='flex items-center gap-2 ml-6'>
             <button
               onClick={() => setZoom(z => Math.max(0.5, +(z - 0.1).toFixed(2)))}
               className='px-2 py-1 border rounded'
+              aria-label='Zoom out'
             >
               -
             </button>
-            <div className='px-3'>{Math.round(zoom * 100)}%</div>
+            <div className='px-3 text-sm text-gray-600'>{Math.round(zoom * 100)}%</div>
             <button
               onClick={() => setZoom(z => Math.min(2, +(z + 0.1).toFixed(2)))}
               className='px-2 py-1 border rounded'
+              aria-label='Zoom in'
             >
               +
             </button>
           </div>
 
-          <div className='ml-auto flex items-center gap-2'>
+          <div className='ml-auto flex items-center gap-3'>
             <select
               value={selectedDevice}
               onChange={e => setSelectedDevice(e.target.value)}
               className='border px-2 py-1 rounded'
+              aria-label='Device preview'
             >
               <option value='desktop'>Desktop</option>
               <option value='tablet'>Tablet</option>
               <option value='mobile'>Mobile</option>
             </select>
-
-            <button
-              onClick={() => setRightCollapsed(v => !v)}
-              className='px-3 py-2 border rounded ml-2'
-              title={rightCollapsed ? 'Open components' : 'Collapse components'}
-            >
-              {rightCollapsed ? 'Open Components' : 'Components'}
-            </button>
-
-            <button
-              onClick={() => setCollapsed(v => !v)}
-              className='px-3 py-2 border rounded ml-2'
-              title={leftCollapsed ? 'Open sidebar' : 'Collapse sidebar'}
-            >
-              {leftCollapsed ? 'Open Sidebar' : 'Sidebar'}
-            </button>
           </div>
         </div>
 
