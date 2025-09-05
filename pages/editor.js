@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Admin from 'layouts/Admin.js';
 import { Messages, isEditorMessage, postToEditor } from '../lib/editor-protocol';
 
-function Toolbar({ ready, onSave, onPublish, onUndo, onRedo, onZoomIn, onZoomOut, setDevice, device, onExport, onImport }) {
+function Toolbar({ ready, onSave, onPublish, onUndo, onRedo, onZoomIn, onZoomOut, setDevice, device, onExport, onImport, editMode, toggleEditMode }) {
   return (
     <div className="sticky top-[70px] z-50 bg-slate-800 text-white border-b border-slate-700 px-4 py-2 flex items-center gap-3">
       <div className="flex items-center gap-2">
@@ -20,6 +20,7 @@ function Toolbar({ ready, onSave, onPublish, onUndo, onRedo, onZoomIn, onZoomOut
         <button onClick={onRedo} className="flex items-center gap-2 bg-transparent hover:bg-slate-700 px-2 py-1 rounded text-sm">
           <i className="ni ni-fat-add" />
         </button>
+        <button onClick={toggleEditMode} className={`ml-2 px-3 py-1 rounded ${editMode ? 'bg-rose-600':'bg-slate-700'}`} title="Toggle edit mode">{editMode ? 'Exit Edit' : 'Enter Edit'}</button>
       </div>
 
       <div className="flex-1 flex items-center justify-center gap-3">
