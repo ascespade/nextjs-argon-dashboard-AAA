@@ -1,4 +1,4 @@
-import { saveDraft } from '../../../../../lib/db';
+import { saveDraft } from '../../../../lib/db';
 
 export default async function handler(req, res) {
   try {
