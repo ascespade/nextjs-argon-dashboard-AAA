@@ -2121,6 +2121,54 @@
             }
           ]
         }
+      },
+      {
+        "ts": 1757037259062,
+        "draft": {
+          "components": [
+            {
+              "id": "hero-1",
+              "type": "hero_banner",
+              "props": {
+                "title": "Welcome to Argon Editable",
+                "subtitle": "Build pages visually with Argon components.",
+                "buttonText": "Get Started",
+                "buttonHref": "/dashboard",
+                "image": ""
+              },
+              "layout": {
+                "fullWidth": true
+              },
+              "style": {}
+            },
+            {
+              "id": "text-1",
+              "type": "text_block",
+              "props": {
+                "text": "This homepage content is loaded from the local DB. Switch to edit mode to modify it inline."
+              },
+              "layout": {},
+              "style": {}
+            },
+            {
+              "id": "lib-hero",
+              "type": "hero_banner",
+              "props": {
+                "title": "Hero title",
+                "subtitle": "Subtitle",
+                "buttonText": "Action",
+                "buttonHref": "#"
+              }
+            },
+            {
+              "id": "lib-testimonials",
+              "type": "testimonials",
+              "props": {
+                "items": []
+              }
+            }
+          ]
+        }
       }
     ]
   }
