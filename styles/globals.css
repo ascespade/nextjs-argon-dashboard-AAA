@@ -39,7 +39,9 @@
 .new-editor-sidebar .component-btn{display:block;width:100%;text-align:left;margin-bottom:8px}
 .new-editor-canvas{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:12px;overflow:auto}
 .new-editor-rightpanel{width:320px;background:#f8f9fb;border-left:1px solid rgba(0,0,0,.04);padding:12px}
-.canvas-frame{width:100%;max-width:1200px;display:flex;justify-content:center}
+.canvas-frame{width:100%;max-width:none;display:flex;justify-content:flex-start}
+/* keep a centered max width option if needed */
+.canvas-frame.centered{justify-content:center;max-width:1200px}
 
 /* when sidebar hidden, allow canvas to expand */
 .hide-sidebar .canvas-frame{max-width:100% !important}
