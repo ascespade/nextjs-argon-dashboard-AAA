@@ -73,7 +73,7 @@ const clearPageTransition = () => {
 };
 
 Router.events.on('routeChangeComplete', clearPageTransition);
-Router.events.on('routeChangeError', clearPageTransition);
+Router.events.on('routeChangeError', (err, url) => { console.error('Route change error to', url, err); clearPageTransition(); });
 
 // Create a client
 const queryClient = new QueryClient({
