@@ -93,7 +93,7 @@ export default function Editor() {
 
   return (
     <div className="editor-root">
-      <Sidebar components={componentsLibrary} onAdd={onAdd} />
+      <Sidebar components={componentsLibrary} onAdd={onAdd} ready={iframeReady} />
       <div className="editor-main">
         <Toolbar onSave={saveDraft} onPublish={publish} onUndo={undo} onRedo={redo} onExport={exportJSON} onImport={importJSON} onTogglePalette={togglePalette} onToggleFont={toggleFont} ready={iframeReady} />
         <DeviceControls device={device} setDevice={setDevice} />
