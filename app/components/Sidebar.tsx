@@ -96,11 +96,17 @@ const Sidebar: React.FC = () => {
               className={`nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 ${collapsed ? 'justify-center' : ''}`}
               title='Pages'
             >
-              <svg className='w-5 h-5 text-green-500' viewBox='0 0 24 24' fill='none'>
+              <svg
+                className='w-5 h-5 text-green-500'
+                viewBox='0 0 24 24'
+                fill='none'
+              >
                 <path d='M3 7h18v13H3z' fill='currentColor' />
                 <path d='M7 3h10v4H7z' fill='currentColor' />
               </svg>
-              <span className={`nav-label ${collapsed ? 'sr-only' : 'block'}`}>Pages</span>
+              <span className={`nav-label ${collapsed ? 'sr-only' : 'block'}`}>
+                Pages
+              </span>
             </Link>
           </li>
 
@@ -110,11 +116,17 @@ const Sidebar: React.FC = () => {
               className={`nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 ${collapsed ? 'justify-center' : ''}`}
               title='Editor'
             >
-              <svg className='w-5 h-5 text-indigo-500' viewBox='0 0 24 24' fill='none'>
+              <svg
+                className='w-5 h-5 text-indigo-500'
+                viewBox='0 0 24 24'
+                fill='none'
+              >
                 <path d='M3 4h18v4H3z' fill='currentColor' />
                 <path d='M3 10h18v10H3z' fill='currentColor' />
               </svg>
-              <span className={`nav-label ${collapsed ? 'sr-only' : 'block'}`}>Editor</span>
+              <span className={`nav-label ${collapsed ? 'sr-only' : 'block'}`}>
+                Editor
+              </span>
             </Link>
           </li>
 
@@ -124,10 +136,16 @@ const Sidebar: React.FC = () => {
               className={`nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 ${collapsed ? 'justify-center' : ''}`}
               title='Settings'
             >
-              <svg className='w-5 h-5 text-gray-600' viewBox='0 0 24 24' fill='none'>
+              <svg
+                className='w-5 h-5 text-gray-600'
+                viewBox='0 0 24 24'
+                fill='none'
+              >
                 <path d='M12 8a4 4 0 100 8 4 4 0 000-8z' fill='currentColor' />
               </svg>
-              <span className={`nav-label ${collapsed ? 'sr-only' : 'block'}`}>Settings</span>
+              <span className={`nav-label ${collapsed ? 'sr-only' : 'block'}`}>
+                Settings
+              </span>
             </Link>
           </li>
 
@@ -137,15 +155,38 @@ const Sidebar: React.FC = () => {
               className={`nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 ${collapsed ? 'justify-center' : ''}`}
               title='Logout'
             >
-              <svg className='w-5 h-5 text-red-500' viewBox='0 0 24 24' fill='none'>
-                <path d='M16 17l5-5-5-5' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' />
-                <path d='M21 12H9' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' />
-                <path d='M12 19H6a2 2 0 01-2-2V7a2 2 0 012-2h6' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' />
+              <svg
+                className='w-5 h-5 text-red-500'
+                viewBox='0 0 24 24'
+                fill='none'
+              >
+                <path
+                  d='M16 17l5-5-5-5'
+                  stroke='currentColor'
+                  strokeWidth='2'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                />
+                <path
+                  d='M21 12H9'
+                  stroke='currentColor'
+                  strokeWidth='2'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                />
+                <path
+                  d='M12 19H6a2 2 0 01-2-2V7a2 2 0 012-2h6'
+                  stroke='currentColor'
+                  strokeWidth='2'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                />
               </svg>
-              <span className={`nav-label ${collapsed ? 'sr-only' : 'block'}`}>Logout</span>
+              <span className={`nav-label ${collapsed ? 'sr-only' : 'block'}`}>
+                Logout
+              </span>
             </a>
           </li>
-
         </ul>
       </nav>
 

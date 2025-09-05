@@ -29,7 +29,16 @@ export function ensureDemoPage() {
     slug: 'home',
     title_json: { en: 'NextJS Enterprise Dashboard', ar: 'لوحة التحكم' },
     components_json: [
-      { type: 'hero_banner', props: { title: 'NextJS Enterprise Dashboard', subtitle: 'A modern, responsive, and feature-rich dashboard built with Next.js and Tailwind + Preline', ctaText: 'View Dashboard', ctaHref: '/admin/dashboard' } },
+      {
+        type: 'hero_banner',
+        props: {
+          title: 'NextJS Enterprise Dashboard',
+          subtitle:
+            'A modern, responsive, and feature-rich dashboard built with Next.js and Tailwind + Preline',
+          ctaText: 'View Dashboard',
+          ctaHref: '/admin/dashboard',
+        },
+      },
       { type: 'features', props: {} },
       { type: 'stats', props: {} },
     ],

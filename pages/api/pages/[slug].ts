@@ -1,7 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { readPage, writePage } from '../../../../lib/supabase';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { slug } = req.query as { slug: string };
 
   if (req.method === 'GET') {

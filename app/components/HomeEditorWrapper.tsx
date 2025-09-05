@@ -2,9 +2,15 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 
-const HomeEditorClient = dynamic(() => import('./HomeEditorClient'), { ssr: false });
+const HomeEditorClient = dynamic(() => import('./HomeEditorClient'), {
+  ssr: false,
+});
 
-export default function HomeEditorWrapper({ initialComponents }: { initialComponents?: any[] }) {
+export default function HomeEditorWrapper({
+  initialComponents,
+}: {
+  initialComponents?: any[];
+}) {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
