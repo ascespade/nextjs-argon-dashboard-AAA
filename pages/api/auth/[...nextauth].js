@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import EmailProvider from 'next-auth/providers/email';
-import { findUserByCredentials } from '../../../../lib/db';
+import { findUserByCredentials } from '../../../lib/db';
 
 const providers = [
   CredentialsProvider({
