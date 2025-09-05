@@ -36,14 +36,28 @@ export default function Editor() {
   const redo = () => postToEditor(iframeRef.current.contentWindow, Messages.REDO, {});
   const onAdd = (c) => postToEditor(iframeRef.current.contentWindow, Messages.ADD_COMPONENT, { component: c });
 
+  const iframeStyle = (() => {
+    if (device === 'desktop') return { width: '100%', height: '100%', border: 0 };
+    if (device === 'tablet') return { width: 960, height: '100%', border: 0, margin: '0 auto' };
+    return { width: 375, height: '100%', border: 0, margin: '0 auto' };
+  })();
+
+  const onIframeLoad = () => {
+    try {
+      postToEditor(iframeRef.current.contentWindow, Messages.INIT, { mode: 'draft' });
+    } catch (e) {}
+  };
+
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       <Sidebar components={componentsLibrary} onAdd={onAdd} />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Toolbar onSave={saveDraft} onPublish={publish} onUndo={undo} onRedo={redo} />
         <DeviceControls device={device} setDevice={setDevice} />
-        <div style={{ flex: 1, display: 'flex', position: 'relative' }}>
-          <iframe ref={iframeRef} className="editor-iframe" src="/?edit=1&mode=draft" />
+        <div style={{ flex: 1, display: 'flex', position: 'relative', justifyContent: 'center', alignItems: 'center' }}>
+          <div className="editor-device-frame" style={{ flex: device==='desktop'?1:'none', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <iframe ref={iframeRef} className="editor-iframe" src="/?edit=1&mode=draft" style={iframeStyle} onLoad={onIframeLoad} />
+          </div>
           <PreviewLens />
         </div>
       </div>
