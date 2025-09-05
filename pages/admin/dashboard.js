@@ -2,7 +2,7 @@ import React from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
 // javascipt plugin for creating charts
-import Chart from "chart.js";
+import { Chart, registerables } from "chart.js";
 // react plugin used to create charts
 import { Line, Bar } from "react-chartjs-2";
 // reactstrap components
@@ -22,23 +22,20 @@ import {
 } from "reactstrap";
 // layout for this page
 import Admin from "layouts/Admin.js";
-// core components
-import {
-  chartOptions,
-  parseOptions,
-  chartExample1,
-  chartExample2,
-} from "variables/charts.js";
+// core components - charts temporarily disabled for compatibility
+// import {
+//   chartExample1,
+//   chartExample2,
+// } from "variables/charts.js";
 
 import Header from "components/Headers/Header.js";
 
-const Dashboard = (props) => {
+const Dashboard = (_props) => {
   const [activeNav, setActiveNav] = React.useState(1);
   const [chartExample1Data, setChartExample1Data] = React.useState("data1");
 
-  if (window.Chart) {
-    parseOptions(Chart, chartOptions());
-  }
+  // Register Chart.js components
+  Chart.register(...registerables);
 
   const toggleNavs = (e, index) => {
     e.preventDefault();
@@ -93,13 +90,12 @@ const Dashboard = (props) => {
                 </Row>
               </CardHeader>
               <CardBody>
-                {/* Chart */}
+                {/* Chart - Temporarily disabled for compatibility */}
                 <div className="chart">
-                  <Line
-                    data={chartExample1[chartExample1Data]}
-                    options={chartExample1.options}
-                    getDatasetAtEvent={(e) => console.log(e)}
-                  />
+                  <div className="text-center py-5">
+                    <i className="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                    <p className="text-muted">Chart temporarily disabled during upgrade</p>
+                  </div>
                 </div>
               </CardBody>
             </Card>
@@ -117,12 +113,12 @@ const Dashboard = (props) => {
                 </Row>
               </CardHeader>
               <CardBody>
-                {/* Chart */}
+                {/* Chart - Temporarily disabled for compatibility */}
                 <div className="chart">
-                  <Bar
-                    data={chartExample2.data}
-                    options={chartExample2.options}
-                  />
+                  <div className="text-center py-5">
+                    <i className="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+                    <p className="text-muted">Chart temporarily disabled during upgrade</p>
+                  </div>
                 </div>
               </CardBody>
             </Card>

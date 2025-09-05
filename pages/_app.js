@@ -1,10 +1,15 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import App from "next/app";
 import Head from "next/head";
 import Router from "next/router";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import PageChange from "components/PageChange/PageChange.js";
+import ErrorBoundary from "components/common/ErrorBoundary";
+import PerformanceMonitor from "components/common/PerformanceMonitor";
+import { config } from "config/app.config";
 
 // Preline CSS will be loaded via CDN in the Head component
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -12,18 +17,39 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 Router.events.on("routeChangeStart", (url) => {
   console.log(`Loading: ${url}`);
   document.body.classList.add("body-page-transition");
-  ReactDOM.render(
-    <PageChange path={url} />,
-    document.getElementById("page-transition")
-  );
+  const container = document.getElementById("page-transition");
+  if (container) {
+    const root = createRoot(container);
+    root.render(<PageChange path={url} />);
+  }
 });
 Router.events.on("routeChangeComplete", () => {
-  ReactDOM.unmountComponentAtNode(document.getElementById("page-transition"));
+  const container = document.getElementById("page-transition");
+  if (container) {
+    const root = createRoot(container);
+    root.unmount();
+  }
   document.body.classList.remove("body-page-transition");
 });
 Router.events.on("routeChangeError", () => {
-  ReactDOM.unmountComponentAtNode(document.getElementById("page-transition"));
+  const container = document.getElementById("page-transition");
+  if (container) {
+    const root = createRoot(container);
+    root.unmount();
+  }
   document.body.classList.remove("body-page-transition");
+});
+
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: config.performance.cacheTimeout,
+      gcTime: config.performance.cacheTimeout * 2,
+      retry: 3,
+      refetchOnWindowFocus: false,
+    },
+  },
 });
 
 export default class MyApp extends App {
@@ -38,7 +64,7 @@ export default class MyApp extends App {
     };
     document.head.appendChild(script);
 
-    let comment = document.createComment(`
+    const comment = document.createComment(`
 
 =========================================================
 * * NextJS Dashboard with Preline UI
@@ -83,14 +109,14 @@ export default class MyApp extends App {
               if (!module) return module;
               module.paths = module.paths || [];
               module.children = module.children || [];
-            } catch (e) { }
+            } catch (_e) { }
             return module;
           };
         }
       }
-    } catch (e) {
-      // Non-critical
-    }
+            } catch (_e) {
+          // Non-critical
+        }
 
     // Global client-side handlers to avoid noisy aborts/crashes in dev tooling
     try {
@@ -103,7 +129,7 @@ export default class MyApp extends App {
               console.warn('Suppressed AbortError from dev overlay/HMR');
               ev.preventDefault && ev.preventDefault();
             }
-          } catch (e) { }
+          } catch (_e) { }
         });
         window.addEventListener('error', (ev) => {
           // prevent dev overlay from stopping execution on non-critical errors
@@ -112,12 +138,12 @@ export default class MyApp extends App {
             if (msg && msg.indexOf('React Dev Overlay') !== -1) {
               ev.preventDefault && ev.preventDefault();
             }
-          } catch (e) { }
+          } catch (_e) { }
         });
       }
     } catch (e) { }
   }
-  static async getInitialProps({ Component, router, ctx }) {
+  static async getInitialProps({ Component, router: _router, ctx }) {
     let pageProps = {};
 
     if (Component.getInitialProps) {
@@ -138,12 +164,26 @@ export default class MyApp extends App {
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
           />
-          <title>NextJS Enterprise Dashboard with Preline UI</title>
+          <title>{config.app.name}</title>
+          <meta name="description" content={config.app.description} />
           <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.css" />
         </Head>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        
+        <QueryClientProvider client={queryClient}>
+          <ErrorBoundary>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+            
+            {/* Development tools */}
+            {process.env.NODE_ENV === 'development' && (
+              <>
+                <ReactQueryDevtools initialIsOpen={false} />
+                <PerformanceMonitor />
+              </>
+            )}
+          </ErrorBoundary>
+        </QueryClientProvider>
       </React.Fragment>
     );
   }

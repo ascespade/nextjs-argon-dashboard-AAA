@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSidebarStore, useUserStore, useNotificationStore, useLoadingStore } from '@/store';
 import { ApiError } from '@/types';
-import { ErrorHandler } from '@/utils/errorHandler';
+import { ErrorHandler, AppError } from '@/utils/errorHandler';
 
 // Custom hook for API queries
 export const useApiQuery = <T = any>(
@@ -14,7 +14,7 @@ export const useApiQuery = <T = any>(
         staleTime?: number;
         cacheTime?: number;
         retry?: boolean | number;
-        onError?: (error: ApiError) => void;
+        onError?: (error: AppError) => void;
     }
 ) => {
     const { setLoading } = useLoadingStore();
@@ -27,21 +27,21 @@ export const useApiQuery = <T = any>(
             try {
                 const result = await queryFn();
                 return result;
+            } catch (error) {
+                const appError = ErrorHandler.handleApiError(error as ApiError, {
+                    action: 'useApiQuery',
+                    metadata: { queryKey },
+                });
+                options?.onError?.(appError);
+                throw appError;
             } finally {
                 setLoading(loadingKey, false);
             }
         },
         enabled: options?.enabled ?? true,
         staleTime: options?.staleTime ?? 5 * 60 * 1000, // 5 minutes
-        cacheTime: options?.cacheTime ?? 10 * 60 * 1000, // 10 minutes
+        gcTime: options?.cacheTime ?? 10 * 60 * 1000, // 10 minutes
         retry: options?.retry ?? 3,
-        onError: (error: ApiError) => {
-            const appError = ErrorHandler.handleApiError(error, {
-                action: 'useApiQuery',
-                metadata: { queryKey },
-            });
-            options?.onError?.(appError);
-        },
     });
 
     return {
@@ -55,7 +55,7 @@ export const useApiMutation = <TData = any, TVariables = any>(
     mutationFn: (variables: TVariables) => Promise<TData>,
     options?: {
         onSuccess?: (data: TData, variables: TVariables) => void;
-        onError?: (error: ApiError, variables: TVariables) => void;
+        onError?: (error: AppError, variables: TVariables) => void;
         invalidateQueries?: string[][];
     }
 ) => {
@@ -69,6 +69,20 @@ export const useApiMutation = <TData = any, TVariables = any>(
             try {
                 const result = await mutationFn(variables);
                 return result;
+            } catch (error) {
+                const appError = ErrorHandler.handleApiError(error as ApiError, {
+                    action: 'useApiMutation',
+                    metadata: { variables },
+                });
+
+                addNotification({
+                    type: 'error',
+                    title: 'Error',
+                    message: appError.message,
+                });
+
+                options?.onError?.(appError, variables);
+                throw appError;
             } finally {
                 setLoading('mutation', false);
             }
@@ -81,20 +95,6 @@ export const useApiMutation = <TData = any, TVariables = any>(
                 });
             }
             options?.onSuccess?.(data, variables);
-        },
-        onError: (error: ApiError, variables) => {
-            const appError = ErrorHandler.handleApiError(error, {
-                action: 'useApiMutation',
-                metadata: { variables },
-            });
-
-            addNotification({
-                type: 'error',
-                title: 'Error',
-                message: appError.message,
-            });
-
-            options?.onError?.(appError, variables);
         },
     });
 };
@@ -266,7 +266,7 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
 
 // Custom hook for previous value
 export const usePrevious = <T>(value: T): T | undefined => {
-    const ref = useRef<T>();
+    const ref = useRef<T | undefined>(undefined);
     useEffect(() => {
         ref.current = value;
     });
