@@ -2,69 +2,63 @@ import React, { useState, useEffect, useRef } from 'react';
 import Admin from 'layouts/Admin.js';
 import { Messages, isEditorMessage, postToEditor } from '../lib/editor-protocol';
 
-// New simplified editor subcomponents (kept lightweight and self-contained)
-function NewToolbar({ ready, onSave, onPublish, onUndo, onRedo, onExport, onImport, onTogglePalette, onToggleFont }) {
+function Toolbar({ ready, onSave, onPublish, onUndo, onRedo, onZoomIn, onZoomOut, setDevice, device, onExport, onImport }) {
   return (
-    <header className="new-editor-toolbar">
-      <div className="toolbar-left">
-        <button className="btn btn-sm btn-light" onClick={onSave} disabled={!ready}><i className="ni ni-cloud-upload-96 mr-2" />Save</button>
-        <button className="btn btn-sm btn-primary" onClick={onPublish} disabled={!ready}><i className="ni ni-paper-diploma mr-2" />Publish</button>
-        <button className="btn btn-sm btn-outline-secondary" onClick={onUndo} disabled={!ready}><i className="ni ni-curved-next mr-2" />Undo</button>
-        <button className="btn btn-sm btn-outline-secondary" onClick={onRedo} disabled={!ready}><i className="ni ni-fat-add mr-2" />Redo</button>
+    <div className="sticky top-[70px] z-50 bg-slate-800 text-white border-b border-slate-700 px-4 py-2 flex items-center gap-3">
+      <div className="flex items-center gap-2">
+        <button onClick={onSave} disabled={!ready} className="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded text-sm">
+          <i className="ni ni-cloud-upload-96" />
+          <span>Save</span>
+        </button>
+        <button onClick={onPublish} disabled={!ready} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 px-3 py-1 rounded text-sm">
+          <i className="ni ni-paper-diploma" />
+          <span>Publish</span>
+        </button>
+        <button onClick={onUndo} className="flex items-center gap-2 bg-transparent hover:bg-slate-700 px-2 py-1 rounded text-sm">
+          <i className="ni ni-curved-next" />
+        </button>
+        <button onClick={onRedo} className="flex items-center gap-2 bg-transparent hover:bg-slate-700 px-2 py-1 rounded text-sm">
+          <i className="ni ni-fat-add" />
+        </button>
       </div>
-      <div className="toolbar-center">
-        <div className="device-controls">
-          <span className="device-label">Preview:</span>
-          <button className="btn btn-sm btn-outline-secondary" data-device="desktop"><i className="ni ni-tv-2 mr-2" />Desktop</button>
-          <button className="btn btn-sm btn-outline-secondary" data-device="tablet"><i className="ni ni-tablet-button mr-2" />Tablet</button>
-          <button className="btn btn-sm btn-outline-secondary" data-device="mobile"><i className="ni ni-mobile-button mr-2" />Mobile</button>
+
+      <div className="flex-1 flex items-center justify-center gap-3">
+        <div className="flex items-center gap-2">
+          <button onClick={onZoomOut} className="px-2 py-1 rounded bg-slate-700">-</button>
+          <button onClick={onZoomIn} className="px-2 py-1 rounded bg-slate-700">+</button>
+        </div>
+        <div className="flex items-center gap-2">
+          <button onClick={() => setDevice('desktop')} className={`px-3 py-1 rounded ${device==='desktop' ? 'bg-indigo-600':'bg-slate-700'}`} title="Desktop"><i className="ni ni-tv-2"/></button>
+          <button onClick={() => setDevice('tablet')} className={`px-3 py-1 rounded ${device==='tablet' ? 'bg-indigo-600':'bg-slate-700'}`} title="Tablet"><i className="ni ni-tablet-button"/></button>
+          <button onClick={() => setDevice('mobile')} className={`px-3 py-1 rounded ${device==='mobile' ? 'bg-indigo-600':'bg-slate-700'}`} title="Mobile"><i className="ni ni-mobile-button"/></button>
         </div>
       </div>
-      <div className="toolbar-right">
-        <button className="btn btn-sm btn-outline-light" onClick={onExport}><i className="ni ni-ungroup mr-2" />Export</button>
-        <label className="btn btn-sm btn-outline-light mb-0"><i className="ni ni-fat-add mr-2" />Import<input type="file" className="file-input-hidden" onChange={onImport} /></label>
-        <button className="btn btn-sm btn-outline-light" onClick={onTogglePalette}><i className="ni ni-palette mr-2" />Palette</button>
-        <button className="btn btn-sm btn-outline-light" onClick={onToggleFont}><i className="ni ni-zoom-split-in mr-2" />Fonts</button>
+
+      <div className="flex items-center gap-2">
+        <button onClick={onExport} className="px-3 py-1 rounded bg-transparent hover:bg-slate-700"><i className="ni ni-ungroup"/></button>
+        <label className="px-3 py-1 rounded bg-transparent hover:bg-slate-700 cursor-pointer">
+          <i className="ni ni-fat-add"/>
+          <input type="file" className="hidden" onChange={onImport} />
+        </label>
       </div>
-    </header>
+    </div>
   );
 }
 
-function NewSidebar({ components = [], onAdd, collapsed, toggleCollapsed, ready }) {
+function ComponentsCard({ c, onAdd }) {
   return (
-    <aside className={`new-editor-sidebar ${collapsed ? 'collapsed' : ''}`}>
-      <div className="sidebar-top">
-        <button className="collapse-toggle" onClick={toggleCollapsed} aria-label="Toggle sidebar">{collapsed ? '›' : '‹'}</button>
-        <div className="brand">BRAND</div>
+    <div draggable onDragStart={(e)=>{ e.dataTransfer.setData('application/json', JSON.stringify(c)); e.dataTransfer.effectAllowed = 'copy'; }} className="p-3 rounded border bg-white hover:shadow cursor-grab">
+      <div className="flex items-center gap-3">
+        <div className="w-12 h-8 bg-slate-100 rounded flex items-center justify-center">
+          <i className={`ni ${c.type && c.type.indexOf('image')!==-1 ? 'ni-image' : 'ni-ui-04'}`} />
+        </div>
+        <div className="flex-1">
+          <div className="font-medium text-sm">{c.type}</div>
+          <div className="text-xs text-slate-500">Preview</div>
+        </div>
+        <button onClick={()=>onAdd(c)} className="text-xs px-2 py-1 bg-indigo-600 text-white rounded">Add</button>
       </div>
-      <div className="components-list">
-        <h6>Components</h6>
-        {components.map(c => {
-          const type = String(c.type || '').toLowerCase();
-          let icon = 'ni-ui-04';
-          if (type.indexOf('image') !== -1) icon = 'ni-image';
-          else if (type.indexOf('button') !== -1) icon = 'ni-fat-add';
-          else if (type.indexOf('hero') !== -1) icon = 'ni-tv-2';
-          else if (type.indexOf('gallery') !== -1) icon = 'ni-collection';
-          else if (type.indexOf('stats') !== -1) icon = 'ni-chart-bar-32';
-          else if (type.indexOf('testimonials') !== -1) icon = 'ni-satisfied';
-          return (
-            <button key={c.id} className="component-btn" onClick={() => onAdd(c)} disabled={!ready}><i className={`ni ${icon} mr-2`} />{c.type}</button>
-          );
-        })}
-      </div>
-      <div className="sidebar-footer">Documentation</div>
-    </aside>
-  );
-}
-
-function RightPanel({ visible }) {
-  if (!visible) return null;
-  return (
-    <aside className="new-editor-rightpanel">
-      <h6>Inspector</h6>
-      <p>No selection</p>
-    </aside>
+    </div>
   );
 }
 
@@ -74,8 +68,7 @@ export default function Editor() {
   const [device, setDevice] = useState('desktop');
   const [collapsed, setCollapsed] = useState(false);
   const [iframeReady, setIframeReady] = useState(false);
-  const [iframeHeight, setIframeHeight] = useState(null);
-  const [rightVisible, setRightVisible] = useState(false);
+  const [scale, setScale] = useState(1);
 
   useEffect(() => {
     (async () => {
@@ -91,29 +84,27 @@ export default function Editor() {
     const handler = (ev) => {
       if (!isEditorMessage(ev)) return;
       const { type, payload } = ev.data;
-      if (type === Messages.SYNC_STATE) {
-        // example: open inspector when selection changes
-        setRightVisible(!!payload && !!payload.selection);
-      }
+      // handle sync responses or selection
     };
     window.addEventListener('message', handler);
     return () => window.removeEventListener('message', handler);
   }, []);
 
   const post = (type, payload = {}) => {
-    try { postToEditor(iframeRef.current.contentWindow, type, payload); } catch (e) {}
+    try { postToEditor(iframeRef.current?.contentWindow, type, payload); } catch (e) { console.error(e); }
   };
 
   const saveDraft = () => post(Messages.SAVE_DRAFT);
   const publish = () => post(Messages.PUBLISH);
   const undo = () => post(Messages.UNDO);
   const redo = () => post(Messages.REDO);
+
   const onAdd = (c) => post(Messages.ADD_COMPONENT, { component: c });
 
-  const exportJSON = async () => {
+  const onExport = async () => {
     post(Messages.SAVE_DRAFT);
-    setTimeout(async () => {
-      try {
+    setTimeout(async ()=>{
+      try{
         const res = await fetch('/api/pages/home?mode=draft');
         const json = await res.json();
         if (json && json.ok) {
@@ -121,55 +112,58 @@ export default function Editor() {
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a'); a.href = url; a.download = 'page-home.json'; a.click(); URL.revokeObjectURL(url);
         }
-      } catch (e) { console.error(e); }
-    }, 600);
+      }catch(e){ console.error(e); }
+    },500);
   };
 
-  const importJSON = async (ev) => {
-    const file = ev.target.files && ev.target.files[0]; if (!file) return;
-    try { const txt = await file.text(); const data = JSON.parse(txt); post(Messages.IMPORT_PAGE, { page: data }); } catch (e) { console.error(e); }
+  const onImport = async (ev) => {
+    const file = ev.target.files && ev.target.files[0]; if (!file) return; try { const txt = await file.text(); const data = JSON.parse(txt); post(Messages.IMPORT_PAGE, { page: data }); } catch (e) { console.error(e); }
   };
 
-  const computeIframeHeight = () => {
+  const onIframeLoad = () => { try { postToEditor(iframeRef.current.contentWindow, Messages.INIT, { mode: 'draft' }); setIframeReady(true); } catch (e) { console.error(e); } };
+
+  const handleDropFromLibrary = (e) => {
+    e.preventDefault();
+    const json = e.dataTransfer.getData('application/json');
+    if (!json) return;
     try {
-      const win = iframeRef.current && iframeRef.current.contentWindow;
-      const doc = win && (win.document || win.contentDocument);
-      if (!doc) return;
-      const h = Math.max(doc.body.scrollHeight || 0, doc.documentElement.scrollHeight || 0, doc.body.offsetHeight || 0);
-      setIframeHeight(h + 40);
-    } catch (e) {}
+      const component = JSON.parse(json);
+      post(Messages.ADD_COMPONENT, { component });
+    } catch (e) { console.error(e); }
   };
 
-  useEffect(() => { computeIframeHeight(); }, [device]);
-  useEffect(() => { const onResize = () => computeIframeHeight(); window.addEventListener('resize', onResize); return () => window.removeEventListener('resize', onResize); }, []);
+  const onDragOver = (e) => e.preventDefault();
 
-  const iframeStyle = { border: 0, width: device === 'desktop' ? '100%' : device === 'tablet' ? 960 : 375, height: iframeHeight ? iframeHeight : '100%', margin: device === 'desktop' ? 0 : '0 auto' };
+  const zoomIn = () => setScale(s => Math.min(2, +(s + 0.1).toFixed(2)));
+  const zoomOut = () => setScale(s => Math.max(0.5, +(s - 0.1).toFixed(2)));
 
-  const onIframeLoad = () => { try { postToEditor(iframeRef.current.contentWindow, Messages.INIT, { mode: 'draft' }); setIframeReady(true); computeIframeHeight(); setTimeout(computeIframeHeight, 350); } catch (e) { console.error(e); } };
-
-  // handle toggles
-  const toggleCollapsed = () => { setCollapsed(!collapsed); try { localStorage.setItem('sidebar-collapsed', !collapsed ? 'true' : 'false'); document.body.classList.toggle('sidebar-collapsed', !collapsed); } catch (e) {} };
-
-  // palette/font placeholders
-  const togglePalette = () => alert('Palette');
-  const toggleFont = () => alert('Fonts');
+  // compute iframe classes for device preview
+  const iframeWrapperClass = device === 'desktop' ? 'w-full max-w-none' : device === 'tablet' ? 'max-w-[960px] w-full' : 'max-w-[375px] w-full';
 
   return (
-    <div className="new-editor-root">
-      <NewToolbar ready={iframeReady} onSave={saveDraft} onPublish={publish} onUndo={undo} onRedo={redo} onExport={exportJSON} onImport={importJSON} onTogglePalette={togglePalette} onToggleFont={toggleFont} />
-      <div className="new-editor-body">
-        <NewSidebar components={componentsLibrary} onAdd={onAdd} collapsed={collapsed} toggleCollapsed={toggleCollapsed} ready={iframeReady} />
-        <main className="new-editor-canvas">
-          <div className="canvas-frame" role="region">
-            <iframe ref={iframeRef} className="editor-iframe" src="/?edit=1&mode=draft" style={iframeStyle} onLoad={onIframeLoad} />
+    <div className="flex h-[calc(100vh-70px)] flex-col">
+      <Toolbar ready={iframeReady} onSave={saveDraft} onPublish={publish} onUndo={undo} onRedo={redo} onZoomIn={zoomIn} onZoomOut={zoomOut} setDevice={setDevice} device={device} onExport={onExport} onImport={onImport} />
+      <div className="flex flex-1 overflow-hidden">
+        <main className="flex-1 flex items-start justify-center bg-slate-50 p-4" onDrop={handleDropFromLibrary} onDragOver={onDragOver}>
+          <div className={`${iframeWrapperClass} transform origin-top`} style={{ transform: `scale(${scale})` }}>
+            <iframe ref={iframeRef} src="/?edit=1" title="editor-canvas" className="w-full h-[calc(100vh-140px)] bg-white border" onLoad={onIframeLoad} />
           </div>
         </main>
-        <RightPanel visible={rightVisible} />
+        <aside className={`w-80 bg-white border-l p-4 overflow-auto ${collapsed ? 'hidden lg:block' : ''}`}>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-semibold">Components Library</h3>
+            <button onClick={()=>{ setCollapsed(s=>!s); try{ document.body.classList.toggle('sidebar-collapsed'); }catch(e){} }} className="px-2 py-1 text-sm bg-slate-100 rounded">{collapsed ? 'Expand' : 'Collapse'}</button>
+          </div>
+          <div className="grid grid-cols-1 gap-3">
+            {componentsLibrary.map(c => <ComponentsCard key={c.id} c={c} onAdd={onAdd} />)}
+          </div>
+        </aside>
       </div>
     </div>
   );
 }
 
 Editor.layout = function EditorLayout({ children }) {
-  return <Admin hideSidebar>{children}</Admin>;
+  // keep original Argon sidebar functional and visible; the Admin layout manages it
+  return <Admin>{children}</Admin>;
 };
