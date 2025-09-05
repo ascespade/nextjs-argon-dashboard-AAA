@@ -18,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className="bg-gray-50 text-gray-900">
+        <div id="page-transition"></div>
         <SidebarProvider>
           <div className="min-h-screen relative">
             {children}
