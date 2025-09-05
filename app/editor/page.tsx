@@ -12,12 +12,28 @@ export default function EditorPage() {
   const [zoom, setZoom] = useState(1);
   const [rightCollapsed, setRightCollapsed] = useState(false);
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   useEffect(() => {
     function onMessage(e: MessageEvent) {
       if (!e.data) return;
-      const { type } = e.data;
+      const { type, error } = e.data;
       if (type === 'READY') setReady(true);
-      if (type === 'SAVE_ACK') console.log('Save acknowledged');
+      if (type === 'SAVE_ACK') {
+        console.log('Save acknowledged');
+        setErrorMessage(null);
+      }
+      if (type === 'SAVE_ERROR') {
+        console.error('Save error from iframe:', error);
+        setErrorMessage(error || 'Save failed');
+      }
+      if (type === 'PUBLISH_ACK') {
+        console.log('Publish acknowledged');
+        setErrorMessage(null);
+      }
+      if (type === 'PUBLISH_ERROR') {
+        console.error('Publish error from iframe:', error);
+        setErrorMessage(error || 'Publish failed');
+      }
     }
     window.addEventListener('message', onMessage);
     return () => window.removeEventListener('message', onMessage);
