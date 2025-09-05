@@ -10,6 +10,8 @@ import './globals.css';
 import '../assets/css/nextjs-argon-dashboard.min.css';
 import '../assets/css/custom-home.css';
 import { SidebarProvider } from './components/SidebarContext';
+import { ThemeProvider } from '@/lib/theme';
+import { I18nProvider } from '@/lib/i18n';
 
 export default function RootLayout({
   children,
@@ -49,11 +51,15 @@ export default function RootLayout({
         ></script>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
       </head>
-      <body className='bg-gray-50 text-gray-900'>
+      <body className='bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100'>
         <div id='page-transition'></div>
-        <SidebarProvider>
-          <div className='min-h-screen relative'>{children}</div>
-        </SidebarProvider>
+        <ThemeProvider>
+          <I18nProvider>
+            <SidebarProvider>
+              <div className='min-h-screen relative'>{children}</div>
+            </SidebarProvider>
+          </I18nProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
