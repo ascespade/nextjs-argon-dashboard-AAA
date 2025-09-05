@@ -12,6 +12,7 @@
 /* Polyfills for Bootstrap 5-like utilities in BS4/Argon context */
 .min-vh-75 { min-height: 75vh; }
 .gap-3 { gap: 1rem; }
+.g-2 { gap: .5rem; }
 .fs-6 { font-size: .875rem; }
 .fw-bold { font-weight: 700; }
 .display-5 { font-size: 3rem; font-weight: 300; line-height: 1.2; }
