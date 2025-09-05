@@ -48,16 +48,30 @@ export default function HomeEditorClient({
           break;
         case 'SAVE_DRAFT':
           // post to API
-          fetch('/api/pages/home/save', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              components_json: components,
-              updated_by: 'editor',
-            }),
-          })
-            .then(r => r.json())
-            .then(() => window.parent.postMessage({ type: 'SAVE_ACK' }, '*'));
+          (async () => {
+            try {
+              const url = `${location.origin}/api/pages/home/save`;
+              const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  components_json: components,
+                  updated_by: 'editor',
+                }),
+                credentials: 'same-origin',
+                mode: 'cors',
+              });
+              if (!res.ok) {
+                const text = await res.text().catch(() => '');
+                window.parent.postMessage({ type: 'SAVE_ERROR', error: `Save failed: ${res.status} ${res.statusText} ${text}` }, '*');
+                return;
+              }
+              await res.json().catch(() => null);
+              window.parent.postMessage({ type: 'SAVE_ACK' }, '*');
+            } catch (err: any) {
+              window.parent.postMessage({ type: 'SAVE_ERROR', error: err?.message || String(err) }, '*');
+            }
+          })();
           break;
         case 'PUBLISH':
           fetch('/api/pages/home/publish', { method: 'POST' }).then(() =>
