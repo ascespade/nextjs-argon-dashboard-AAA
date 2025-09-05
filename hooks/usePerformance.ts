@@ -118,14 +118,32 @@ export const usePerformance = (options: PerformanceOptions = {}) => {
   useEffect(() => {
     if (!enableErrorTracking) return;
 
+    const isNoisyNetworkError = (reason: any) => {
+      try {
+        if (!reason) return false;
+        const msg = typeof reason === 'string' ? reason : reason.message || reason.name || '';
+        const stack = reason && reason.stack ? String(reason.stack) : '';
+        // Ignore generic network fetch failures and known 3rd-party hosts like fullstory
+        if (msg.toLowerCase().includes('failed to fetch')) return true;
+        if (stack.toLowerCase().includes('fullstory')) return true;
+        if ((reason && reason.name && reason.name === 'TypeError') && msg.toLowerCase().includes('failed')) return true;
+      } catch (_e) {
+        // ignore
+      }
+      return false;
+    };
+
     const handleError = (event: ErrorEvent) => {
+      // Ignore noisy network errors from third-party scripts
+      if (isNoisyNetworkError(event.error || event.message)) return;
       metricsRef.current.errors++;
-      console.error('Performance tracked error:', event.error);
+      try { console.error('Performance tracked error:', event.error || event.message); } catch (_e) {}
     };
 
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      if (isNoisyNetworkError(event.reason)) return;
       metricsRef.current.errors++;
-      console.error('Performance tracked unhandled rejection:', event.reason);
+      try { console.error('Performance tracked unhandled rejection:', event.reason); } catch (_e) {}
     };
 
     window.addEventListener('error', handleError);
