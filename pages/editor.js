@@ -76,10 +76,34 @@ export default function Editor() {
   const togglePalette = () => { alert('Color palette would open (placeholder)'); };
   const toggleFont = () => { alert('Font selector would open (placeholder)'); };
 
+  const [iframeHeight, setIframeHeight] = useState(null);
+
+  const computeIframeHeight = () => {
+    try {
+      const win = iframeRef.current && iframeRef.current.contentWindow;
+      const doc = win && (win.document || win.contentDocument);
+      if (!doc) return;
+      const h = Math.max(doc.body.scrollHeight || 0, doc.documentElement.scrollHeight || 0, doc.body.offsetHeight || 0);
+      setIframeHeight(h + 40);
+    } catch (e) {
+      // ignore cross-origin or timing errors
+    }
+  };
+
+  React.useEffect(() => { computeIframeHeight(); }, [device]);
+  React.useEffect(() => {
+    const onResize = () => computeIframeHeight();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
   const iframeStyle = (() => {
-    if (device === 'desktop') return { width: '100%', height: '100%', border: 0 };
-    if (device === 'tablet') return { width: 960, height: '100%', border: 0, margin: '0 auto' };
-    return { width: 375, height: '100%', border: 0, margin: '0 auto' };
+    const base = { border: 0 };
+    if (device === 'desktop') base.width = '100%';
+    if (device === 'tablet') { base.width = 960; base.margin = '0 auto'; }
+    if (device === 'mobile') { base.width = 375; base.margin = '0 auto'; }
+    base.height = iframeHeight ? iframeHeight : '100%';
+    return base;
   })();
 
   const [iframeReady, setIframeReady] = useState(false);
@@ -88,6 +112,9 @@ export default function Editor() {
     try {
       postToEditor(iframeRef.current.contentWindow, Messages.INIT, { mode: 'draft' });
       setIframeReady(true);
+      computeIframeHeight();
+      setTimeout(computeIframeHeight, 350);
+      setTimeout(computeIframeHeight, 1200);
     } catch (e) { console.error(e); }
   };
 
