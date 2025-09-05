@@ -100,6 +100,13 @@ export default class MyApp extends App {
             if (reason && reason.name === 'AbortError') {
               console.warn('Suppressed AbortError from dev overlay/HMR');
               ev.preventDefault && ev.preventDefault();
+              return;
+            }
+            // suppress noisy network fetch failures coming from third-party scripts (e.g. FullStory) or HMR
+            if (reason && reason.message && reason.message.indexOf('Failed to fetch') !== -1) {
+              console.warn('Suppressed network fetch error (unhandledrejection):', reason);
+              ev.preventDefault && ev.preventDefault();
+              return;
             }
           } catch (e) {}
         });
@@ -107,8 +114,25 @@ export default class MyApp extends App {
           // prevent dev overlay from stopping execution on non-critical errors
           try {
             const msg = ev && ev.message;
+            const src = ev && ev.filename;
             if (msg && msg.indexOf('React Dev Overlay') !== -1) {
               ev.preventDefault && ev.preventDefault();
+              return;
+            }
+            // suppress TypeError: Failed to fetch coming from injected 3rd party scripts (edge.fullstory.com)
+            if (msg && msg.indexOf('Failed to fetch') !== -1) {
+              // if filename indicates fullstory or webpack HMR, suppress
+              if (src && (src.indexOf('fullstory') !== -1 || src.indexOf('webpack') !== -1 || src.indexOf('fs.js') !== -1)) {
+                console.warn('Suppressed network fetch error (window.error):', msg, src);
+                ev.preventDefault && ev.preventDefault();
+                return;
+              }
+              // general suppression in dev to avoid noisy overlay
+              if (process.env.NODE_ENV !== 'production') {
+                console.warn('Suppressed network fetch error (window.error):', msg, src);
+                ev.preventDefault && ev.preventDefault();
+                return;
+              }
             }
           } catch (e) {}
         });
