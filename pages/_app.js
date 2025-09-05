@@ -30,15 +30,23 @@ Router.events.on('routeChangeStart', url => {
       }
       container.__pageTransitionRoot.render(<PageChange path={url} />);
 
-      if (container.__pageTransitionTimeout) clearTimeout(container.__pageTransitionTimeout);
+      if (container.__pageTransitionTimeout)
+        clearTimeout(container.__pageTransitionTimeout);
       container.__pageTransitionTimeout = setTimeout(() => {
-        try { container.__pageTransitionRoot && container.__pageTransitionRoot.unmount(); } catch (_e) {}
+        try {
+          container.__pageTransitionRoot &&
+            container.__pageTransitionRoot.unmount();
+        } catch (_e) {}
         container.__pageTransitionRoot = null;
-        try { container.innerHTML = ''; } catch (_e) {}
+        try {
+          container.innerHTML = '';
+        } catch (_e) {}
         document.body.classList.remove('body-page-transition');
       }, 10000);
     } catch (e) {
-      try { container.innerHTML = ''; } catch (_e) {}
+      try {
+        container.innerHTML = '';
+      } catch (_e) {}
     }
   }
 });
@@ -51,10 +59,14 @@ const clearPageTransition = () => {
       container.__pageTransitionTimeout = null;
     }
     if (container.__pageTransitionRoot) {
-      try { container.__pageTransitionRoot.unmount(); } catch (_e) {}
+      try {
+        container.__pageTransitionRoot.unmount();
+      } catch (_e) {}
       container.__pageTransitionRoot = null;
     } else {
-      try { container.innerHTML = ''; } catch (_e) {}
+      try {
+        container.innerHTML = '';
+      } catch (_e) {}
     }
   }
   document.body.classList.remove('body-page-transition');
