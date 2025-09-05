@@ -76,28 +76,41 @@ export const usePerformance = (options: PerformanceOptions = {}) => {
     return () => clearInterval(interval);
   }, [enableMemoryTracking, reportInterval]);
 
-  // Track network requests
+  // Track network requests using PerformanceObserver (safer than monkey-patching fetch)
   useEffect(() => {
     if (!enableNetworkTracking) return;
 
-    const originalFetch = window.fetch;
-    let requestCount = 0;
+    if (typeof PerformanceObserver === 'undefined' || typeof performance === 'undefined') {
+      return;
+    }
 
-    window.fetch = async (...args) => {
-      requestCount++;
-      metricsRef.current.networkRequests = requestCount;
-      
+    let requestCount = metricsRef.current.networkRequests || 0;
+
+    const observer = new PerformanceObserver((list) => {
+      const entries = list.getEntries() || [];
+      entries.forEach((entry: any) => {
+        // Count resource fetches and XHR/fetch initiator types
+        if (entry.initiatorType === 'xmlhttprequest' || entry.initiatorType === 'fetch' || entry.entryType === 'resource') {
+          requestCount++;
+          metricsRef.current.networkRequests = requestCount;
+        }
+      });
+    });
+
+    try {
+      observer.observe({ type: 'resource', buffered: true });
+    } catch (_e) {
+      // Some browsers require observe with entryTypes
       try {
-        const response = await originalFetch(...args);
-        return response;
-      } catch (error) {
-        metricsRef.current.errors++;
-        throw error;
+        // @ts-ignore
+        observer.observe({ entryTypes: ['resource'] });
+      } catch (_err) {
+        // Give up silently
       }
-    };
+    }
 
     return () => {
-      window.fetch = originalFetch;
+      try { observer.disconnect(); } catch (_e) {}
     };
   }, [enableNetworkTracking]);
 
