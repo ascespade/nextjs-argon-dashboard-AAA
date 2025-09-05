@@ -110,7 +110,7 @@ const FeaturesSection = () => {
               <Card className="h-100 border-0 shadow-sm">
                 <CardBody className="text-center p-4">
                   <div className="feature-icon mb-3">
-                    <i className={`${feature.icon} text-primary`} style={{ fontSize: '2.5rem' }}></i>
+                    <i className={`${feature.icon} text-primary feature-icon-size`}></i>
                   </div>
                   <CardTitle tag="h5" className="fw-bold mb-3">
                     {feature.title}
@@ -334,7 +334,7 @@ const Homepage = () => {
       </nav>
 
       {/* Main Content */}
-      <main style={{ marginTop: '76px' }}>
+      <main className="content-offset-top">
         <HeroSection />
         <FeaturesSection />
         <StatsSection />

@@ -78,14 +78,8 @@ const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
   };
 
   return (
-    <Card 
-      className={`${getPositionClass()} ${className}`}
-      style={{ 
-        width: '300px', 
-        zIndex: 9999,
-        fontSize: '0.875rem',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-      }}
+    <Card
+      className={`${getPositionClass()} ${className} perf-monitor-card`}
     >
       <CardBody className="p-3">
         <CardTitle tag="h6" className="mb-3 d-flex align-items-center">

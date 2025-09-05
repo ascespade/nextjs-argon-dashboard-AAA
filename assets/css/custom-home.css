@@ -1,0 +1,27 @@
+/* Custom utilities and homepage styles */
+
+/* Offset main content below fixed navbar */
+.content-offset-top { margin-top: 76px; }
+
+/* Feature icon size */
+.feature-icon-size { font-size: 2.5rem; }
+
+/* Performance monitor card styling */
+.perf-monitor-card { width: 300px; z-index: 9999; font-size: .875rem; box-shadow: 0 4px 6px rgba(0,0,0,.1); }
+
+/* Polyfills for Bootstrap 5-like utilities in BS4/Argon context */
+.min-vh-75 { min-height: 75vh; }
+.gap-3 { gap: 1rem; }
+.fs-6 { font-size: .875rem; }
+.fw-bold { font-weight: 700; }
+.display-5 { font-size: 3rem; font-weight: 300; line-height: 1.2; }
+
+/* Logical margin utilities */
+.ms-auto { margin-left: auto; }
+.me-2 { margin-right: .5rem; }
+.me-3 { margin-right: 1rem; }
+
+/* Responsive text alignment */
+@media (min-width: 768px) {
+  .text-md-end { text-align: right; }
+}

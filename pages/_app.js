@@ -13,6 +13,8 @@ import { config } from "config/app.config";
 
 // Preline CSS will be loaded via CDN in the Head component
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import "assets/css/nextjs-argon-dashboard.css";
+import "assets/css/custom-home.css";
 
 Router.events.on("routeChangeStart", (url) => {
   console.log(`Loading: ${url}`);
@@ -54,6 +56,8 @@ const queryClient = new QueryClient({
 
 export default class MyApp extends App {
   componentDidMount() {
+    // Load Bootstrap JS (v5 bundle) for collapse/toggler functionality
+    try { import('bootstrap/dist/js/bootstrap.bundle.min.js'); } catch (_e) {}
     // Load Preline from CDN
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.js';
