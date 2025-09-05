@@ -10,11 +10,13 @@ const Sidebar: React.FC = () => {
     <aside
       className={`fixed top-0 left-0 h-full bg-white border-r shadow-sm z-40 flex flex-col transition-all duration-200 ${collapsed ? 'w-20' : 'w-64'}`}
       aria-expanded={!collapsed}
-      aria-label="Sidebar navigation"
+      aria-label='Sidebar navigation'
     >
       <div className='flex items-center justify-between px-3 h-16'>
         <Link href='/' className='flex items-center gap-3'>
-          <span className={`brand-text text-xl font-extrabold ${collapsed ? 'sr-only' : 'block'}`}>
+          <span
+            className={`brand-text text-xl font-extrabold ${collapsed ? 'sr-only' : 'block'}`}
+          >
             NextJS
           </span>
           <span className='brand-logo w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-semibold'>
@@ -29,8 +31,15 @@ const Sidebar: React.FC = () => {
           title={collapsed ? 'Expand' : 'Collapse'}
           className={`sidebar-toggle -mr-2 inline-flex items-center justify-center w-9 h-9 rounded-full bg-white shadow-sm border hover:bg-gray-50 focus:outline-none transition-transform ${collapsed ? 'rotate-180' : ''}`}
         >
-          <svg viewBox='0 0 24 24' className='w-5 h-5 text-gray-700' aria-hidden>
-            <path fill='currentColor' d='M9.29 6.71a1 1 0 011.42 0L15 11l-4.29 4.29a1 1 0 01-1.42-1.42L12.17 11 9.29 8.12a1 1 0 010-1.41z' />
+          <svg
+            viewBox='0 0 24 24'
+            className='w-5 h-5 text-gray-700'
+            aria-hidden
+          >
+            <path
+              fill='currentColor'
+              d='M9.29 6.71a1 1 0 011.42 0L15 11l-4.29 4.29a1 1 0 01-1.42-1.42L12.17 11 9.29 8.12a1 1 0 010-1.41z'
+            />
           </svg>
         </button>
       </div>
@@ -80,7 +89,6 @@ const Sidebar: React.FC = () => {
               </span>
             </Link>
           </li>
-
         </ul>
       </nav>
 
