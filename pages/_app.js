@@ -64,7 +64,7 @@ export default class MyApp extends App {
     };
     document.head.appendChild(script);
 
-    let comment = document.createComment(`
+    const comment = document.createComment(`
 
 =========================================================
 * * NextJS Dashboard with Preline UI
@@ -109,14 +109,14 @@ export default class MyApp extends App {
               if (!module) return module;
               module.paths = module.paths || [];
               module.children = module.children || [];
-            } catch (e) { }
+            } catch (_e) { }
             return module;
           };
         }
       }
-    } catch (e) {
-      // Non-critical
-    }
+            } catch (_e) {
+          // Non-critical
+        }
 
     // Global client-side handlers to avoid noisy aborts/crashes in dev tooling
     try {
@@ -129,7 +129,7 @@ export default class MyApp extends App {
               console.warn('Suppressed AbortError from dev overlay/HMR');
               ev.preventDefault && ev.preventDefault();
             }
-          } catch (e) { }
+          } catch (_e) { }
         });
         window.addEventListener('error', (ev) => {
           // prevent dev overlay from stopping execution on non-critical errors
@@ -138,12 +138,12 @@ export default class MyApp extends App {
             if (msg && msg.indexOf('React Dev Overlay') !== -1) {
               ev.preventDefault && ev.preventDefault();
             }
-          } catch (e) { }
+          } catch (_e) { }
         });
       }
     } catch (e) { }
   }
-  static async getInitialProps({ Component, router, ctx }) {
+  static async getInitialProps({ Component, router: _router, ctx }) {
     let pageProps = {};
 
     if (Component.getInitialProps) {

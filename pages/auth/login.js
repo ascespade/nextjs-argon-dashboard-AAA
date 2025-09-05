@@ -9,7 +9,6 @@ import {
   FormGroup,
   Form,
   Input,
-  InputGroupAddon,
   InputGroupText,
   InputGroup,
   Row,
@@ -65,11 +64,9 @@ function Login() {
             <Form role="form">
               <FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      <i className="ni ni-email-83" />
-                    </InputGroupText>
-                  </InputGroupAddon>
+                  <InputGroupText>
+                    <i className="ni ni-email-83" />
+                  </InputGroupText>
                   <Input
                     placeholder="Email"
                     type="email"
@@ -79,11 +76,9 @@ function Login() {
               </FormGroup>
               <FormGroup>
                 <InputGroup className="input-group-alternative">
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      <i className="ni ni-lock-circle-open" />
-                    </InputGroupText>
-                  </InputGroupAddon>
+                  <InputGroupText>
+                    <i className="ni ni-lock-circle-open" />
+                  </InputGroupText>
                   <Input
                     placeholder="Password"
                     type="password"

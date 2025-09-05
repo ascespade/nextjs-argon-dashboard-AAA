@@ -163,7 +163,7 @@ export const useNotificationStore = create<NotificationStore>()(
                 }),
             removeNotification: (id) =>
                 set((state) => {
-                    state.notifications = state.notifications.filter((n) => n.id !== id);
+                    state.notifications = state.notifications.filter((n: Notification) => n.id !== id);
                 }),
             clearAll: () =>
                 set((state) => {

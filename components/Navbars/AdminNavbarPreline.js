@@ -1,7 +1,7 @@
 import React from "react";
 import { useSidebar } from "contexts/SidebarContext";
 
-function AdminNavbarPreline({ brandText }) {
+function AdminNavbarPreline({ brandText: _brandText }) {
   const { toggleSidebar } = useSidebar();
 
   return (

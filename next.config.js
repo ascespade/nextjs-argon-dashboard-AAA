@@ -1,4 +1,3 @@
-const webpack = require("webpack");
 const path = require("path");
 
 /** @type {import('next').NextConfig} */
@@ -72,19 +71,9 @@ const nextConfig = {
       'moment',
       'axios'
     ],
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
   },
   // Enable compression
   compress: true,
-  // Enable SWC minification
-  swcMinify: true,
   // Enable static optimization
   trailingSlash: false,
   // Enable source maps in development
