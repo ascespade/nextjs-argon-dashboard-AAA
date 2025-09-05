@@ -7,6 +7,28 @@
       "draft": {
         "components": [
           {
+            "id": "text-1",
+            "type": "text_block",
+            "props": {
+              "text": "This homepage content is loaded from the local DB. Switch to edit mode to modify it inline."
+            },
+            "layout": {},
+            "style": {
+              "width": "723px",
+              "height": "380.375px"
+            }
+          },
+          {
+            "id": "lib-hero",
+            "type": "hero_banner",
+            "props": {
+              "title": "Hero title",
+              "subtitle": "Subtitle",
+              "buttonText": "Action",
+              "buttonHref": "#"
+            }
+          },
+          {
             "id": "hero-1",
             "type": "hero_banner",
             "props": {
@@ -20,25 +42,6 @@
               "fullWidth": true
             },
             "style": {}
-          },
-          {
-            "id": "text-1",
-            "type": "text_block",
-            "props": {
-              "text": "This homepage content is loaded from the local DB. Switch to edit mode to modify it inline."
-            },
-            "layout": {},
-            "style": {}
-          },
-          {
-            "id": "lib-hero",
-            "type": "hero_banner",
-            "props": {
-              "title": "Hero title",
-              "subtitle": "Subtitle",
-              "buttonText": "Action",
-              "buttonHref": "#"
-            }
           },
           {
             "id": "lib-testimonials",
@@ -2351,6 +2354,549 @@
                 "buttonText": "Action",
                 "buttonHref": "#"
               }
+            },
+            {
+              "id": "lib-testimonials",
+              "type": "testimonials",
+              "props": {
+                "items": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "ts": 1757037573683,
+        "draft": {
+          "components": [
+            {
+              "id": "hero-1",
+              "type": "hero_banner",
+              "props": {
+                "title": "Welcome to Argon Editable",
+                "subtitle": "Build pages visually with Argon components.",
+                "buttonText": "Get Started",
+                "buttonHref": "/dashboard",
+                "image": ""
+              },
+              "layout": {
+                "fullWidth": true
+              },
+              "style": {}
+            },
+            {
+              "id": "text-1",
+              "type": "text_block",
+              "props": {
+                "text": "This homepage content is loaded from the local DB. Switch to edit mode to modify it inline."
+              },
+              "layout": {},
+              "style": {}
+            },
+            {
+              "id": "lib-hero",
+              "type": "hero_banner",
+              "props": {
+                "title": "Hero title",
+                "subtitle": "Subtitle",
+                "buttonText": "Action",
+                "buttonHref": "#"
+              }
+            },
+            {
+              "id": "lib-testimonials",
+              "type": "testimonials",
+              "props": {
+                "items": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "ts": 1757037607769,
+        "draft": {
+          "components": [
+            {
+              "id": "hero-1",
+              "type": "hero_banner",
+              "props": {
+                "title": "Welcome to Argon Editable",
+                "subtitle": "Build pages visually with Argon components.",
+                "buttonText": "Get Started",
+                "buttonHref": "/dashboard",
+                "image": ""
+              },
+              "layout": {
+                "fullWidth": true
+              },
+              "style": {}
+            },
+            {
+              "id": "text-1",
+              "type": "text_block",
+              "props": {
+                "text": "This homepage content is loaded from the local DB. Switch to edit mode to modify it inline."
+              },
+              "layout": {},
+              "style": {}
+            },
+            {
+              "id": "lib-hero",
+              "type": "hero_banner",
+              "props": {
+                "title": "Hero title",
+                "subtitle": "Subtitle",
+                "buttonText": "Action",
+                "buttonHref": "#"
+              }
+            },
+            {
+              "id": "lib-testimonials",
+              "type": "testimonials",
+              "props": {
+                "items": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "ts": 1757037619221,
+        "draft": {
+          "components": [
+            {
+              "id": "hero-1",
+              "type": "hero_banner",
+              "props": {
+                "title": "Welcome to Argon Editable",
+                "subtitle": "Build pages visually with Argon components.",
+                "buttonText": "Get Started",
+                "buttonHref": "/dashboard",
+                "image": ""
+              },
+              "layout": {
+                "fullWidth": true
+              },
+              "style": {}
+            },
+            {
+              "id": "text-1",
+              "type": "text_block",
+              "props": {
+                "text": "This homepage content is loaded from the local DB. Switch to edit mode to modify it inline."
+              },
+              "layout": {},
+              "style": {}
+            },
+            {
+              "id": "lib-hero",
+              "type": "hero_banner",
+              "props": {
+                "title": "Hero title",
+                "subtitle": "Subtitle",
+                "buttonText": "Action",
+                "buttonHref": "#"
+              }
+            },
+            {
+              "id": "lib-testimonials",
+              "type": "testimonials",
+              "props": {
+                "items": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "ts": 1757037627565,
+        "draft": {
+          "components": [
+            {
+              "id": "text-1",
+              "type": "text_block",
+              "props": {
+                "text": "This homepage content is loaded from the local DB. Switch to edit mode to modify it inline."
+              },
+              "layout": {},
+              "style": {}
+            },
+            {
+              "id": "hero-1",
+              "type": "hero_banner",
+              "props": {
+                "title": "Welcome to Argon Editable",
+                "subtitle": "Build pages visually with Argon components.",
+                "buttonText": "Get Started",
+                "buttonHref": "/dashboard",
+                "image": ""
+              },
+              "layout": {
+                "fullWidth": true
+              },
+              "style": {}
+            },
+            {
+              "id": "lib-hero",
+              "type": "hero_banner",
+              "props": {
+                "title": "Hero title",
+                "subtitle": "Subtitle",
+                "buttonText": "Action",
+                "buttonHref": "#"
+              }
+            },
+            {
+              "id": "lib-testimonials",
+              "type": "testimonials",
+              "props": {
+                "items": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "ts": 1757037633073,
+        "draft": {
+          "components": [
+            {
+              "id": "hero-1",
+              "type": "hero_banner",
+              "props": {
+                "title": "Welcome to Argon Editable",
+                "subtitle": "Build pages visually with Argon components.",
+                "buttonText": "Get Started",
+                "buttonHref": "/dashboard",
+                "image": ""
+              },
+              "layout": {
+                "fullWidth": true
+              },
+              "style": {}
+            },
+            {
+              "id": "text-1",
+              "type": "text_block",
+              "props": {
+                "text": "This homepage content is loaded from the local DB. Switch to edit mode to modify it inline."
+              },
+              "layout": {},
+              "style": {}
+            },
+            {
+              "id": "lib-hero",
+              "type": "hero_banner",
+              "props": {
+                "title": "Hero title",
+                "subtitle": "Subtitle",
+                "buttonText": "Action",
+                "buttonHref": "#"
+              }
+            },
+            {
+              "id": "lib-testimonials",
+              "type": "testimonials",
+              "props": {
+                "items": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "ts": 1757037660153,
+        "draft": {
+          "components": [
+            {
+              "id": "text-1",
+              "type": "text_block",
+              "props": {
+                "text": "This homepage content is loaded from the local DB. Switch to edit mode to modify it inline."
+              },
+              "layout": {},
+              "style": {}
+            },
+            {
+              "id": "lib-hero",
+              "type": "hero_banner",
+              "props": {
+                "title": "Hero title",
+                "subtitle": "Subtitle",
+                "buttonText": "Action",
+                "buttonHref": "#"
+              }
+            },
+            {
+              "id": "hero-1",
+              "type": "hero_banner",
+              "props": {
+                "title": "Welcome to Argon Editable",
+                "subtitle": "Build pages visually with Argon components.",
+                "buttonText": "Get Started",
+                "buttonHref": "/dashboard",
+                "image": ""
+              },
+              "layout": {
+                "fullWidth": true
+              },
+              "style": {}
+            },
+            {
+              "id": "lib-testimonials",
+              "type": "testimonials",
+              "props": {
+                "items": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "ts": 1757037662772,
+        "draft": {
+          "components": [
+            {
+              "id": "text-1",
+              "type": "text_block",
+              "props": {
+                "text": "This homepage content is loaded from the local DB. Switch to edit mode to modify it inline."
+              },
+              "layout": {},
+              "style": {
+                "width": "723px",
+                "height": "380.375px"
+              }
+            },
+            {
+              "id": "lib-hero",
+              "type": "hero_banner",
+              "props": {
+                "title": "Hero title",
+                "subtitle": "Subtitle",
+                "buttonText": "Action",
+                "buttonHref": "#"
+              }
+            },
+            {
+              "id": "hero-1",
+              "type": "hero_banner",
+              "props": {
+                "title": "Welcome to Argon Editable",
+                "subtitle": "Build pages visually with Argon components.",
+                "buttonText": "Get Started",
+                "buttonHref": "/dashboard",
+                "image": ""
+              },
+              "layout": {
+                "fullWidth": true
+              },
+              "style": {}
+            },
+            {
+              "id": "lib-testimonials",
+              "type": "testimonials",
+              "props": {
+                "items": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "ts": 1757037664118,
+        "draft": {
+          "components": [
+            {
+              "id": "text-1",
+              "type": "text_block",
+              "props": {
+                "text": "This homepage content is loaded from the local DB. Switch to edit mode to modify it inline."
+              },
+              "layout": {},
+              "style": {
+                "width": "723px",
+                "height": "380.375px"
+              }
+            },
+            {
+              "id": "lib-hero",
+              "type": "hero_banner",
+              "props": {
+                "title": "Hero title",
+                "subtitle": "Subtitle",
+                "buttonText": "Action",
+                "buttonHref": "#"
+              }
+            },
+            {
+              "id": "hero-1",
+              "type": "hero_banner",
+              "props": {
+                "title": "Welcome to Argon Editable",
+                "subtitle": "Build pages visually with Argon components.",
+                "buttonText": "Get Started",
+                "buttonHref": "/dashboard",
+                "image": ""
+              },
+              "layout": {
+                "fullWidth": true
+              },
+              "style": {}
+            },
+            {
+              "id": "lib-testimonials",
+              "type": "testimonials",
+              "props": {
+                "items": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "ts": 1757037686083,
+        "draft": {
+          "components": [
+            {
+              "id": "text-1",
+              "type": "text_block",
+              "props": {
+                "text": "This homepage content is loaded from the local DB. Switch to edit mode to modify it inline."
+              },
+              "layout": {},
+              "style": {
+                "width": "723px",
+                "height": "380.375px"
+              }
+            },
+            {
+              "id": "lib-hero",
+              "type": "hero_banner",
+              "props": {
+                "title": "Hero title",
+                "subtitle": "Subtitle",
+                "buttonText": "Action",
+                "buttonHref": "#"
+              }
+            },
+            {
+              "id": "hero-1",
+              "type": "hero_banner",
+              "props": {
+                "title": "Welcome to Argon Editable",
+                "subtitle": "Build pages visually with Argon components.",
+                "buttonText": "Get Started",
+                "buttonHref": "/dashboard",
+                "image": ""
+              },
+              "layout": {
+                "fullWidth": true
+              },
+              "style": {}
+            },
+            {
+              "id": "lib-testimonials",
+              "type": "testimonials",
+              "props": {
+                "items": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "ts": 1757037696752,
+        "draft": {
+          "components": [
+            {
+              "id": "text-1",
+              "type": "text_block",
+              "props": {
+                "text": "This homepage content is loaded from the local DB. Switch to edit mode to modify it inline."
+              },
+              "layout": {},
+              "style": {
+                "width": "723px",
+                "height": "380.375px"
+              }
+            },
+            {
+              "id": "lib-hero",
+              "type": "hero_banner",
+              "props": {
+                "title": "Hero title",
+                "subtitle": "Subtitle",
+                "buttonText": "Action",
+                "buttonHref": "#"
+              }
+            },
+            {
+              "id": "hero-1",
+              "type": "hero_banner",
+              "props": {
+                "title": "Welcome to Argon Editable",
+                "subtitle": "Build pages visually with Argon components.",
+                "buttonText": "Get Started",
+                "buttonHref": "/dashboard",
+                "image": ""
+              },
+              "layout": {
+                "fullWidth": true
+              },
+              "style": {}
+            },
+            {
+              "id": "lib-testimonials",
+              "type": "testimonials",
+              "props": {
+                "items": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "ts": 1757037729531,
+        "draft": {
+          "components": [
+            {
+              "id": "text-1",
+              "type": "text_block",
+              "props": {
+                "text": "This homepage content is loaded from the local DB. Switch to edit mode to modify it inline."
+              },
+              "layout": {},
+              "style": {
+                "width": "723px",
+                "height": "380.375px"
+              }
+            },
+            {
+              "id": "lib-hero",
+              "type": "hero_banner",
+              "props": {
+                "title": "Hero title",
+                "subtitle": "Subtitle",
+                "buttonText": "Action",
+                "buttonHref": "#"
+              }
+            },
+            {
+              "id": "hero-1",
+              "type": "hero_banner",
+              "props": {
+                "title": "Welcome to Argon Editable",
+                "subtitle": "Build pages visually with Argon components.",
+                "buttonText": "Get Started",
+                "buttonHref": "/dashboard",
+                "image": ""
+              },
+              "layout": {
+                "fullWidth": true
+              },
+              "style": {}
             },
             {
               "id": "lib-testimonials",
