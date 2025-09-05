@@ -58,23 +58,22 @@ function Sidebar(props) {
     return routes.map((prop, key) => {
       return (
         <NavItem key={key} active={activeRoute(prop.layout + prop.path)}>
-          <Link href={prop.layout + prop.path}>
-            <NavLink
-              href="#pablo"
-              active={activeRoute(prop.layout + prop.path)}
-              onClick={closeCollapse}
-            >
-              <i className={prop.icon} />
-              {prop.name}
-            </NavLink>
-          </Link>
+          <NavLink
+            tag={Link}
+            href={prop.layout + prop.path}
+            active={activeRoute(prop.layout + prop.path)}
+            onClick={closeCollapse}
+          >
+            <i className={prop.icon} />
+            {prop.name}
+          </NavLink>
         </NavItem>
       );
     });
   };
   const { routes, logo } = props;
   let navbarBrand = (
-    <NavbarBrand href="#pablo" className="pt-0">
+    <NavbarBrand className="pt-0" tag={Link} href={logo && logo.innerLink ? logo.innerLink : '#'}>
       <img alt={logo.imgAlt} className="navbar-brand-img" src={logo.imgSrc} />
     </NavbarBrand>
   );
@@ -95,9 +94,7 @@ function Sidebar(props) {
         </button>
         {/* Brand */}
         {logo && logo.innerLink ? (
-          <Link href={logo.innerLink}>
-            <span>{navbarBrand}</span>
-          </Link>
+          navbarBrand
         ) : null}
         {logo && logo.outterLink ? (
           <a href={logo.innerLink} target="_blank">
@@ -136,30 +133,22 @@ function Sidebar(props) {
               <DropdownItem className="noti-title" header tag="div">
                 <h6 className="text-overflow m-0">Welcome!</h6>
               </DropdownItem>
-              <Link href="/admin/profile">
-                <DropdownItem>
+              <DropdownItem tag={Link} href="/admin/profile">
                   <i className="ni ni-single-02" />
                   <span>My profile</span>
                 </DropdownItem>
-              </Link>
-              <Link href="/admin/profile">
-                <DropdownItem>
+              <DropdownItem tag={Link} href="/admin/profile">
                   <i className="ni ni-settings-gear-65" />
                   <span>Settings</span>
                 </DropdownItem>
-              </Link>
-              <Link href="/admin/profile">
-                <DropdownItem>
+              <DropdownItem tag={Link} href="/admin/profile">
                   <i className="ni ni-calendar-grid-58" />
                   <span>Activity</span>
                 </DropdownItem>
-              </Link>
-              <Link href="/admin/profile">
-                <DropdownItem>
+              <DropdownItem tag={Link} href="/admin/profile">
                   <i className="ni ni-support-16" />
                   <span>Support</span>
                 </DropdownItem>
-              </Link>
               <DropdownItem divider />
               <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
                 <i className="ni ni-user-run" />
@@ -176,9 +165,9 @@ function Sidebar(props) {
               {logo ? (
                 <Col className="collapse-brand" xs="6">
                   {logo.innerLink ? (
-                    <Link href={logo.innerLink}>
+                    <NavbarBrand tag={Link} href={logo.innerLink}>
                       <img alt={logo.imgAlt} src={logo.imgSrc} />
-                    </Link>
+                    </NavbarBrand>
                   ) : (
                     <a href={logo.outterLink}>
                       <img alt={logo.imgAlt} src={logo.imgSrc} />
