@@ -53,7 +53,7 @@ const Dashboard = (props) => {
       <Container className="mt--7" fluid>
         <Row className="mb-4">
           <Col className="text-right">
-            <Link href="/editor">
+            <Link href="/editor" prefetch={false}>
               <Button color="primary" size="sm">Edit Homepage</Button>
             </Link>
           </Col>

@@ -39,7 +39,7 @@ function AdminNavbar({ brandText }) {
           <button className="sidebar-toggle-float" type="button" onClick={toggleSidebar} aria-label="Open sidebar">
             <i className="ni ni-bold-right" />
           </button>
-          <Link href="/admin/dashboard">
+          <Link href="/admin/dashboard" prefetch={false}>
             <a className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">
               {brandText}
             </a>
