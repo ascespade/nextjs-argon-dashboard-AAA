@@ -46,5 +46,17 @@ export default NextAuth({
   pages: {
     signIn: '/login'
   },
-  secret: process.env.NEXTAUTH_SECRET
+  secret: process.env.NEXTAUTH_SECRET,
+  debug: true,
+  logger: {
+    error(code, ...rest) {
+      console.error('[next-auth][error]', code, ...rest);
+    },
+    warn(code, ...rest) {
+      console.warn('[next-auth][warn]', code, ...rest);
+    },
+    debug(code, ...rest) {
+      console.debug('[next-auth][debug]', code, ...rest);
+    }
+  }
 });
