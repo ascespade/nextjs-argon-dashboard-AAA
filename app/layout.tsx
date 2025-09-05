@@ -5,8 +5,8 @@ export const metadata = {
 
 import React from 'react';
 import './globals.css';
-import { SidebarProvider } from '../components/SidebarContext';
-import PerformanceMonitor from '../components/PerformanceMonitorApp';
+import { SidebarProvider } from './components/SidebarContext';
+import PerformanceMonitor from './components/PerformanceMonitorApp';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
