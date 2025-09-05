@@ -16,7 +16,12 @@ function Admin(props) {
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
-    mainContentRef.current.scrollTop = 0;
+    if (mainContentRef.current) mainContentRef.current.scrollTop = 0;
+    // restore collapsed state from localStorage
+    try {
+      const collapsed = localStorage.getItem('sidebar-collapsed');
+      if (collapsed === 'true') document.body.classList.add('sidebar-collapsed');
+    } catch (e) {}
   }, []);
   const getBrandText = () => {
     for (let i = 0; i < routes.length; i++) {
@@ -26,17 +31,20 @@ function Admin(props) {
     }
     return "Brand";
   };
+  const hideSidebar = props.hideSidebar || false;
   return (
     <>
-      <Sidebar
-        {...props}
-        routes={routes}
-        logo={{
-          innerLink: "/admin/index",
-          imgSrc: require("assets/img/brand/nextjs_argon_black.png"),
-          imgAlt: "...",
-        }}
-      />
+      {!hideSidebar ? (
+        <Sidebar
+          {...props}
+          routes={routes}
+          logo={{
+            innerLink: "/admin/index",
+            imgSrc: require("assets/img/brand/nextjs_argon_black.png"),
+            imgAlt: "...",
+          }}
+        />
+      ) : null}
       <div className="main-content" ref={mainContentRef}>
         <AdminNavbar {...props} brandText={getBrandText()} />
         {props.children}
