@@ -12,6 +12,7 @@ class MyDocument extends Document {
           <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/brand/apple-icon.png" />
           {/* Fonts and icons */}
           <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=optional" rel="stylesheet" />
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.css" />
         </Head>
         <body>
           <div id="page-transition"></div>
