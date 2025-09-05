@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "pages": {
+    "home": {
+      "id": "home",
+      "slug": "/",
+      "draft": {
+        "components": [
+          {
+            "id": "hero-1",
+            "type": "hero_banner",
+            "props": {
+              "title": "Welcome to Argon Editable",
+              "subtitle": "Build pages visually with Argon components.",
+              "buttonText": "Get Started",
+              "buttonHref": "/dashboard",
+              "image": ""
+            },
+            "layout": {
+              "fullWidth": true
+            },
+            "style": {}
+          },
+          {
+            "id": "text-1",
+            "type": "text_block",
+            "props": {
+              "text": "This homepage content is loaded from the local DB. Switch to edit mode to modify it inline."
+            },
+            "layout": {},
+            "style": {}
+          }
+        ]
+      },
+      "published": {
+        "components": []
+      }
+    }
+  },
+  "users": [
+    {
+      "id": "admin-1",
+      "name": "Admin User",
+      "email": "admin@example.com",
+      "password": "admin123"
+    }
+  ],
+  "components_library": [
+    {
+      "id": "lib-text",
+      "type": "text_block",
+      "props": {
+        "text": "Editable text"
+      },
+      "layout": {},
+      "style": {}
+    },
+    {
+      "id": "lib-image",
+      "type": "image",
+      "props": {
+        "src": "/uploads/sample.jpg",
+        "alt": "Image"
+      },
+      "layout": {},
+      "style": {}
+    },
+    {
+      "id": "lib-button",
+      "type": "button",
+      "props": {
+        "label": "Click me",
+        "href": "#"
+      },
+      "layout": {},
+      "style": {}
+    },
+    {
+      "id": "lib-hero",
+      "type": "hero_banner",
+      "props": {
+        "title": "Hero title",
+        "subtitle": "Subtitle",
+        "buttonText": "Action",
+        "buttonHref": "#"
+      },
+      "layout": {
+        "fullWidth": true
+      },
+      "style": {}
+    },
+    {
+      "id": "lib-gallery",
+      "type": "gallery",
+      "props": {
+        "images": []
+      },
+      "layout": {},
+      "style": {}
+    },
+    {
+      "id": "lib-stats",
+      "type": "stats_counter",
+      "props": {
+        "items": []
+      },
+      "layout": {},
+      "style": {}
+    },
+    {
+      "id": "lib-testimonials",
+      "type": "testimonials",
+      "props": {
+        "items": []
+      },
+      "layout": {},
+      "style": {}
+    },
+    {
+      "id": "lib-cta",
+      "type": "cta_section",
+      "props": {
+        "title": "Call to action",
+        "buttonText": "Do it",
+        "buttonHref": "#"
+      },
+      "layout": {},
+      "style": {}
+    }
+  ],
+  "versions": {
+    "home": []
+  }
+}

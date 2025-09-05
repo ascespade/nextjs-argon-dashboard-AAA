@@ -1,4 +1,4 @@
-import { publishPage } from '../../../../../lib/db';
+import { publishPage } from '../../../../lib/db';
 
 export default async function handler(req, res) {
   try {
