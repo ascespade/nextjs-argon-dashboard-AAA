@@ -105,4 +105,6 @@ export default function Editor() {
   );
 }
 
-Editor.layout = Admin;
+Editor.layout = function EditorLayout({ children }) {
+  return <Admin hideSidebar>{children}</Admin>;
+};
