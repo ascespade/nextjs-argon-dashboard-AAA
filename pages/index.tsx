@@ -14,51 +14,52 @@ import {
 } from 'reactstrap';
 
 // Hero Section Component
-const HeroSection = () => (
-  <section className='hero-section bg-gradient-primary text-white py-5'>
-    <Container>
-      <Row className='align-items-center min-vh-75'>
-        <Col lg='6' className='text-center text-lg-start'>
-          <h1 className='display-4 fw-bold mb-4'>
-            NextJS Enterprise Dashboard
-          </h1>
-          <p className='lead mb-4'>
-            A modern, responsive, and feature-rich dashboard built with Next.js,
-            React 18, and the latest web technologies. Perfect for enterprise
-            applications.
-          </p>
-          <div className='d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start'>
-            <Button
-              color='light'
-              size='lg'
-              className='px-4 py-3'
-              tag={Link}
-              href='/admin/dashboard'
-            >
-              <i className='fas fa-tachometer-alt me-2'></i>
-              View Dashboard
-            </Button>
-            <Button
-              color='outline-light'
-              size='lg'
-              className='px-4 py-3'
-              tag={Link}
-              href='/auth/login'
-            >
-              <i className='fas fa-sign-in-alt me-2'></i>
-              Get Started
-            </Button>
-          </div>
-        </Col>
-        <Col lg='6' className='text-center'>
-          <div className='hero-image mt-5 mt-lg-0'>
-            <i className='fas fa-chart-line display-1 text-white-50'></i>
-          </div>
-        </Col>
-      </Row>
-    </Container>
-  </section>
-);
+const HeroSection = () => {
+  const router = useRouter();
+  return (
+    <section className='hero-section bg-gradient-primary text-white py-5'>
+      <Container>
+        <Row className='align-items-center min-vh-75'>
+          <Col lg='6' className='text-center text-lg-start'>
+            <h1 className='display-4 fw-bold mb-4'>
+              NextJS Enterprise Dashboard
+            </h1>
+            <p className='lead mb-4'>
+              A modern, responsive, and feature-rich dashboard built with Next.js,
+              React 18, and the latest web technologies. Perfect for enterprise
+              applications.
+            </p>
+            <div className='d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start'>
+              <Button
+                color='light'
+                size='lg'
+                className='px-4 py-3'
+                onClick={() => router.push('/admin/dashboard')}
+              >
+                <i className='fas fa-tachometer-alt me-2'></i>
+                View Dashboard
+              </Button>
+              <Button
+                color='outline-light'
+                size='lg'
+                className='px-4 py-3'
+                onClick={() => router.push('/auth/login')}
+              >
+                <i className='fas fa-sign-in-alt me-2'></i>
+                Get Started
+              </Button>
+            </div>
+          </Col>
+          <Col lg='6' className='text-center'>
+            <div className='hero-image mt-5 mt-lg-0'>
+              <i className='fas fa-chart-line display-1 text-white-50'></i>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </section>
+  );
+};
 
 // Features Section Component
 const FeaturesSection = () => {
