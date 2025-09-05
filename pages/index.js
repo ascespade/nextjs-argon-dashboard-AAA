@@ -179,9 +179,27 @@ export default function Index() {
     );
   };
 
+  const showFallback = !editModeRef.current && (!page || !page.components || page.components.length === 0);
+
   return (
-    <div>
-      {page.components.map((c, idx) => renderComponent(c, idx))}
-    </div>
+    <ErrorBoundary>
+      <div>
+        {showFallback ? (
+          <section className="section section-shaped pt-5">
+            <div className="container py-md">
+              <div className="row justify-content-center">
+                <div className="col-lg-8 text-center">
+                  <h1 className="display-3">Welcome to Argon Editable</h1>
+                  <p className="lead">The homepage has no published content yet. Sign in to the dashboard to create content.</p>
+                  <a href="/admin/dashboard" className="btn btn-primary">Go to Dashboard</a>
+                </div>
+              </div>
+            </div>
+          </section>
+        ) : (
+          page.components.map((c, idx) => renderComponent(c, idx))
+        )}
+      </div>
+    </ErrorBoundary>
   );
 }
