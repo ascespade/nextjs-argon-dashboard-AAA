@@ -39,9 +39,19 @@ function NewSidebar({ components = [], onAdd, collapsed, toggleCollapsed, ready 
       </div>
       <div className="components-list">
         <h6>Components</h6>
-        {components.map(c => (
-          <button key={c.id} className="component-btn" onClick={() => onAdd(c)} disabled={!ready}>{c.type}</button>
-        ))}
+        {components.map(c => {
+          const type = String(c.type || '').toLowerCase();
+          let icon = 'ni-ui-04';
+          if (type.indexOf('image') !== -1) icon = 'ni-image';
+          else if (type.indexOf('button') !== -1) icon = 'ni-fat-add';
+          else if (type.indexOf('hero') !== -1) icon = 'ni-tv-2';
+          else if (type.indexOf('gallery') !== -1) icon = 'ni-collection';
+          else if (type.indexOf('stats') !== -1) icon = 'ni-chart-bar';
+          else if (type.indexOf('testimonials') !== -1) icon = 'ni-satisfied';
+          return (
+            <button key={c.id} className="component-btn" onClick={() => onAdd(c)} disabled={!ready}><i className={`ni ${icon} mr-2`} />{c.type}</button>
+          );
+        })}
       </div>
       <div className="sidebar-footer">Documentation</div>
     </aside>
