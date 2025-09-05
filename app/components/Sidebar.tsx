@@ -29,7 +29,7 @@ const Sidebar: React.FC = () => {
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           onClick={toggle}
           title={collapsed ? 'Expand' : 'Collapse'}
-          className={`sidebar-toggle -mr-2 inline-flex items-center justify-center w-9 h-9 rounded-full bg-white shadow-sm border hover:bg-gray-50 focus:outline-none transition-transform ${collapsed ? 'rotate-180' : ''}`}
+          className={`sidebar-toggle -mr-2 inline-flex items-center justify-center w-9 h-9 rounded-full bg-white shadow-sm border hover:bg-gray-50 focus:outline-none transition-transform ${collapsed ? '' : 'rotate-180'}`}
         >
           <svg
             viewBox='0 0 24 24'
