@@ -11,8 +11,15 @@ const PerformanceMonitor: React.FC = () => {
     errors: 0,
   });
   const [visible, setVisible] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // ensure this component renders nothing on the server to avoid hydration mismatch
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     const t = setInterval(() => {
       setMetrics(m => ({
         ...m,
@@ -22,7 +29,10 @@ const PerformanceMonitor: React.FC = () => {
       }));
     }, 2000);
     return () => clearInterval(t);
-  }, []);
+  }, [mounted]);
+
+  // Render nothing on server; this prevents server/client markup mismatches
+  if (!mounted) return null;
 
   if (!visible) {
     return (
