@@ -13,7 +13,7 @@ import { config } from "config/app.config";
 
 // Preline CSS will be loaded via CDN in the Head component
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import "assets/css/nextjs-argon-dashboard.css";
+import "assets/css/nextjs-argon-dashboard.min.css";
 import "assets/css/custom-home.css";
 
 Router.events.on("routeChangeStart", (url) => {
