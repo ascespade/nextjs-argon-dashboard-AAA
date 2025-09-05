@@ -15,9 +15,9 @@ function NewToolbar({ ready, onSave, onPublish, onUndo, onRedo, onExport, onImpo
       <div className="toolbar-center">
         <div className="device-controls">
           <span className="device-label">Preview:</span>
-          <button className="btn btn-sm btn-outline-secondary" data-device="desktop">Desktop</button>
-          <button className="btn btn-sm btn-outline-secondary" data-device="tablet">Tablet</button>
-          <button className="btn btn-sm btn-outline-secondary" data-device="mobile">Mobile</button>
+          <button className="btn btn-sm btn-outline-secondary" data-device="desktop"><i className="ni ni-tv-2 mr-2" />Desktop</button>
+          <button className="btn btn-sm btn-outline-secondary" data-device="tablet"><i className="ni ni-tablet-button mr-2" />Tablet</button>
+          <button className="btn btn-sm btn-outline-secondary" data-device="mobile"><i className="ni ni-mobile-button mr-2" />Mobile</button>
         </div>
       </div>
       <div className="toolbar-right">
