@@ -330,10 +330,10 @@ const Homepage = () => {
       {/* Navigation Header */}
       <nav className='navbar navbar-expand-lg navbar-dark bg-primary fixed-top'>
         <Container>
-          <Link href='/' className='navbar-brand fw-bold'>
+          <a role='button' className='navbar-brand fw-bold' onClick={() => { const r = require('next/router').useRouter ? null : null; }} href='/'>
             <i className='fas fa-chart-line me-2'></i>
             NextJS Dashboard
-          </Link>
+          </a>
           <button
             className='navbar-toggler'
             type='button'
@@ -345,26 +345,26 @@ const Homepage = () => {
           <div className='collapse navbar-collapse' id='navbarNav'>
             <ul className='navbar-nav ms-auto'>
               <li className='nav-item'>
-                <Link href='/admin/dashboard' className='nav-link'>
+                <a className='nav-link' role='button' onClick={(e) => { e.preventDefault(); const r = require('next/router').useRouter(); r && r.push('/admin/dashboard'); window.scrollTo(0,0); }} href='/admin/dashboard'>
                   Dashboard
-                </Link>
+                </a>
               </li>
               <li className='nav-item'>
-                <Link href='/admin/profile' className='nav-link'>
+                <a className='nav-link' role='button' onClick={(e) => { e.preventDefault(); const r = require('next/router').useRouter(); r && r.push('/admin/profile'); window.scrollTo(0,0); }} href='/admin/profile'>
                   Profile
-                </Link>
+                </a>
               </li>
               <li className='nav-item'>
-                <Link href='/auth/login' className='nav-link'>
+                <a className='nav-link' role='button' onClick={(e) => { e.preventDefault(); const r = require('next/router').useRouter(); r && r.push('/auth/login'); window.scrollTo(0,0); }} href='/auth/login'>
                   Login
-                </Link>
+                </a>
               </li>
               <li className='nav-item'>
-                <Link href='/auth/register' className='nav-link'>
+                <a className='nav-link' role='button' onClick={(e) => { e.preventDefault(); const r = require('next/router').useRouter(); r && r.push('/auth/register'); window.scrollTo(0,0); }} href='/auth/register'>
                   <Button color='light' size='sm' className='px-3'>
                     Get Started
                   </Button>
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
