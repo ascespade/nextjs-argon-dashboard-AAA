@@ -70,6 +70,8 @@ export default function Editor() {
   const [collapsed, setCollapsed] = useState(false);
   const [iframeReady, setIframeReady] = useState(false);
   const [scale, setScale] = useState(1);
+  const [editMode, setEditMode] = useState(true);
+  const iframeSrc = editMode ? '/?edit=1' : '/';
 
   useEffect(() => {
     (async () => {
