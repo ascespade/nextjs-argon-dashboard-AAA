@@ -351,7 +351,7 @@ const Homepage = () => {
                 </a>
               </li>
               <li className='nav-item'>
-                <a className='nav-link' role='button' onClick={(e) => { e.preventDefault(); const r = require('next/router').useRouter(); r && r.push('/admin/profile'); window.scrollTo(0,0); }} href='/admin/profile'>
+                <a className='nav-link' role='button' onClick={(e) => { e.preventDefault(); router.push('/admin/profile'); window.scrollTo(0,0); }} href='/admin/profile'>
                   Profile
                 </a>
               </li>
