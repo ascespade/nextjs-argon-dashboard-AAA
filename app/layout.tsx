@@ -10,7 +10,6 @@ import './globals.css';
 import '../assets/css/nextjs-argon-dashboard.min.css';
 import '../assets/css/custom-home.css';
 import { SidebarProvider } from './components/SidebarContext';
-import PerformanceMonitor from './components/PerformanceMonitorApp';
 
 export default function RootLayout({
   children,
