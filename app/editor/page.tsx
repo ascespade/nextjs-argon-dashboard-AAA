@@ -71,18 +71,14 @@ export default function EditorPage() {
               className='p-2 rounded-md hover:bg-gray-100'
               title='Undo'
             >
-              <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5 text-gray-700' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
-              </svg>
+              <i className='fa fa-undo text-gray-700' aria-hidden='true' />
             </button>
             <button
               onClick={() => postToIframe({ type: 'REDO' })}
               className='p-2 rounded-md hover:bg-gray-100'
               title='Redo'
             >
-              <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5 text-gray-700' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
-              </svg>
+              <i className='fa fa-redo text-gray-700' aria-hidden='true' />
             </button>
           </div>
 
