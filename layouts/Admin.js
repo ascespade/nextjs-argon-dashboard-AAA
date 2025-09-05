@@ -32,19 +32,25 @@ function Admin(props) {
     return "Brand";
   };
   const hideSidebar = props.hideSidebar || false;
+  React.useEffect(() => {
+    // if page requests hiding sidebar, keep a collapsed mini sidebar instead of removing it
+    try {
+      if (hideSidebar) document.body.classList.add('sidebar-collapsed');
+      else document.body.classList.remove('sidebar-collapsed');
+    } catch (e) {}
+  }, [hideSidebar]);
+
   return (
     <>
-      {!hideSidebar ? (
-        <Sidebar
-          {...props}
-          routes={routes}
-          logo={{
-            innerLink: "/admin/index",
-            imgSrc: require("assets/img/brand/nextjs_argon_black.png"),
-            imgAlt: "...",
-          }}
-        />
-      ) : null}
+      <Sidebar
+        {...props}
+        routes={routes}
+        logo={{
+          innerLink: "/admin/index",
+          imgSrc: require("assets/img/brand/nextjs_argon_black.png"),
+          imgAlt: "...",
+        }}
+      />
       <div className="main-content" ref={mainContentRef}>
         <AdminNavbar {...props} brandText={getBrandText()} />
         {props.children}
