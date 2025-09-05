@@ -16,31 +16,41 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/css/nextjs-argon-dashboard.min.css";
 import "assets/css/custom-home.css";
 
+// Page transition root (reused to avoid createRoot on same container multiple times)
+let pageTransitionRoot = null;
+
 Router.events.on("routeChangeStart", (url) => {
   console.log(`Loading: ${url}`);
   document.body.classList.add("body-page-transition");
   const container = document.getElementById("page-transition");
   if (container) {
-    const root = createRoot(container);
-    root.render(<PageChange path={url} />);
+    try {
+      if (!pageTransitionRoot) {
+        pageTransitionRoot = createRoot(container);
+      }
+      pageTransitionRoot.render(<PageChange path={url} />);
+    } catch (e) {
+      // Fallback: ensure container isn't left in a broken state
+      try { container.innerHTML = ''; } catch (_e) {}
+    }
   }
 });
-Router.events.on("routeChangeComplete", () => {
+
+const clearPageTransition = () => {
   const container = document.getElementById("page-transition");
-  if (container) {
-    const root = createRoot(container);
-    root.unmount();
+  if (pageTransitionRoot) {
+    try {
+      pageTransitionRoot.unmount();
+    } catch (_e) {}
+    pageTransitionRoot = null;
+  } else if (container) {
+    try { container.innerHTML = ''; } catch (_e) {}
   }
   document.body.classList.remove("body-page-transition");
-});
-Router.events.on("routeChangeError", () => {
-  const container = document.getElementById("page-transition");
-  if (container) {
-    const root = createRoot(container);
-    root.unmount();
-  }
-  document.body.classList.remove("body-page-transition");
-});
+};
+
+Router.events.on("routeChangeComplete", clearPageTransition);
+Router.events.on("routeChangeError", clearPageTransition);
 
 // Create a client
 const queryClient = new QueryClient({
