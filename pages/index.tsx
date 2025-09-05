@@ -346,7 +346,7 @@ const Homepage = () => {
           <div className='collapse navbar-collapse' id='navbarNav'>
             <ul className='navbar-nav ms-auto'>
               <li className='nav-item'>
-                <a className='nav-link' role='button' onClick={(e) => { e.preventDefault(); const r = require('next/router').useRouter(); r && r.push('/admin/dashboard'); window.scrollTo(0,0); }} href='/admin/dashboard'>
+                <a className='nav-link' role='button' onClick={(e) => { e.preventDefault(); router.push('/admin/dashboard'); window.scrollTo(0,0); }} href='/admin/dashboard'>
                   Dashboard
                 </a>
               </li>
