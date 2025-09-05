@@ -46,7 +46,7 @@ function NewSidebar({ components = [], onAdd, collapsed, toggleCollapsed, ready 
           else if (type.indexOf('button') !== -1) icon = 'ni-fat-add';
           else if (type.indexOf('hero') !== -1) icon = 'ni-tv-2';
           else if (type.indexOf('gallery') !== -1) icon = 'ni-collection';
-          else if (type.indexOf('stats') !== -1) icon = 'ni-chart-bar';
+          else if (type.indexOf('stats') !== -1) icon = 'ni-chart-bar-32';
           else if (type.indexOf('testimonials') !== -1) icon = 'ni-satisfied';
           return (
             <button key={c.id} className="component-btn" onClick={() => onAdd(c)} disabled={!ready}><i className={`ni ${icon} mr-2`} />{c.type}</button>
