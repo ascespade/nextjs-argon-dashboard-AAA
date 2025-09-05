@@ -42,17 +42,17 @@ export default function EditorPage() {
 
   // sidebar widths must mirror app/components/Sidebar.tsx w-20 (80px) and w-64 (256px)
   const leftWidth = leftCollapsed ? 80 : 256;
-  const rightWidth = rightCollapsed ? 0 : 320; // approx w-80 + padding
+  const rightWidth = rightCollapsed ? 64 : 320; // collapsed shows small toggle area
   const toolbarHeight = 64; // px
 
   return (
     <div className='min-h-screen relative'>
       <Sidebar />
 
-      <div style={{ marginLeft: leftWidth }} className='flex-1'>
-        {/* Top toolbar */}
-        <div style={{ height: toolbarHeight }} className='flex items-center gap-2 p-3 border-b bg-white fixed left-0 right-0 z-30'>
-          <div className='ml-4'>
+      <div style={{ marginLeft: leftWidth }} className='flex-1 flex flex-col min-h-screen'>
+        {/* Top toolbar (restored to non-fixed flow) */}
+        <div style={{ height: toolbarHeight }} className='flex items-center gap-2 p-3 border-b bg-white'>
+          <div>
             <button
               onClick={() => postToIframe({ type: 'SAVE_DRAFT' })}
               className='px-3 py-2 bg-indigo-600 text-white rounded'
@@ -124,9 +124,11 @@ export default function EditorPage() {
           </div>
         </div>
 
-        {/* Canvas area - fixed so it occupies available viewport between sidebars */}
-        <div style={{ paddingTop: toolbarHeight }}>
+        {/* Main content area: center canvas + right sidebar as siblings */}
+        <div style={{ flex: 1 }} className='flex overflow-hidden'>
+          {/* Center canvas */}
           <div
+            className='flex-1 flex justify-center items-start p-4 overflow-auto'
             onDragOver={e => e.preventDefault()}
             onDrop={e => {
               e.preventDefault();
@@ -140,108 +142,94 @@ export default function EditorPage() {
                 console.error(err);
               }
             }}
-            style={{
-              position: 'fixed',
-              zIndex: 20,
-              top: toolbarHeight,
-              left: leftWidth,
-              right: rightWidth,
-              bottom: 0,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              padding: 16,
-              background: 'var(--bg, transparent)'
-            }}
           >
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'flex-start',
-                width: '100%',
-                height: '100%',
-                overflow: 'auto'
-              }}
-            >
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', width: '100%', height: `calc(100vh - ${toolbarHeight}px)`, overflow: 'auto' }}>
               <iframe
                 ref={iframeRef}
                 src={`/?edit=1`}
                 className='border rounded shadow'
                 style={{
                   width: selectedDevice === 'desktop' ? '100%' : selectedDevice === 'tablet' ? '800px' : '375px',
-                  height: 'calc(100vh - ' + (toolbarHeight + 32) + 'px)',
+                  height: `calc(100vh - ${toolbarHeight + 32}px)`,
                   border: '1px solid rgba(0,0,0,0.08)',
                   background: 'white'
                 }}
                 title='Editor Canvas'
               />
             </div>
-
-            {/* Right components sidebar */}
-            <aside
-              style={{
-                position: 'absolute',
-                right: 0,
-                top: 0,
-                bottom: 0,
-                width: rightCollapsed ? 56 : 320,
-                transition: 'width 0.2s',
-                background: 'white',
-                borderLeft: '1px solid rgba(0,0,0,0.08)',
-                padding: 12,
-                overflow: 'auto'
-              }}
-            >
-              {!rightCollapsed ? (
-                <div>
-                  <h4 className='font-semibold mb-2'>Components</h4>
-                  <div className='grid grid-cols-2 gap-3'>
-                    <div
-                      draggable
-                      onDragStart={e => {
-                        e.dataTransfer?.setData('application/json', JSON.stringify({ type: 'hero_banner' }));
-                      }}
-                      className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
-                    >
-                      Hero
-                    </div>
-                    <div
-                      draggable
-                      onDragStart={e => {
-                        e.dataTransfer?.setData('application/json', JSON.stringify({ type: 'feature_card' }));
-                      }}
-                      className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
-                    >
-                      Feature
-                    </div>
-                    <div
-                      draggable
-                      onDragStart={e => {
-                        e.dataTransfer?.setData('application/json', JSON.stringify({ type: 'stats_counter' }));
-                      }}
-                      className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
-                    >
-                      Stats
-                    </div>
-                    <div
-                      draggable
-                      onDragStart={e => {
-                        e.dataTransfer?.setData('application/json', JSON.stringify({ type: 'testimonial' }));
-                      }}
-                      className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
-                    >
-                      Testimonial
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className='h-full flex items-center justify-center'>
-                  <button onClick={() => setRightCollapsed(false)} className='px-2 py-1 border rounded'>Open</button>
-                </div>
-              )}
-            </aside>
           </div>
+
+          {/* Right components sidebar (sibling, aligned to right) */}
+          <aside
+            style={{
+              width: rightWidth,
+              transition: 'width 0.2s',
+              background: 'white',
+              borderLeft: '1px solid rgba(0,0,0,0.08)',
+              padding: 12,
+              overflow: 'auto',
+              display: 'flex',
+              flexDirection: 'column'
+            }}
+          >
+            <div className='flex items-center justify-between mb-3'>
+              {!rightCollapsed && <h4 className='font-semibold'>Components</h4>}
+              <div>
+                <button
+                  onClick={() => setRightCollapsed(v => !v)}
+                  className='px-2 py-1 border rounded'
+                  title={rightCollapsed ? 'Open' : 'Collapse'}
+                >
+                  {rightCollapsed ? '>' : '‹'}
+                </button>
+              </div>
+            </div>
+
+            {!rightCollapsed ? (
+              <div className='grid grid-cols-2 gap-3'>
+                <div
+                  draggable
+                  onDragStart={e => {
+                    e.dataTransfer?.setData('application/json', JSON.stringify({ type: 'hero_banner' }));
+                  }}
+                  className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
+                >
+                  Hero
+                </div>
+                <div
+                  draggable
+                  onDragStart={e => {
+                    e.dataTransfer?.setData('application/json', JSON.stringify({ type: 'feature_card' }));
+                  }}
+                  className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
+                >
+                  Feature
+                </div>
+                <div
+                  draggable
+                  onDragStart={e => {
+                    e.dataTransfer?.setData('application/json', JSON.stringify({ type: 'stats_counter' }));
+                  }}
+                  className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
+                >
+                  Stats
+                </div>
+                <div
+                  draggable
+                  onDragStart={e => {
+                    e.dataTransfer?.setData('application/json', JSON.stringify({ type: 'testimonial' }));
+                  }}
+                  className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
+                >
+                  Testimonial
+                </div>
+              </div>
+            ) : (
+              <div className='flex-1 flex items-center justify-center'>
+                <button onClick={() => setRightCollapsed(false)} className='px-2 py-1 border rounded'>Open</button>
+              </div>
+            )}
+          </aside>
         </div>
       </div>
     </div>
