@@ -1,3 +1,4 @@
+.editor-root{display:flex;height:100vh}
 .editor-wrapper{position:relative}
 .editor-controls{position:absolute;top:6px;right:6px;display:flex;gap:6px;z-index:2}
 .editor-drag-handle{cursor:move}
@@ -5,7 +6,11 @@
 .editor-device-frame{border:1px solid rgba(0,0,0,.1);box-shadow:0 2px 12px rgba(0,0,0,.08);border-radius:6px;overflow:hidden}
 .editor-toolbar{background:var(--editor-toolbar-bg, #172b4d);color:#fff}
 .editor-sidebar{background:#fff;border-left:1px solid rgba(0,0,0,.1)}
+.editor-sidebar-panel{width:260px;padding:1rem}
 .editor-iframe{width:100%;height:100%;border:0}
+.editor-device-controls{display:flex;gap:8px;padding:0.5rem}
+.preview-lens{position:absolute;right:12px;bottom:12px;width:140px;height:84px;background:rgba(0,0,0,.6);color:#fff;border-radius:6px;padding:8px}
+.file-input-hidden{display:none}
 
 /* Sidebar collapse behavior */
 .navbar-vertical{transition: width .25s ease, transform .25s ease}
