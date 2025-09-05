@@ -164,6 +164,6 @@ export default function Editor() {
 }
 
 Editor.layout = function EditorLayout({ children }) {
-  // keep original Argon sidebar functional and visible; the Admin layout manages it
-  return <Admin>{children}</Admin>;
+  // hide the main Argon sidebar for the editor to allow full-width canvas
+  return <Admin hideSidebar={true}>{children}</Admin>;
 };
