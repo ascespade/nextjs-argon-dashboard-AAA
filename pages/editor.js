@@ -84,7 +84,7 @@ export default function Editor() {
     <div style={{ display: 'flex', height: '100vh' }}>
       <Sidebar components={componentsLibrary} onAdd={onAdd} />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <Toolbar onSave={saveDraft} onPublish={publish} onUndo={undo} onRedo={redo} />
+        <Toolbar onSave={saveDraft} onPublish={publish} onUndo={undo} onRedo={redo} onExport={exportJSON} onImport={importJSON} onTogglePalette={togglePalette} onToggleFont={toggleFont} />
         <DeviceControls device={device} setDevice={setDevice} />
         <div style={{ flex: 1, display: 'flex', position: 'relative', justifyContent: 'center', alignItems: 'center' }}>
           <div className="editor-device-frame" style={{ flex: device==='desktop'?1:'none', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
