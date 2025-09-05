@@ -13,11 +13,12 @@ export default function HomeEditorClient({
   useEffect(() => {
     function applyZoom(z: number) {
       try {
+        // Prefer non-standard CSS zoom when available (acts like browser zoom) for crisper scaling
+        (document.body as any).style.zoom = String(z);
+        // Fallback: use transform scale on the root element
         const el = document.documentElement || document.body;
         el.style.transformOrigin = 'top left';
         el.style.transform = `scale(${z})`;
-        // compensate width so scaled content stays within viewport
-        (el as HTMLElement).style.width = `${100 / z}%`;
       } catch (e) {
         // ignore
       }
