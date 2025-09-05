@@ -150,23 +150,136 @@ export default function Index() {
   const onDragOver = (e) => e.preventDefault();
 
   const renderComponent = (c, idx) => {
+    const commonProps = { id: c.id, editMode: editModeRef.current };
     const content = (() => {
       switch(c.type) {
         case 'hero_banner':
           return (
-            <>
-              {c.props.image ? <EditableImage id={c.id} src={c.props.image} alt={c.props.title} editMode={editModeRef.current} /> : null}
-              <h1>{c.props.title}</h1>
-              <p>{c.props.subtitle}</p>
-              <a className="btn btn-primary" href={c.props.buttonHref}>{c.props.buttonText}</a>
-            </>
+            <section className="bg-white py-12">
+              <div className="container mx-auto px-4 md:px-8 grid gap-8 md:grid-cols-2 items-center">
+                <div>
+                  {c.props.badge ? <div className="inline-block bg-indigo-100 text-indigo-800 px-3 py-1 rounded mb-3 text-sm">{c.props.badge}</div> : null}
+                  <h1 className="text-3xl md:text-5xl font-bold mb-4"><EditableText id={c.id + '-title'} text={c.props.title} editMode={editModeRef.current} /></h1>
+                  <p className="text-slate-700 mb-6"><EditableText id={c.id + '-subtitle'} text={c.props.subtitle} editMode={editModeRef.current} /></p>
+                  <div className="flex gap-3">
+                    <a href={c.props.buttonHref || '#'} className="px-4 py-2 bg-indigo-600 text-white rounded"><EditableText id={c.id + '-btn'} text={c.props.buttonText} editMode={editModeRef.current} /></a>
+                    <a href="#" className="px-4 py-2 border rounded text-slate-700">Learn more</a>
+                  </div>
+                </div>
+                <div className="flex justify-center">
+                  {c.props.image ? <EditableImage id={c.id + '-img'} src={c.props.image} alt={c.props.title} editMode={editModeRef.current} /> : <div className="w-80 h-48 bg-slate-100" />}
+                </div>
+              </div>
+            </section>
+          );
+        case 'features':
+          return (
+            <section className="py-12">
+              <div className="container mx-auto px-4 md:px-8">
+                <div className="grid gap-6 md:grid-cols-3">
+                  {(c.props.items||[]).map(item => (
+                    <div key={item.id} className="p-6 bg-white rounded shadow-sm">
+                      <div className="text-indigo-600 text-2xl mb-3"><i className={`${item.icon}`}></i></div>
+                      <h3 className="font-semibold mb-2"><EditableText id={`${c.id}-${item.id}-title`} text={item.title} editMode={editModeRef.current} /></h3>
+                      <p className="text-slate-600"><EditableText id={`${c.id}-${item.id}-text`} text={item.text} editMode={editModeRef.current} /></p>
+                      <div className="mt-4">
+                        <a className="text-indigo-600 text-sm" href="#">Learn more →</a>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          );
+        case 'stats_counter':
+          return (
+            <section className="py-8 bg-slate-50">
+              <div className="container mx-auto px-4 md:px-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                  {(c.props.items||[]).map(it => (
+                    <div key={it.id}>
+                      <div className="text-3xl font-bold"><EditableText id={`${c.id}-${it.id}-value`} text={it.value} editMode={editModeRef.current} /></div>
+                      <div className="text-sm text-slate-600"><EditableText id={`${c.id}-${it.id}-label`} text={it.label} editMode={editModeRef.current} /></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          );
+        case 'gallery':
+          return (
+            <section className="py-12">
+              <div className="container mx-auto px-4 md:px-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  {(c.props.images||[]).map((src, i) => (
+                    <div key={i} className="overflow-hidden rounded">
+                      <img src={src} alt={`Gallery ${i}`} className="w-full h-48 object-cover cursor-pointer" onClick={() => window.open(src, '_blank')} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          );
+        case 'testimonials':
+          return (
+            <section className="py-12 bg-white">
+              <div className="container mx-auto px-4 md:px-8">
+                <div className="grid gap-6 md:grid-cols-2">
+                  {(c.props.items||[]).map(it => (
+                    <div key={it.id} className="p-6 border rounded">
+                      <div className="flex items-center gap-4 mb-3">
+                        <img src={it.avatar} alt={it.name} className="w-12 h-12 rounded-full object-cover" />
+                        <div>
+                          <div className="font-semibold">{it.name}</div>
+                          <div className="text-sm text-slate-500">{it.role}</div>
+                        </div>
+                      </div>
+                      <div className="text-slate-700"><EditableText id={`${c.id}-${it.id}-quote`} text={it.quote} editMode={editModeRef.current} /></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          );
+        case 'cta_section':
+          return (
+            <section className="py-12">
+              <div className="container mx-auto px-4 md:px-8">
+                <div className="bg-indigo-600 text-white rounded p-8 flex items-center justify-between">
+                  <div>
+                    <h3 className="text-xl font-bold mb-2"><EditableText id={`${c.id}-title`} text={c.props.title} editMode={editModeRef.current} /></h3>
+                    <p className="text-sm"><EditableText id={`${c.id}-subtitle`} text={c.props.subtitle || ''} editMode={editModeRef.current} /></p>
+                  </div>
+                  <div>
+                    <a href={c.props.buttonHref || '#'} className="px-4 py-2 bg-white text-indigo-600 rounded"><EditableText id={`${c.id}-btn`} text={c.props.buttonText} editMode={editModeRef.current} /></a>
+                  </div>
+                </div>
+              </div>
+            </section>
+          );
+        case 'faq':
+          return (
+            <section className="py-12 bg-slate-50">
+              <div className="container mx-auto px-4 md:px-8">
+                <div className="max-w-2xl mx-auto">
+                  {(c.props.items||[]).map(it => (
+                    <details key={it.id} className="mb-3 border rounded">
+                      <summary className="px-4 py-3 cursor-pointer font-medium">{it.q}</summary>
+                      <div className="px-4 py-3 text-slate-700"><EditableText id={`${c.id}-${it.id}-a`} text={it.a} editMode={editModeRef.current} /></div>
+                    </details>
+                  ))}
+                </div>
+              </div>
+            </section>
           );
         case 'text_block':
-          return <EditableText id={c.id} text={c.props.text} editMode={editModeRef.current} />;
-        case 'image':
-          return <EditableImage id={c.id} src={c.props.src} alt={c.props.alt} editMode={editModeRef.current} />;
+          return (
+            <section className="py-6">
+              <div className="container mx-auto px-4 md:px-8"><EditableText id={c.id} text={c.props.text} editMode={editModeRef.current} /></div>
+            </section>
+          );
         default:
-          return <div>{JSON.stringify(c)}</div>;
+          return <pre className="p-4 bg-white rounded">{JSON.stringify(c, null, 2)}</pre>;
       }
     })();
 
