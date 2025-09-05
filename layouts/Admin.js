@@ -33,10 +33,14 @@ function Admin(props) {
   };
   const hideSidebar = props.hideSidebar || false;
   React.useEffect(() => {
-    // if page requests hiding sidebar, keep a collapsed mini sidebar instead of removing it
     try {
-      if (hideSidebar) document.body.classList.add('sidebar-collapsed');
-      else document.body.classList.remove('sidebar-collapsed');
+      if (hideSidebar) {
+        document.body.classList.add('sidebar-collapsed');
+        document.body.classList.add('hide-sidebar');
+      } else {
+        document.body.classList.remove('hide-sidebar');
+        document.body.classList.remove('sidebar-collapsed');
+      }
     } catch (e) {}
   }, [hideSidebar]);
 
