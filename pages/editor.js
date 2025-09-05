@@ -145,7 +145,7 @@ export default function Editor() {
 
   return (
     <div className="flex h-[calc(100vh-70px)] flex-col">
-      <Toolbar ready={iframeReady} onSave={saveDraft} onPublish={publish} onUndo={undo} onRedo={redo} onZoomIn={zoomIn} onZoomOut={zoomOut} setDevice={setDevice} device={device} onExport={onExport} onImport={onImport} />
+      <Toolbar ready={iframeReady} onSave={saveDraft} onPublish={publish} onUndo={undo} onRedo={redo} onZoomIn={zoomIn} onZoomOut={zoomOut} setDevice={setDevice} device={device} onExport={onExport} onImport={onImport} editMode={editMode} toggleEditMode={() => { setEditMode(e=>{ const next = !e; try{ if (iframeRef.current) iframeRef.current.src = next ? '/?edit=1' : '/'; setIframeReady(false); }catch(e){} return next; }); }} />
       <div className="flex flex-1 overflow-hidden">
         <main className="flex-1 flex items-start justify-center bg-slate-50 p-4" onDrop={handleDropFromLibrary} onDragOver={onDragOver}>
           <div className={`${iframeWrapperClass} canvas-frame transform origin-top`} style={{ transform: `scale(${scale})` }}>
