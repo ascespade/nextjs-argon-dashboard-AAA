@@ -24,15 +24,29 @@
 /* make device frame tall enough to show a full page preview */
 .editor-device-frame{min-height:900px;max-width:1200px;width:100%}
 
-/* smaller frame heights for tablet/mobile */
-@media (max-width: 1199.98px){
-  .editor-device-frame{min-height:800px}
-}
+/* New editor design styles */
+.new-editor-root{display:flex;flex-direction:column;height:calc(100vh - 70px)}
+.new-editor-toolbar{height:52px;background:var(--navbar-bg,#172b4d);color:#fff;display:flex;align-items:center;padding:0 12px;justify-content:space-between}
+.new-editor-toolbar .toolbar-left,.new-editor-toolbar .toolbar-center,.new-editor-toolbar .toolbar-right{display:flex;align-items:center;gap:8px}
+.new-editor-toolbar .device-controls .device-label{font-size:12px;color:rgba(255,255,255,.85);margin-right:6px}
+.new-editor-body{display:flex;flex:1;overflow:hidden}
+.new-editor-sidebar{width:260px;background:#fff;border-right:1px solid rgba(0,0,0,.06);display:flex;flex-direction:column}
+.new-editor-sidebar.collapsed{width:72px}
+.new-editor-sidebar .sidebar-top{display:flex;align-items:center;padding:8px;border-bottom:1px solid rgba(0,0,0,.04)}
+.new-editor-sidebar .collapse-toggle{margin-right:8px}
+.new-editor-sidebar .brand{font-weight:bold}
+.new-editor-sidebar .components-list{padding:10px;overflow:auto}
+.new-editor-sidebar .component-btn{display:block;width:100%;text-align:left;margin-bottom:8px}
+.new-editor-canvas{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:12px;overflow:auto}
+.new-editor-rightpanel{width:320px;background:#f8f9fb;border-left:1px solid rgba(0,0,0,.04);padding:12px}
+.canvas-frame{width:100%;max-width:1200px;display:flex;justify-content:center}
+
 @media (max-width: 991.98px){
-  .editor-device-frame{min-height:700px}
-}
-@media (max-width: 575.98px){
-  .editor-device-frame{min-height:640px}
+  .new-editor-body{flex-direction:column}
+  .new-editor-sidebar{width:100%;height:auto}
+  .new-editor-sidebar.collapsed{width:100%}
+  .new-editor-rightpanel{width:100%}
+  .new-editor-canvas{padding:8px}
 }
 
 /* Sidebar collapse behavior */
