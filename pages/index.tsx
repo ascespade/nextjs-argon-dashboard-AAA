@@ -315,6 +315,7 @@ const Footer = () => (
 
 // Main Homepage Component
 const Homepage = () => {
+  const router = useRouter();
   return (
     <>
       <Head>
