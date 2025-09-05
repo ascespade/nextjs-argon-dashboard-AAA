@@ -21,10 +21,10 @@ function NewToolbar({ ready, onSave, onPublish, onUndo, onRedo, onExport, onImpo
         </div>
       </div>
       <div className="toolbar-right">
-        <button className="btn btn-sm btn-outline-light" onClick={onExport}>Export</button>
-        <label className="btn btn-sm btn-outline-light mb-0">Import<input type="file" className="file-input-hidden" onChange={onImport} /></label>
-        <button className="btn btn-sm btn-outline-light" onClick={onTogglePalette}>Palette</button>
-        <button className="btn btn-sm btn-outline-light" onClick={onToggleFont}>Fonts</button>
+        <button className="btn btn-sm btn-outline-light" onClick={onExport}><i className="ni ni-ungroup mr-2" />Export</button>
+        <label className="btn btn-sm btn-outline-light mb-0"><i className="ni ni-fat-add mr-2" />Import<input type="file" className="file-input-hidden" onChange={onImport} /></label>
+        <button className="btn btn-sm btn-outline-light" onClick={onTogglePalette}><i className="ni ni-palette mr-2" />Palette</button>
+        <button className="btn btn-sm btn-outline-light" onClick={onToggleFont}><i className="ni ni-zoom-split-in mr-2" />Fonts</button>
       </div>
     </header>
   );
