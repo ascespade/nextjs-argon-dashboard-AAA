@@ -167,6 +167,6 @@ export default function Editor() {
 }
 
 Editor.layout = function EditorLayout({ children }) {
-  // hide the main Argon sidebar for the editor to allow full-width canvas
-  return <Admin hideSidebar={true}>{children}</Admin>;
+  // use standard Admin layout (sidebar visible) — collapse buttons now scoped correctly
+  return <Admin>{children}</Admin>;
 };
