@@ -33,7 +33,6 @@
     "compile:scss": "sass assets/scss/nextjs-argon-dashboard.scss assets/css/nextjs-argon-dashboard.css",
     "minify:scss": "sass --style=compressed assets/scss/nextjs-argon-dashboard.scss assets/css/nextjs-argon-dashboard.min.css",
     "map:scss": "sass --source-map assets/scss/nextjs-argon-dashboard.scss assets/css/nextjs-argon-dashboard.css",
-    "prepare": "husky install",
     "pre-commit": "lint-staged",
     "validate": "pnpm run type-check && pnpm run lint && pnpm run test:ci"
   },

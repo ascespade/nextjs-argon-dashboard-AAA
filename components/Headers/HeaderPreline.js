@@ -1,20 +1,20 @@
 import React from 'react';
-import { DashboardStats } from '@/types';
+// import { DashboardStats } from '@/types';
 
-interface HeaderPrelineProps {
-    title?: string;
-    subtitle?: string;
-    stats?: DashboardStats[];
-    actions?: React.ReactNode;
-}
+// interface HeaderPrelineProps {
+//   title?: string;
+//   subtitle?: string;
+//   stats?: DashboardStats[];
+//   actions?: React.ReactNode;
+// }
 
-const HeaderPreline: React.FC<HeaderPrelineProps> = ({
+const HeaderPreline = ({
     title = 'Dashboard',
     subtitle,
     stats = [],
     actions,
 }) => {
-    const defaultStats: DashboardStats[] = [
+    const defaultStats = [
         {
             id: 'traffic',
             title: 'Traffic',
