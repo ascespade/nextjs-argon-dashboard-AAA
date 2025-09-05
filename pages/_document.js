@@ -14,6 +14,8 @@ class MyDocument extends Document {
           <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
           {/* Preline CSS (UI components) */}
           <link rel="stylesheet" href="https://unpkg.com/preline/dist/preline.min.css" />
+          {/* Tailwind CDN for editor styling (loaded only for editor UI) */}
+          <script src="https://cdn.tailwindcss.com"></script>
         </Head>
         <body>
           <div id="page-transition"></div>
