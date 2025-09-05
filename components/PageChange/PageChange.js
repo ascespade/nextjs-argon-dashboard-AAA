@@ -7,7 +7,9 @@ import { Spinner } from 'reactstrap';
 
 export default function PageChange(props) {
   const handleCancel = () => {
-    try { window.dispatchEvent(new Event('clearPageTransition')); } catch (_e) {}
+    try {
+      window.dispatchEvent(new Event('clearPageTransition'));
+    } catch (_e) {}
   };
 
   return (
@@ -22,7 +24,11 @@ export default function PageChange(props) {
         <h4 className='title text-white mb-3'>
           Loading page contents for: {props.path}
         </h4>
-        <button onClick={handleCancel} className='btn btn-sm btn-light' style={{ opacity: 0.9 }}>
+        <button
+          onClick={handleCancel}
+          className='btn btn-sm btn-light'
+          style={{ opacity: 0.9 }}
+        >
           Cancel
         </button>
       </div>

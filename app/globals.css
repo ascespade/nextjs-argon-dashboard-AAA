@@ -1,13 +1,16 @@
 /* Global styles (Tailwind loaded via CDN in layout) */
-:root {}
+:root {
+}
 
 /* small helper to transition content area when sidebar toggles */
 .content-transition {
-  transition: margin-left 200ms ease, padding-left 200ms ease;
+  transition:
+    margin-left 200ms ease,
+    padding-left 200ms ease;
 }
 
 /* ensure page-transition container still exists for legacy code */
-#page-transition{
+#page-transition {
   position: fixed;
   inset: 0;
   z-index: 60;
