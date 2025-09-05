@@ -5,6 +5,8 @@ import EditableImage from 'components/Editable/EditableImage';
 import EditableWrapper from 'components/Editable/EditableWrapper';
 import { isEditorMessage, Messages, postToEditor } from '../lib/editor-protocol';
 
+import ErrorBoundary from 'components/ErrorBoundary';
+
 export default function Index() {
   const [page, setPage] = useState({ components: [] });
   const pageRef = useRef(page);
