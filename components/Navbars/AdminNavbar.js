@@ -20,10 +20,21 @@ import {
 } from "reactstrap";
 
 function AdminNavbar({ brandText }) {
+  const toggleSidebar = (e) => {
+    e && e.preventDefault && e.preventDefault();
+    try {
+      const body = document.body;
+      const collapsed = body.classList.toggle('sidebar-collapsed');
+      localStorage.setItem('sidebar-collapsed', collapsed ? 'true' : 'false');
+    } catch (e) {}
+  };
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
         <Container fluid>
+          <button className="navbar-toggler mr-2" type="button" onClick={toggleSidebar} aria-label="Toggle sidebar">
+            <span className="navbar-toggler-icon" />
+          </button>
           <Link href="/admin/dashboard">
             <a className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">
               {brandText}
