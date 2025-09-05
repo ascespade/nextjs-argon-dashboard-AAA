@@ -21,6 +21,8 @@
 /* Sidebar collapse behavior */
 .navbar-vertical{transition: width .25s ease, transform .25s ease}
 .main-content{transition: margin-left .25s ease}
+/* prevent content being hidden under fixed header */
+.main-content{padding-top:70px}
 
 /* default sidebar width in Argon is 250px */
 .navbar-vertical{width:250px}
