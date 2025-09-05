@@ -8,27 +8,29 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside
-      className={`fixed top-0 left-0 h-full bg-white border-r shadow-sm z-40 flex flex-col transition-all duration-200 ${collapsed ? 'w-16' : 'w-64'}`}
+      className={`fixed top-0 left-0 h-full bg-white border-r shadow-sm z-40 flex flex-col transition-all duration-200 ${collapsed ? 'w-20' : 'w-64'}`}
       aria-expanded={!collapsed}
+      aria-label="Sidebar navigation"
     >
       <div className='flex items-center justify-between px-3 h-16'>
-        <Link href='/' className='flex items-center gap-2'>
-          <span
-            className={`text-xl font-bold ${collapsed ? 'hidden' : 'block'}`}
-          >
+        <Link href='/' className='flex items-center gap-3'>
+          <span className={`brand-text text-xl font-extrabold ${collapsed ? 'sr-only' : 'block'}`}>
             NextJS
           </span>
-          <span className='w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white'>
+          <span className='brand-logo w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-semibold'>
             N
           </span>
         </Link>
+
+        {/* Improved collapse control: circular toggle that sits flush to the sidebar edge */}
         <button
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           onClick={toggle}
-          className='p-1 rounded hover:bg-gray-100'
+          title={collapsed ? 'Expand' : 'Collapse'}
+          className={`sidebar-toggle -mr-2 inline-flex items-center justify-center w-9 h-9 rounded-full bg-white shadow-sm border hover:bg-gray-50 focus:outline-none transition-transform ${collapsed ? 'rotate-180' : ''}`}
         >
-          <svg viewBox='0 0 24 24' className='w-5 h-5 text-gray-600'>
-            <path fill='currentColor' d='M4 11h16v2H4z' />
+          <svg viewBox='0 0 24 24' className='w-5 h-5 text-gray-700' aria-hidden>
+            <path fill='currentColor' d='M9.29 6.71a1 1 0 011.42 0L15 11l-4.29 4.29a1 1 0 01-1.42-1.42L12.17 11 9.29 8.12a1 1 0 010-1.41z' />
           </svg>
         </button>
       </div>
@@ -38,7 +40,8 @@ const Sidebar: React.FC = () => {
           <li>
             <Link
               href='/admin/dashboard'
-              className={`flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 ${collapsed ? 'justify-center' : ''}`}
+              className={`nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 ${collapsed ? 'justify-center' : ''}`}
+              title='Dashboard'
             >
               <svg
                 className='w-5 h-5 text-indigo-500'
@@ -50,15 +53,17 @@ const Sidebar: React.FC = () => {
                   fill='currentColor'
                 />
               </svg>
-              <span className={`${collapsed ? 'hidden' : 'block'}`}>
+              <span className={`nav-label ${collapsed ? 'sr-only' : 'block'}`}>
                 Dashboard
               </span>
             </Link>
           </li>
+
           <li>
             <Link
               href='/admin/profile'
-              className={`flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 ${collapsed ? 'justify-center' : ''}`}
+              className={`nav-item flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 ${collapsed ? 'justify-center' : ''}`}
+              title='Profile'
             >
               <svg
                 className='w-5 h-5 text-yellow-500'
@@ -70,11 +75,12 @@ const Sidebar: React.FC = () => {
                   fill='currentColor'
                 />
               </svg>
-              <span className={`${collapsed ? 'hidden' : 'block'}`}>
+              <span className={`nav-label ${collapsed ? 'sr-only' : 'block'}`}>
                 Profile
               </span>
             </Link>
           </li>
+
         </ul>
       </nav>
 
