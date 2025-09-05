@@ -93,6 +93,54 @@ export default class MyApp extends App {
     // Global client-side handlers to avoid noisy aborts/crashes in dev tooling
     try {
       if (typeof window !== 'undefined') {
+        // Radical mitigation: remove or disable FullStory/other noisy third-party scripts injected into the page
+        try {
+          const blockedHosts = ['fullstory.com', 'edge.fullstory.com', 'fs.js', 'fullstory'];
+          // remove existing script tags that match blocked hosts
+          document.querySelectorAll('script[src]').forEach(s => {
+            try {
+              const src = s.src || '';
+              if (blockedHosts.some(h => src.indexOf(h) !== -1)) {
+                console.warn('Removing blocked third-party script:', src);
+                s.parentNode && s.parentNode.removeChild(s);
+              }
+            } catch (e) {}
+          });
+          // attempt to shutdown FullStory global if present
+          try {
+            if (window.FS && typeof window.FS.shutdown === 'function') {
+              try { window.FS.shutdown(); } catch (e) {}
+            }
+            // remove global references
+            try { delete window.FS; } catch (e) {}
+            try { delete window._fs_script; } catch (e) {}
+          } catch (e) {}
+
+          // monkey-patch fetch to silently handle requests to blocked hosts
+          try {
+            const originalFetch = window.fetch.bind(window);
+            window.fetch = function(input, init) {
+              try {
+                let url = '';
+                if (typeof input === 'string') url = input;
+                else if (input && input.url) url = input.url;
+                if (url && blockedHosts.some(h => url.indexOf(h) !== -1)) {
+                  console.warn('Blocked fetch to', url);
+                  try {
+                    return Promise.resolve(new Response(null, { status: 204 }));
+                  } catch (e) {
+                    // Response may not be available in some envs; return a resolved object compatible enough
+                    return Promise.resolve({ ok: false, status: 0, text: () => Promise.resolve('') });
+                  }
+                }
+              } catch (e) {}
+              return originalFetch(input, init);
+            };
+          } catch (e) {}
+        } catch (e) {
+          console.warn('Error while attempting to remove third-party scripts', e);
+        }
+
         window.addEventListener('unhandledrejection', (ev) => {
           // swallow AbortError from overlays or HMR which are non-critical in dev
           try {
