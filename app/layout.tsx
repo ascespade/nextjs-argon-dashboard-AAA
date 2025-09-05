@@ -6,6 +6,9 @@ export const metadata = {
 
 import React from 'react';
 import './globals.css';
+// Original Argon CSS (imported so Next can bundle it)
+import '../assets/css/nextjs-argon-dashboard.min.css';
+import '../assets/css/custom-home.css';
 import { SidebarProvider } from './components/SidebarContext';
 import PerformanceMonitor from './components/PerformanceMonitorApp';
 
@@ -27,9 +30,7 @@ export default function RootLayout({
           rel='stylesheet'
           href='https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.css'
         />
-        {/* Original Argon Dashboard styles and fonts */}
-        <link rel="stylesheet" href="/assets/css/nextjs-argon-dashboard.min.css" />
-        <link rel="stylesheet" href="/assets/css/custom-home.css" />
+        {/* Original Argon Dashboard fonts and fontawesome (served via CDN) */}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=optional" rel="stylesheet" />
         {/* Bootstrap JS bundle and Preline script (CDN) */}
