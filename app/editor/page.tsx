@@ -134,6 +134,13 @@ export default function EditorPage() {
           </div>
         </div>
 
+        {/* Error banner */}
+        {errorMessage && (
+          <div className='bg-red-50 border border-red-200 text-red-800 px-4 py-2 m-4 rounded'>
+            <strong>Error:</strong> {errorMessage}
+          </div>
+        )}
+
         {/* Main content area: center canvas + right sidebar as siblings */}
         <div style={{ flex: 1 }} className='flex overflow-hidden'>
           {/* Center canvas */}
