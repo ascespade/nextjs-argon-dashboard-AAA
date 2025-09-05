@@ -1,51 +1,107 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Admin from 'layouts/Admin.js';
-import Toolbar from 'components/Editor/Toolbar';
-import Sidebar from 'components/Editor/Sidebar';
-import DeviceControls from 'components/Editor/DeviceControls';
-import PreviewLens from 'components/Editor/PreviewLens';
 import { Messages, isEditorMessage, postToEditor } from '../lib/editor-protocol';
+
+// New simplified editor subcomponents (kept lightweight and self-contained)
+function NewToolbar({ ready, onSave, onPublish, onUndo, onRedo, onExport, onImport, onTogglePalette, onToggleFont }) {
+  return (
+    <header className="new-editor-toolbar">
+      <div className="toolbar-left">
+        <button className="btn btn-sm btn-light" onClick={onSave} disabled={!ready}>Save</button>
+        <button className="btn btn-sm btn-primary" onClick={onPublish} disabled={!ready}>Publish</button>
+        <button className="btn btn-sm btn-outline-secondary" onClick={onUndo} disabled={!ready}>Undo</button>
+        <button className="btn btn-sm btn-outline-secondary" onClick={onRedo} disabled={!ready}>Redo</button>
+      </div>
+      <div className="toolbar-center">
+        <div className="device-controls">
+          <span className="device-label">Preview:</span>
+          <button className="btn btn-sm btn-outline-secondary" data-device="desktop">Desktop</button>
+          <button className="btn btn-sm btn-outline-secondary" data-device="tablet">Tablet</button>
+          <button className="btn btn-sm btn-outline-secondary" data-device="mobile">Mobile</button>
+        </div>
+      </div>
+      <div className="toolbar-right">
+        <button className="btn btn-sm btn-outline-light" onClick={onExport}>Export</button>
+        <label className="btn btn-sm btn-outline-light mb-0">Import<input type="file" className="file-input-hidden" onChange={onImport} /></label>
+        <button className="btn btn-sm btn-outline-light" onClick={onTogglePalette}>Palette</button>
+        <button className="btn btn-sm btn-outline-light" onClick={onToggleFont}>Fonts</button>
+      </div>
+    </header>
+  );
+}
+
+function NewSidebar({ components = [], onAdd, collapsed, toggleCollapsed, ready }) {
+  return (
+    <aside className={`new-editor-sidebar ${collapsed ? 'collapsed' : ''}`}>
+      <div className="sidebar-top">
+        <button className="collapse-toggle" onClick={toggleCollapsed} aria-label="Toggle sidebar">{collapsed ? '›' : '‹'}</button>
+        <div className="brand">BRAND</div>
+      </div>
+      <div className="components-list">
+        <h6>Components</h6>
+        {components.map(c => (
+          <button key={c.id} className="component-btn" onClick={() => onAdd(c)} disabled={!ready}>{c.type}</button>
+        ))}
+      </div>
+      <div className="sidebar-footer">Documentation</div>
+    </aside>
+  );
+}
+
+function RightPanel({ visible }) {
+  if (!visible) return null;
+  return (
+    <aside className="new-editor-rightpanel">
+      <h6>Inspector</h6>
+      <p>No selection</p>
+    </aside>
+  );
+}
 
 export default function Editor() {
   const iframeRef = useRef(null);
   const [componentsLibrary, setComponentsLibrary] = useState([]);
   const [device, setDevice] = useState('desktop');
+  const [collapsed, setCollapsed] = useState(false);
+  const [iframeReady, setIframeReady] = useState(false);
+  const [iframeHeight, setIframeHeight] = useState(null);
+  const [rightVisible, setRightVisible] = useState(false);
+
   useEffect(() => {
-    // fetch components library from server-side API to avoid bundling server fs code into client
     (async () => {
       try {
         const res = await fetch('/api/components');
         const json = await res.json();
         if (json && json.ok) setComponentsLibrary(json.components || []);
-      } catch (e) {
-        console.error('Failed to load components library', e);
-      }
+      } catch (e) { console.error(e); }
     })();
   }, []);
 
   useEffect(() => {
     const handler = (ev) => {
       if (!isEditorMessage(ev)) return;
-      // handle messages from iframe
       const { type, payload } = ev.data;
-      console.log('Editor received', type, payload);
+      if (type === Messages.SYNC_STATE) {
+        // example: open inspector when selection changes
+        setRightVisible(!!payload && !!payload.selection);
+      }
     };
     window.addEventListener('message', handler);
     return () => window.removeEventListener('message', handler);
   }, []);
 
-  const saveDraft = () => {
-    postToEditor(iframeRef.current.contentWindow, Messages.SAVE_DRAFT, {});
+  const post = (type, payload = {}) => {
+    try { postToEditor(iframeRef.current.contentWindow, type, payload); } catch (e) {}
   };
-  const publish = () => {
-    postToEditor(iframeRef.current.contentWindow, Messages.PUBLISH, {});
-  };
-  const undo = () => postToEditor(iframeRef.current.contentWindow, Messages.UNDO, {});
-  const redo = () => postToEditor(iframeRef.current.contentWindow, Messages.REDO, {});
-  const onAdd = (c) => postToEditor(iframeRef.current.contentWindow, Messages.ADD_COMPONENT, { component: c });
+
+  const saveDraft = () => post(Messages.SAVE_DRAFT);
+  const publish = () => post(Messages.PUBLISH);
+  const undo = () => post(Messages.UNDO);
+  const redo = () => post(Messages.REDO);
+  const onAdd = (c) => post(Messages.ADD_COMPONENT, { component: c });
 
   const exportJSON = async () => {
-    postToEditor(iframeRef.current.contentWindow, Messages.SAVE_DRAFT, {});
+    post(Messages.SAVE_DRAFT);
     setTimeout(async () => {
       try {
         const res = await fetch('/api/pages/home?mode=draft');
@@ -53,30 +109,16 @@ export default function Editor() {
         if (json && json.ok) {
           const blob = new Blob([JSON.stringify(json.page, null, 2)], { type: 'application/json' });
           const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'page-home.json';
-          a.click();
-          URL.revokeObjectURL(url);
+          const a = document.createElement('a'); a.href = url; a.download = 'page-home.json'; a.click(); URL.revokeObjectURL(url);
         }
       } catch (e) { console.error(e); }
-    }, 700);
+    }, 600);
   };
 
   const importJSON = async (ev) => {
-    const file = ev.target.files && ev.target.files[0];
-    if (!file) return;
-    try {
-      const txt = await file.text();
-      const data = JSON.parse(txt);
-      postToEditor(iframeRef.current.contentWindow, Messages.IMPORT_PAGE, { page: data });
-    } catch (e) { console.error(e); }
+    const file = ev.target.files && ev.target.files[0]; if (!file) return;
+    try { const txt = await file.text(); const data = JSON.parse(txt); post(Messages.IMPORT_PAGE, { page: data }); } catch (e) { console.error(e); }
   };
-
-  const togglePalette = () => { alert('Color palette would open (placeholder)'); };
-  const toggleFont = () => { alert('Font selector would open (placeholder)'); };
-
-  const [iframeHeight, setIframeHeight] = useState(null);
 
   const computeIframeHeight = () => {
     try {
@@ -85,51 +127,34 @@ export default function Editor() {
       if (!doc) return;
       const h = Math.max(doc.body.scrollHeight || 0, doc.documentElement.scrollHeight || 0, doc.body.offsetHeight || 0);
       setIframeHeight(h + 40);
-    } catch (e) {
-      // ignore cross-origin or timing errors
-    }
+    } catch (e) {}
   };
 
-  React.useEffect(() => { computeIframeHeight(); }, [device]);
-  React.useEffect(() => {
-    const onResize = () => computeIframeHeight();
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
+  useEffect(() => { computeIframeHeight(); }, [device]);
+  useEffect(() => { const onResize = () => computeIframeHeight(); window.addEventListener('resize', onResize); return () => window.removeEventListener('resize', onResize); }, []);
 
-  const iframeStyle = (() => {
-    const base = { border: 0 };
-    if (device === 'desktop') base.width = '100%';
-    if (device === 'tablet') { base.width = 960; base.margin = '0 auto'; }
-    if (device === 'mobile') { base.width = 375; base.margin = '0 auto'; }
-    base.height = iframeHeight ? iframeHeight : '100%';
-    return base;
-  })();
+  const iframeStyle = { border: 0, width: device === 'desktop' ? '100%' : device === 'tablet' ? 960 : 375, height: iframeHeight ? iframeHeight : '100%', margin: device === 'desktop' ? 0 : '0 auto' };
 
-  const [iframeReady, setIframeReady] = useState(false);
+  const onIframeLoad = () => { try { postToEditor(iframeRef.current.contentWindow, Messages.INIT, { mode: 'draft' }); setIframeReady(true); computeIframeHeight(); setTimeout(computeIframeHeight, 350); } catch (e) { console.error(e); } };
 
-  const onIframeLoad = () => {
-    try {
-      postToEditor(iframeRef.current.contentWindow, Messages.INIT, { mode: 'draft' });
-      setIframeReady(true);
-      computeIframeHeight();
-      setTimeout(computeIframeHeight, 350);
-      setTimeout(computeIframeHeight, 1200);
-    } catch (e) { console.error(e); }
-  };
+  // handle toggles
+  const toggleCollapsed = () => { setCollapsed(!collapsed); try { localStorage.setItem('sidebar-collapsed', !collapsed ? 'true' : 'false'); document.body.classList.toggle('sidebar-collapsed', !collapsed); } catch (e) {} };
+
+  // palette/font placeholders
+  const togglePalette = () => alert('Palette');
+  const toggleFont = () => alert('Fonts');
 
   return (
-    <div className="editor-root">
-      <Sidebar components={componentsLibrary} onAdd={onAdd} ready={iframeReady} />
-      <div className="editor-main">
-        <Toolbar onSave={saveDraft} onPublish={publish} onUndo={undo} onRedo={redo} onExport={exportJSON} onImport={importJSON} onTogglePalette={togglePalette} onToggleFont={toggleFont} ready={iframeReady} />
-        <DeviceControls device={device} setDevice={setDevice} />
-        <div className="editor-canvas-wrap">
-          <div className="editor-device-frame" style={{ flex: device==='desktop'?1:'none' }}>
+    <div className="new-editor-root">
+      <NewToolbar ready={iframeReady} onSave={saveDraft} onPublish={publish} onUndo={undo} onRedo={redo} onExport={exportJSON} onImport={importJSON} onTogglePalette={togglePalette} onToggleFont={toggleFont} />
+      <div className="new-editor-body">
+        <NewSidebar components={componentsLibrary} onAdd={onAdd} collapsed={collapsed} toggleCollapsed={toggleCollapsed} ready={iframeReady} />
+        <main className="new-editor-canvas">
+          <div className="canvas-frame" role="region">
             <iframe ref={iframeRef} className="editor-iframe" src="/?edit=1&mode=draft" style={iframeStyle} onLoad={onIframeLoad} />
           </div>
-          <PreviewLens />
-        </div>
+        </main>
+        <RightPanel visible={rightVisible} />
       </div>
     </div>
   );
