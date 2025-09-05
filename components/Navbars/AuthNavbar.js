@@ -18,7 +18,7 @@ function AdminNavbar() {
     <>
       <Navbar className="navbar-top navbar-horizontal navbar-dark" expand="md">
         <Container className="px-4">
-          <Link href="/admin/dashboard">
+          <Link href="/admin/dashboard" prefetch={false}>
             <span>
               <NavbarBrand href="#pablo">
                 <img
@@ -35,7 +35,7 @@ function AdminNavbar() {
             <div className="navbar-collapse-header d-md-none">
               <Row>
                 <Col className="collapse-brand" xs="6">
-                  <Link href="/admin/dashboard">
+                  <Link href="/admin/dashboard" prefetch={false}>
                     <img
                       alt="..."
                       src={require("assets/img/brand/nextjs_argon_black.png")}
@@ -52,7 +52,7 @@ function AdminNavbar() {
             </div>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <Link href="/admin/dashboard">
+                <Link href="/admin/dashboard" prefetch={false}>
                   <NavLink href="#pablo" className="nav-link-icon">
                     <i className="ni ni-planet" />
                     <span className="nav-link-inner--text">Dashboard</span>
@@ -60,7 +60,7 @@ function AdminNavbar() {
                 </Link>
               </NavItem>
               <NavItem>
-                <Link href="/auth/register">
+                <Link href="/auth/register" prefetch={false}>
                   <NavLink href="#pablo" className="nav-link-icon">
                     <i className="ni ni-circle-08" />
                     <span className="nav-link-inner--text">Register</span>
@@ -68,7 +68,7 @@ function AdminNavbar() {
                 </Link>
               </NavItem>
               <NavItem>
-                <Link href="/auth/login">
+                <Link href="/auth/login" prefetch={false}>
                   <NavLink href="#pablo" className="nav-link-icon">
                     <i className="ni ni-key-25" />
                     <span className="nav-link-inner--text">Login</span>
@@ -76,7 +76,7 @@ function AdminNavbar() {
                 </Link>
               </NavItem>
               <NavItem>
-                <Link href="/admin/profile">
+                <Link href="/admin/profile" prefetch={false}>
                   <NavLink href="#pablo" className="nav-link-icon">
                     <i className="ni ni-single-02" />
                     <span className="nav-link-inner--text">Profile</span>
