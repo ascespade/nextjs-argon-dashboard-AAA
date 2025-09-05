@@ -42,6 +42,9 @@ export default function HomePage() {
           </p>
         </div>
       </section>
+
+      {/* If in editor iframe, mount client editor to handle postMessage and editing */}
+      <HomeEditorClient initialComponents={undefined} />
     </div>
   );
 }
