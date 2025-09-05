@@ -11,12 +11,17 @@ const providers = [
       password: { label: 'Password', type: 'password' }
     },
     async authorize(credentials) {
-      const { email, password } = credentials || {};
-      const user = findUserByCredentials(email, password);
-      if (user) {
-        return { id: user.id, name: user.name, email: user.email };
+      try {
+        const { email, password } = credentials || {};
+        const user = findUserByCredentials(email, password);
+        if (user) {
+          return { id: user.id, name: user.name, email: user.email };
+        }
+        return null;
+      } catch (e) {
+        console.error('Authorize error', e);
+        return null;
       }
-      return null;
     }
   })
 ];
