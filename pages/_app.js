@@ -116,27 +116,9 @@ export default class MyApp extends App {
             try { delete window._fs_script; } catch (e) {}
           } catch (e) {}
 
-          // monkey-patch fetch to silently handle requests to blocked hosts
-          try {
-            const originalFetch = window.fetch.bind(window);
-            window.fetch = function(input, init) {
-              try {
-                let url = '';
-                if (typeof input === 'string') url = input;
-                else if (input && input.url) url = input.url;
-                if (url && blockedHosts.some(h => url.indexOf(h) !== -1)) {
-                  console.warn('Blocked fetch to', url);
-                  try {
-                    return Promise.resolve(new Response(null, { status: 204 }));
-                  } catch (e) {
-                    // Response may not be available in some envs; return a resolved object compatible enough
-                    return Promise.resolve({ ok: false, status: 0, text: () => Promise.resolve('') });
-                  }
-                }
-              } catch (e) {}
-              return originalFetch(input, init);
-            };
-          } catch (e) {}
+          // Do NOT monkey-patch window.fetch — it interferes with legitimate fetches (e.g. next-auth).
+          // We already remove known FullStory script tags and attempt to shutdown their globals above.
+          // If further isolation is needed, prefer scoping or defensive try/catch around the third-party code instead of overriding fetch.
         } catch (e) {
           console.warn('Error while attempting to remove third-party scripts', e);
         }
