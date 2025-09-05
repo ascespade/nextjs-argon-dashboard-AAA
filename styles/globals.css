@@ -50,3 +50,14 @@
   .sidebar-collapsed .navbar-vertical{transform:translateX(-250px);width:250px}
   .main-content{margin-left:0}
 }
+
+/* Ensure top navbar is fixed and body content sits below it */
+#navbar-main{position:fixed;top:0;left:0;right:0;z-index:1040}
+
+/* Make the vertical sidebar fixed below the header so it doesn't overlap editor header */
+.navbar-vertical.fixed-left{position:fixed;top:70px;left:0;height:calc(100vh - 70px);overflow:auto;z-index:1030}
+
+/* Floating small toggle shown when sidebar is collapsed so user can reopen */
+.sidebar-toggle-float{display:none;position:fixed;left:8px;top:12px;z-index:1050;background:var(--white,#fff);border-radius:6px;padding:6px;border:1px solid rgba(0,0,0,.06);box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.sidebar-toggle-float i{font-size:14px}
+.sidebar-collapsed .sidebar-toggle-float{display:block}
