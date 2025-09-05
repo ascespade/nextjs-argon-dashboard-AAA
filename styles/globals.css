@@ -75,6 +75,14 @@
 /* adjust main content margin when sidebar is collapsed */
 .sidebar-collapsed .main-content{margin-left:70px}
 
+/* Hide sidebar completely for editor routes */
+.hide-sidebar .navbar-vertical{
+  transform: translateX(-250px);
+  width:0 !important;
+  visibility:hidden;
+}
+.hide-sidebar .main-content{margin-left:0 !important;padding-left:0}
+
 @media (max-width: 991.98px){
   /* keep the original responsive behavior on small screens */
   .navbar-vertical{transform:translateX(-250px)}
