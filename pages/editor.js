@@ -149,13 +149,13 @@ export default function Editor() {
       <div className="flex flex-1 overflow-hidden">
         <main className="flex-1 flex items-start justify-center bg-slate-50 p-4" onDrop={handleDropFromLibrary} onDragOver={onDragOver}>
           <div className={`${iframeWrapperClass} canvas-frame transform origin-top`} style={{ transform: `scale(${scale})` }}>
-            <iframe ref={iframeRef} src="/?edit=1" title="editor-canvas" className="w-full h-[calc(100vh-140px)] bg-white border" onLoad={onIframeLoad} />
+            <iframe ref={iframeRef} src={iframeSrc} title="editor-canvas" className="w-full h-[calc(100vh-140px)] bg-white border" onLoad={onIframeLoad} />
           </div>
         </main>
         <aside className={`w-80 bg-white border-l p-4 overflow-auto ${collapsed ? 'hidden lg:block' : ''}`}>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-semibold">Components Library</h3>
-            <button onClick={()=>{ setCollapsed(s=>!s); try{ document.body.classList.toggle('sidebar-collapsed'); }catch(e){} }} className="px-2 py-1 text-sm bg-slate-100 rounded">{collapsed ? 'Expand' : 'Collapse'}</button>
+            <button onClick={()=>{ setCollapsed(s=>!s); }} className="px-2 py-1 text-sm bg-slate-100 rounded">{collapsed ? 'Expand' : 'Collapse'}</button>
           </div>
           <div className="grid grid-cols-1 gap-3">
             {componentsLibrary.map(c => <ComponentsCard key={c.id} c={c} onAdd={onAdd} />)}
