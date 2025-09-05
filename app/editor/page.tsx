@@ -1,310 +1,392 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
-import Sidebar from '../../app/components/Sidebar';
-import { useSidebar } from '../../app/components/SidebarContext';
+import React, { useState, useRef, useEffect } from 'react';
+import { useTheme } from '@/lib/theme';
+import { useI18n } from '@/lib/i18n';
+import { 
+  Save, 
+  Upload, 
+  Undo, 
+  Redo, 
+  ZoomIn, 
+  ZoomOut, 
+  RotateCcw,
+  Monitor,
+  Tablet,
+  Smartphone,
+  Search,
+  ChevronLeft,
+  ChevronRight
+} from 'lucide-react';
+
+interface Component {
+  id: string;
+  type: string;
+  name: string;
+  category: string;
+  description: string;
+  preview_meta: any;
+  props_template: any;
+}
 
 export default function EditorPage() {
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
-  const { collapsed: leftCollapsed, setCollapsed } = useSidebar();
-  const [ready, setReady] = useState(false);
-  const [selectedDevice, setSelectedDevice] = useState('desktop');
-  const [zoom, setZoom] = useState(1);
-  const [rightCollapsed, setRightCollapsed] = useState(false);
+  const { theme } = useTheme();
+  const { t, isRTL } = useI18n();
+  const [components, setComponents] = useState<Component[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [leftSidebarOpen, setLeftSidebarOpen] = useState(true);
+  const [rightSidebarOpen, setRightSidebarOpen] = useState(true);
+  const [zoom, setZoom] = useState(100);
+  const [devicePreview, setDevicePreview] = useState('desktop');
+  const [history, setHistory] = useState<any[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // Load components on mount
   useEffect(() => {
-    function onMessage(e: MessageEvent) {
-      if (!e.data) return;
-      const { type, error } = e.data;
-      if (type === 'READY') setReady(true);
-      if (type === 'SAVE_ACK') {
-        console.log('Save acknowledged');
-        setErrorMessage(null);
-      }
-      if (type === 'SAVE_ERROR') {
-        console.error('Save error from iframe:', error);
-        setErrorMessage(error || 'Save failed');
-      }
-      if (type === 'PUBLISH_ACK') {
-        console.log('Publish acknowledged');
-        setErrorMessage(null);
-      }
-      if (type === 'PUBLISH_ERROR') {
-        console.error('Publish error from iframe:', error);
-        setErrorMessage(error || 'Publish failed');
-      }
-    }
-    window.addEventListener('message', onMessage);
-    return () => window.removeEventListener('message', onMessage);
+    loadComponents();
   }, []);
 
-  function postToIframe(msg: any) {
-    if (iframeRef.current?.contentWindow) {
-      iframeRef.current.contentWindow.postMessage(msg, '*');
+  const loadComponents = async () => {
+    try {
+      const response = await fetch('/api/components');
+      const data = await response.json();
+      if (data.success) {
+        setComponents(data.data);
+      }
+    } catch (error) {
+      console.error('Error loading components:', error);
     }
-  }
+  };
 
-  useEffect(() => {
-    // send zoom update to iframe content (zoom the page inside iframe)
-    postToIframe({ type: 'SET_ZOOM', zoom });
-  }, [zoom]);
+  const filteredComponents = components.filter(comp => {
+    const matchesSearch = comp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         comp.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || comp.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
-  useEffect(() => {
-    // inform iframe about device width so content can adapt
-    const deviceWidth =
-      selectedDevice === 'desktop'
-        ? '100%'
-        : selectedDevice === 'tablet'
-          ? '800px'
-          : '375px';
-    postToIframe({ type: 'SET_DEVICE', width: deviceWidth });
-  }, [selectedDevice]);
+  const categories = ['all', ...Array.from(new Set(components.map(c => c.category)))];
 
-  // sidebar widths must mirror app/components/Sidebar.tsx w-20 (80px) and w-64 (256px)
-  const leftWidth = leftCollapsed ? 80 : 256;
-  const rightWidth = rightCollapsed ? 64 : 320; // collapsed shows small toggle area
-  const toolbarHeight = 64; // px
+  const handleZoomIn = () => {
+    setZoom(prev => Math.min(prev + 25, 200));
+  };
+
+  const handleZoomOut = () => {
+    setZoom(prev => Math.max(prev - 25, 50));
+  };
+
+  const handleResetZoom = () => {
+    setZoom(100);
+  };
+
+  const handleDevicePreview = (device: string) => {
+    setDevicePreview(device);
+  };
+
+  const getDeviceWidth = () => {
+    switch (devicePreview) {
+      case 'mobile': return '375px';
+      case 'tablet': return '768px';
+      default: return '100%';
+    }
+  };
+
+  const handleSave = async () => {
+    if (iframeRef.current) {
+      iframeRef.current.contentWindow?.postMessage({
+        type: 'SAVE_REQUEST'
+      }, '*');
+    }
+  };
+
+  const handlePublish = async () => {
+    if (iframeRef.current) {
+      iframeRef.current.contentWindow?.postMessage({
+        type: 'PUBLISH_REQUEST'
+      }, '*');
+    }
+  };
+
+  const handleUndo = () => {
+    if (historyIndex > 0) {
+      setHistoryIndex(prev => prev - 1);
+      if (iframeRef.current) {
+        iframeRef.current.contentWindow?.postMessage({
+          type: 'UNDO'
+        }, '*');
+      }
+    }
+  };
+
+  const handleRedo = () => {
+    if (historyIndex < history.length - 1) {
+      setHistoryIndex(prev => prev + 1);
+      if (iframeRef.current) {
+        iframeRef.current.contentWindow?.postMessage({
+          type: 'REDO'
+        }, '*');
+      }
+    }
+  };
+
+  const handleDragStart = (e: React.DragEvent, component: Component) => {
+    e.dataTransfer.setData('application/json', JSON.stringify(component));
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const componentData = e.dataTransfer.getData('application/json');
+    if (componentData && iframeRef.current) {
+      const component = JSON.parse(componentData);
+      iframeRef.current.contentWindow?.postMessage({
+        type: 'ADD_COMPONENT',
+        component
+      }, '*');
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
 
   return (
-    <div className='min-h-screen relative'>
-      <Sidebar />
-
-      <div
-        style={{ marginLeft: leftWidth }}
-        className='flex-1 flex flex-col min-h-screen'
-      >
-        {/* Top toolbar (professional) */}
-        <div
-          style={{ height: toolbarHeight }}
-          className='flex items-center gap-4 px-4 border-b bg-white shadow-sm'
-        >
-          <div className='flex items-center gap-3'>
+    <div className="h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
+      {/* Top Toolbar */}
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
             <button
-              onClick={() => postToIframe({ type: 'SAVE_DRAFT' })}
-              className='px-4 py-2 bg-indigo-600 text-white rounded-md font-medium shadow'
+              onClick={handleSave}
+              className="flex items-center space-x-2 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors h-11"
             >
-              Save Draft
+              <Save className="w-4 h-4" />
+              <span>{t('editor.save')}</span>
             </button>
             <button
-              onClick={() => postToIframe({ type: 'PUBLISH' })}
-              className='px-4 py-2 bg-green-600 text-white rounded-md font-medium shadow'
+              onClick={handlePublish}
+              className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors h-11"
             >
-              Publish
-            </button>
-            <div className='ml-2 h-8 w-px bg-gray-200' />
-            <button
-              onClick={() => postToIframe({ type: 'UNDO' })}
-              className='p-2 rounded-md hover:bg-gray-100'
-              title='Undo'
-            >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                className='h-5 w-5 text-gray-700'
-                viewBox='0 0 20 20'
-                fill='currentColor'
-                aria-hidden='true'
-              >
-                <path
-                  fillRule='evenodd'
-                  d='M9.707 4.293a1 1 0 010 1.414L7.414 8H12a4 4 0 110 8 1 1 0 110 2 6 6 0 100-12H7.414l2.293 2.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z'
-                  clipRule='evenodd'
-                />
-              </svg>
-            </button>
-            <button
-              onClick={() => postToIframe({ type: 'REDO' })}
-              className='p-2 rounded-md hover:bg-gray-100'
-              title='Redo'
-            >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                className='h-5 w-5 text-gray-700'
-                viewBox='0 0 20 20'
-                fill='currentColor'
-                aria-hidden='true'
-              >
-                <path
-                  fillRule='evenodd'
-                  d='M10.293 15.707a1 1 0 010-1.414L12.586 12H8a4 4 0 110-8 1 1 0 110-2 6 6 0 100 12h4.586l-2.293-2.293a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z'
-                  clipRule='evenodd'
-                />
-              </svg>
+              <Upload className="w-4 h-4" />
+              <span>{t('editor.publish')}</span>
             </button>
           </div>
 
-          <div className='flex items-center gap-2 ml-6'>
+          <div className="flex items-center space-x-2">
             <button
-              onClick={() => setZoom(z => Math.max(0.5, +(z - 0.1).toFixed(2)))}
-              className='px-2 py-1 border rounded'
-              aria-label='Zoom out'
+              onClick={handleUndo}
+              disabled={historyIndex <= 0}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed h-11"
             >
-              -
+              <Undo className="w-4 h-4" />
             </button>
-            <div className='px-3 text-sm text-gray-600'>
-              {Math.round(zoom * 100)}%
+            <button
+              onClick={handleRedo}
+              disabled={historyIndex >= history.length - 1}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed h-11"
+            >
+              <Redo className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={handleZoomOut}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 h-11"
+            >
+              <ZoomOut className="w-4 h-4" />
+            </button>
+            <span className="text-sm font-medium min-w-[3rem] text-center">{zoom}%</span>
+            <button
+              onClick={handleZoomIn}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 h-11"
+            >
+              <ZoomIn className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleResetZoom}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 h-11"
+            >
+              <RotateCcw className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => handleDevicePreview('desktop')}
+              className={`p-2 rounded-lg transition-colors h-11 ${
+                devicePreview === 'desktop' 
+                  ? 'bg-indigo-600 text-white' 
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+            >
+              <Monitor className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => handleDevicePreview('tablet')}
+              className={`p-2 rounded-lg transition-colors h-11 ${
+                devicePreview === 'tablet' 
+                  ? 'bg-indigo-600 text-white' 
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+            >
+              <Tablet className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => handleDevicePreview('mobile')}
+              className={`p-2 rounded-lg transition-colors h-11 ${
+                devicePreview === 'mobile' 
+                  ? 'bg-indigo-600 text-white' 
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+            >
+              <Smartphone className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left Sidebar */}
+        <div className={`bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ${
+          leftSidebarOpen ? 'w-64' : 'w-0'
+        } overflow-hidden`}>
+          <div className="p-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">{t('editor.components')}</h3>
+              <button
+                onClick={() => setLeftSidebarOpen(false)}
+                className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
             </div>
-            <button
-              onClick={() => setZoom(z => Math.min(2, +(z + 0.1).toFixed(2)))}
-              className='px-2 py-1 border rounded'
-              aria-label='Zoom in'
-            >
-              +
-            </button>
-          </div>
-
-          <div className='ml-auto flex items-center gap-3'>
-            <select
-              value={selectedDevice}
-              onChange={e => setSelectedDevice(e.target.value)}
-              className='border px-2 py-1 rounded'
-              aria-label='Device preview'
-            >
-              <option value='desktop'>Desktop</option>
-              <option value='tablet'>Tablet</option>
-              <option value='mobile'>Mobile</option>
-            </select>
+            
+            <div className="space-y-2">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder={t('editor.search_components')}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+              </div>
+              
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              >
+                {categories.map(category => (
+                  <option key={category} value={category}>
+                    {category === 'all' ? 'All Categories' : category.charAt(0).toUpperCase() + category.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
-        {/* Error banner */}
-        {errorMessage && (
-          <div className='bg-red-50 border border-red-200 text-red-800 px-4 py-2 m-4 rounded'>
-            <strong>Error:</strong> {errorMessage}
-          </div>
+        {/* Left Sidebar Toggle */}
+        {!leftSidebarOpen && (
+          <button
+            onClick={() => setLeftSidebarOpen(true)}
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 p-2 rounded-r-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
         )}
 
-        {/* Main content area: center canvas + right sidebar as siblings */}
-        <div style={{ flex: 1 }} className='flex overflow-hidden'>
-          {/* Center canvas */}
-          <div
-            className='flex-1 flex justify-center items-start p-4 overflow-auto'
-            onDragOver={e => e.preventDefault()}
-            onDrop={e => {
-              e.preventDefault();
-              try {
-                const data = e.dataTransfer?.getData('application/json');
-                if (data) {
-                  const payload = JSON.parse(data);
-                  postToIframe({ type: 'ADD_COMPONENT', payload });
-                }
-              } catch (err) {
-                console.error(err);
-              }
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'flex-start',
-                width: '100%',
-                height: `calc(100vh - ${toolbarHeight}px)`,
-                overflow: 'auto',
-              }}
-            >
-              <iframe
-                ref={iframeRef}
-                src={`/?edit=1`}
-                className='border rounded shadow'
-                style={{
-                  width:
-                    selectedDevice === 'desktop'
-                      ? '100%'
-                      : selectedDevice === 'tablet'
-                        ? '800px'
-                        : '375px',
-                  height: `calc(100vh - ${toolbarHeight + 32}px)`,
-                  border: '1px solid rgba(0,0,0,0.08)',
-                  background: 'white',
+        {/* Main Canvas */}
+        <div className="flex-1 flex flex-col">
+          <div className="flex-1 bg-gray-200 dark:bg-gray-800 p-4 overflow-auto">
+            <div className="flex justify-center items-center min-h-full">
+              <div
+                className="bg-white dark:bg-gray-900 shadow-lg rounded-lg overflow-hidden"
+                style={{ 
+                  width: getDeviceWidth(),
+                  transform: `scale(${zoom / 100})`,
+                  transformOrigin: 'center center'
                 }}
-                title='Editor Canvas'
-              />
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+              >
+                <iframe
+                  ref={iframeRef}
+                  src="/?edit=1"
+                  className="w-full h-[600px] border-0"
+                  title="Editor Canvas"
+                />
+              </div>
             </div>
           </div>
-
-          {/* Right components sidebar (sibling, aligned to right) */}
-          <aside
-            style={{
-              width: rightWidth,
-              transition: 'width 0.2s',
-              background: 'white',
-              borderLeft: '1px solid rgba(0,0,0,0.08)',
-              padding: 12,
-              overflow: 'auto',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <div className='flex items-center justify-between mb-3'>
-              {!rightCollapsed && <h4 className='font-semibold'>Components</h4>}
-              <div>
-                <button
-                  onClick={() => setRightCollapsed(v => !v)}
-                  className='px-2 py-1 border rounded'
-                  title={rightCollapsed ? 'Open' : 'Collapse'}
-                >
-                  {rightCollapsed ? '>' : '‹'}
-                </button>
-              </div>
-            </div>
-
-            {!rightCollapsed ? (
-              <div className='grid grid-cols-2 gap-3'>
-                <div
-                  draggable
-                  onDragStart={e => {
-                    e.dataTransfer?.setData(
-                      'application/json',
-                      JSON.stringify({ type: 'hero_banner' })
-                    );
-                  }}
-                  className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
-                >
-                  Hero
-                </div>
-                <div
-                  draggable
-                  onDragStart={e => {
-                    e.dataTransfer?.setData(
-                      'application/json',
-                      JSON.stringify({ type: 'feature_card' })
-                    );
-                  }}
-                  className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
-                >
-                  Feature
-                </div>
-                <div
-                  draggable
-                  onDragStart={e => {
-                    e.dataTransfer?.setData(
-                      'application/json',
-                      JSON.stringify({ type: 'stats_counter' })
-                    );
-                  }}
-                  className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
-                >
-                  Stats
-                </div>
-                <div
-                  draggable
-                  onDragStart={e => {
-                    e.dataTransfer?.setData(
-                      'application/json',
-                      JSON.stringify({ type: 'testimonial' })
-                    );
-                  }}
-                  className='aspect-square w-full flex items-center justify-center border rounded cursor-move bg-white'
-                >
-                  Testimonial
-                </div>
-              </div>
-            ) : (
-              <div className='flex-1' />
-            )}
-          </aside>
         </div>
+
+        {/* Right Sidebar */}
+        <div className={`bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 transition-all duration-300 ${
+          rightSidebarOpen ? 'w-80' : 'w-0'
+        } overflow-hidden`}>
+          <div className="p-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">{t('editor.components')}</h3>
+              <button
+                onClick={() => setRightSidebarOpen(false)}
+                className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+            </div>
+            
+            <div className="space-y-3 max-h-[calc(100vh-200px)] overflow-y-auto">
+              {filteredComponents.map((component) => (
+                <div
+                  key={component.id}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, component)}
+                  className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-move transition-colors"
+                >
+                  <div className="flex items-start space-x-3">
+                    <div className="w-16 h-12 bg-gray-100 dark:bg-gray-600 rounded flex items-center justify-center">
+                      {component.preview_meta?.thumbnail ? (
+                        <img 
+                          src={component.preview_meta.thumbnail} 
+                          alt={component.name}
+                          className="w-full h-full object-cover rounded"
+                        />
+                      ) : (
+                        <div className="text-xs text-gray-500">Preview</div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                        {component.name}
+                      </h4>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
+                        {component.description}
+                      </p>
+                      <span className="inline-block mt-1 px-2 py-1 text-xs bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 rounded">
+                        {component.category}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Sidebar Toggle */}
+        {!rightSidebarOpen && (
+          <button
+            onClick={() => setRightSidebarOpen(true)}
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 p-2 rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+        )}
       </div>
     </div>
   );

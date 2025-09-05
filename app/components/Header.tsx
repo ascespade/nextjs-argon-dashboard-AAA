@@ -1,44 +1,94 @@
 'use client';
-import React from 'react';
-import { useSidebar } from './SidebarContext';
-import Link from 'next/link';
 
-const Header: React.FC = () => {
-  const { collapsed } = useSidebar();
+import React from 'react';
+import Link from 'next/link';
+import { useTheme } from '@/lib/theme';
+import { useI18n } from '@/lib/i18n';
+import { Sun, Moon, Globe, Menu } from 'lucide-react';
+
+export default function Header() {
+  const { theme, toggleTheme } = useTheme();
+  const { locale, setLocale, t, isRTL } = useI18n();
+
+  const toggleLanguage = () => {
+    setLocale(locale === 'ar' ? 'en' : 'ar');
+  };
+
   return (
-    <header className='sticky top-0 z-30 bg-white border-b'>
-      <div
-        className={`flex items-center h-14 px-4 transition-all duration-200 ${collapsed ? 'md:pl-20' : 'md:pl-72'}`}
-      >
-        <div className='flex-1'>
-          <nav className='flex items-center gap-4'>
-            <Link
-              href='/admin/dashboard'
-              className='text-sm font-medium text-gray-700'
-            >
-              Dashboard
+    <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <div className="flex items-center">
+            <Link href="/" className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">AD</span>
+              </div>
+              <span className="text-xl font-bold text-gray-900 dark:text-white">
+                {t('nav.home')}
+              </span>
             </Link>
-            <Link
-              href='/admin/profile'
-              className='text-sm font-medium text-gray-700'
+          </div>
+
+          {/* Navigation */}
+          <nav className="hidden md:flex items-center space-x-8">
+            <Link 
+              href="/admin/dashboard" 
+              className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
             >
-              Profile
+              {t('nav.dashboard')}
+            </Link>
+            <Link 
+              href="/editor" 
+              className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+            >
+              {t('nav.editor')}
+            </Link>
+            <Link 
+              href="/auth/login" 
+              className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+            >
+              {t('nav.login')}
             </Link>
           </nav>
-        </div>
-        <div className='flex items-center gap-3'>
-          <button className='p-2 rounded-full hover:bg-gray-100'>
-            <svg className='w-5 h-5 text-gray-600' viewBox='0 0 24 24'>
-              <path
-                fill='currentColor'
-                d='M12 2a10 10 0 100 20 10 10 0 000-20z'
-              />
-            </svg>
-          </button>
+
+          {/* Controls */}
+          <div className="flex items-center space-x-4">
+            {/* Language Toggle */}
+            <button
+              onClick={toggleLanguage}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              title={t('lang.toggle')}
+            >
+              <Globe className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            </button>
+
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              title={t('theme.toggle')}
+            >
+              {theme === 'light' ? (
+                <Moon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+              ) : (
+                <Sun className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+              )}
+            </button>
+
+            {/* Mobile Menu Button */}
+            <button className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+              <Menu className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            </button>
+          </div>
         </div>
       </div>
     </header>
   );
+<<<<<<< Current (Your changes)
 };
 
 export default Header;
+=======
+}
+>>>>>>> Incoming (Background Agent changes)

@@ -1,0 +1,147 @@
+/* Editor-specific CSS fixes */
+
+/* Ensure proper iframe styling */
+.editor-iframe {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.editor-iframe:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Canvas background styling */
+.canvas-bg {
+  background-color: #f3f4f6;
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(0,0,0,0.1) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+/* Toolbar button consistency */
+.toolbar-btn {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.toolbar-btn:hover {
+  background-color: #f9fafb;
+}
+
+.toolbar-btn:active {
+  transform: scale(0.98);
+}
+
+/* Device preview buttons */
+.device-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.device-btn.active {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.device-btn:not(.active) {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+.device-btn:not(.active):hover {
+  background-color: #e5e7eb;
+}
+
+/* Zoom controls */
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.zoom-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.zoom-btn:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.zoom-indicator {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Pan cursor styles */
+.panning {
+  cursor: grabbing !important;
+}
+
+.pan-ready {
+  cursor: grab;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .toolbar-btn {
+    height: 40px;
+    font-size: 14px;
+  }
+  
+  .device-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* Dark mode support */
+.dark .canvas-bg {
+  background-color: #1f2937;
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 0);
+}
+
+.dark .toolbar-btn:hover {
+  background-color: #374151;
+}
+
+.dark .device-btn:not(.active) {
+  background-color: #374151;
+  color: #d1d5db;
+}
+
+.dark .device-btn:not(.active):hover {
+  background-color: #4b5563;
+}
+
+.dark .zoom-btn {
+  background-color: #374151;
+  border-color: #4b5563;
+  color: #d1d5db;
+}
+
+.dark .zoom-btn:hover {
+  background-color: #4b5563;
+}
