@@ -171,7 +171,7 @@ export default function Index() {
     })();
 
     return (
-      <div key={c.id} draggable={editModeRef.current} onDragStart={(e)=>onDragStart(e, idx)} onDragOver={onDragOver} onDrop={(e)=>onDrop(e, idx)}>
+      <div key={c.id} draggable={editModeRef.current} onDragStart={(e)=>onDragStart(e, idx)} onDragOver={onDragOver} onDrop={(e)=>onDrop(e, idx)} style={c.style || {}}>
         <EditableWrapper id={c.id} editMode={editModeRef.current} onStyleChange={(style)=>{
           setPage(prev=>{
             const comps = prev.components.map(x=> x.id===c.id ? { ...x, style: { ...(x.style||{}), ...style } } : x);
