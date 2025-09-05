@@ -26,18 +26,27 @@ const providers = [
   })
 ];
 
-// Email provider will be enabled when SMTP env vars are provided.
-if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
-  providers.push(
-    EmailProvider({
-      server: {
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : 587,
-        auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
-      },
-      from: process.env.SMTP_FROM || process.env.SMTP_USER
-    })
-  );
+// Email provider will only be enabled when explicitly enabled via ENABLE_EMAIL_PROVIDER
+// and an adapter is configured. By default we keep Credentials provider only to avoid
+// requiring a database adapter for email verification tokens.
+if (process.env.ENABLE_EMAIL_PROVIDER === 'true') {
+  if (!(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS)) {
+    console.warn('ENABLE_EMAIL_PROVIDER is true but SMTP_* ENV vars are missing; email provider will not be added');
+  } else if (!process.env.ENABLE_EMAIL_PROVIDER_ADAPTER) {
+    // Require explicit adapter flag to avoid runtime MissingAdapterError
+    console.warn('ENABLE_EMAIL_PROVIDER is true but ENABLE_EMAIL_PROVIDER_ADAPTER is not set. Please configure an adapter to use EmailProvider.');
+  } else {
+    providers.push(
+      EmailProvider({
+        server: {
+          host: process.env.SMTP_HOST,
+          port: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : 587,
+          auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
+        },
+        from: process.env.SMTP_FROM || process.env.SMTP_USER
+      })
+    );
+  }
 }
 
 export default NextAuth({
