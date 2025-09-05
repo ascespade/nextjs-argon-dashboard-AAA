@@ -6,6 +6,7 @@ import Chart from "chart.js";
 // react plugin used to create charts
 import { Line, Bar } from "react-chartjs-2";
 // reactstrap components
+import Link from 'next/link';
 import {
   Button,
   Card,
