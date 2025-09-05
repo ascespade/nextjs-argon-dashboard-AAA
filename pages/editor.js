@@ -36,6 +36,38 @@ export default function Editor() {
   const redo = () => postToEditor(iframeRef.current.contentWindow, Messages.REDO, {});
   const onAdd = (c) => postToEditor(iframeRef.current.contentWindow, Messages.ADD_COMPONENT, { component: c });
 
+  const exportJSON = async () => {
+    postToEditor(iframeRef.current.contentWindow, Messages.SAVE_DRAFT, {});
+    setTimeout(async () => {
+      try {
+        const res = await fetch('/api/pages/home?mode=draft');
+        const json = await res.json();
+        if (json && json.ok) {
+          const blob = new Blob([JSON.stringify(json.page, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'page-home.json';
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+      } catch (e) { console.error(e); }
+    }, 700);
+  };
+
+  const importJSON = async (ev) => {
+    const file = ev.target.files && ev.target.files[0];
+    if (!file) return;
+    try {
+      const txt = await file.text();
+      const data = JSON.parse(txt);
+      postToEditor(iframeRef.current.contentWindow, Messages.IMPORT_PAGE, { page: data });
+    } catch (e) { console.error(e); }
+  };
+
+  const togglePalette = () => { alert('Color palette would open (placeholder)'); };
+  const toggleFont = () => { alert('Font selector would open (placeholder)'); };
+
   const iframeStyle = (() => {
     if (device === 'desktop') return { width: '100%', height: '100%', border: 0 };
     if (device === 'tablet') return { width: 960, height: '100%', border: 0, margin: '0 auto' };
