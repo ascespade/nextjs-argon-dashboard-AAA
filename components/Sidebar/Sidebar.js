@@ -66,7 +66,7 @@ function Sidebar(props) {
               onClick={closeCollapse}
             >
               <i className={prop.icon} />
-              {prop.name}
+              <span className="sidebar-item-label">{prop.name}</span>
             </NavLink>
           </Link>
         </NavItem>
