@@ -89,13 +89,13 @@ export default function Editor() {
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
+    <div className="editor-root">
       <Sidebar components={componentsLibrary} onAdd={onAdd} />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div className="editor-main">
         <Toolbar onSave={saveDraft} onPublish={publish} onUndo={undo} onRedo={redo} onExport={exportJSON} onImport={importJSON} onTogglePalette={togglePalette} onToggleFont={toggleFont} />
         <DeviceControls device={device} setDevice={setDevice} />
-        <div style={{ flex: 1, display: 'flex', position: 'relative', justifyContent: 'center', alignItems: 'center' }}>
-          <div className="editor-device-frame" style={{ flex: device==='desktop'?1:'none', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div className="editor-canvas-wrap">
+          <div className="editor-device-frame" style={{ flex: device==='desktop'?1:'none' }}>
             <iframe ref={iframeRef} className="editor-iframe" src="/?edit=1&mode=draft" style={iframeStyle} onLoad={onIframeLoad} />
           </div>
           <PreviewLens />
