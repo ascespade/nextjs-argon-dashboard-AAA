@@ -5,14 +5,22 @@ import Sidebar from 'components/Editor/Sidebar';
 import DeviceControls from 'components/Editor/DeviceControls';
 import PreviewLens from 'components/Editor/PreviewLens';
 import { Messages, isEditorMessage, postToEditor } from '../lib/editor-protocol';
-import { getComponentsLibrary } from '../lib/db';
 
 export default function Editor() {
   const iframeRef = useRef(null);
   const [componentsLibrary, setComponentsLibrary] = useState([]);
   const [device, setDevice] = useState('desktop');
   useEffect(() => {
-    setComponentsLibrary(getComponentsLibrary());
+    // fetch components library from server-side API to avoid bundling server fs code into client
+    (async () => {
+      try {
+        const res = await fetch('/api/components');
+        const json = await res.json();
+        if (json && json.ok) setComponentsLibrary(json.components || []);
+      } catch (e) {
+        console.error('Failed to load components library', e);
+      }
+    })();
   }, []);
 
   useEffect(() => {
