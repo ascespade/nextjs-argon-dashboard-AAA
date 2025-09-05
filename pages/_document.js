@@ -19,6 +19,8 @@ class MyDocument extends Document {
           <div id="page-transition"></div>
           <Main />
           <NextScript />
+          {/* Preline JS */}
+          <script src="https://unpkg.com/preline/dist/preline.umd.js"></script>
         </body>
       </Html>
     );
