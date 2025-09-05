@@ -14,4 +14,10 @@
   position: fixed;
   inset: 0;
   z-index: 60;
+  pointer-events: none; /* do not block clicks when empty */
+}
+
+/* When a page transition is active (legacy body class), allow the overlay to receive events */
+.body-page-transition #page-transition {
+  pointer-events: auto;
 }
