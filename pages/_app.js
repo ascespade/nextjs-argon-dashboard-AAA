@@ -16,9 +16,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'assets/css/nextjs-argon-dashboard.min.css';
 import 'assets/css/custom-home.css';
 
-// Page transition root (reused to avoid createRoot on same container multiple times)
-let pageTransitionRoot = null;
-let pageTransitionTimeout = null;
+// Manage page transition root on the container DOM node to survive HMR
 
 Router.events.on('routeChangeStart', url => {
   console.log(`Loading: ${url}`);
@@ -26,46 +24,38 @@ Router.events.on('routeChangeStart', url => {
   const container = document.getElementById('page-transition');
   if (container) {
     try {
-      if (!pageTransitionRoot) {
-        pageTransitionRoot = createRoot(container);
+      // attach root and timeout to the DOM node to persist across module reloads
+      if (!container.__pageTransitionRoot) {
+        container.__pageTransitionRoot = createRoot(container);
       }
-      pageTransitionRoot.render(<PageChange path={url} />);
-      // Fallback to clear the transition if routeChangeComplete doesn't fire
-      if (pageTransitionTimeout) clearTimeout(pageTransitionTimeout);
-      pageTransitionTimeout = setTimeout(() => {
-        try {
-          if (pageTransitionRoot) pageTransitionRoot.unmount();
-        } catch (_e) {}
-        pageTransitionRoot = null;
-        try {
-          container.innerHTML = '';
-        } catch (_e) {}
+      container.__pageTransitionRoot.render(<PageChange path={url} />);
+
+      if (container.__pageTransitionTimeout) clearTimeout(container.__pageTransitionTimeout);
+      container.__pageTransitionTimeout = setTimeout(() => {
+        try { container.__pageTransitionRoot && container.__pageTransitionRoot.unmount(); } catch (_e) {}
+        container.__pageTransitionRoot = null;
+        try { container.innerHTML = ''; } catch (_e) {}
         document.body.classList.remove('body-page-transition');
       }, 10000);
     } catch (e) {
-      // Fallback: ensure container isn't left in a broken state
-      try {
-        container.innerHTML = '';
-      } catch (_e) {}
+      try { container.innerHTML = ''; } catch (_e) {}
     }
   }
 });
 
 const clearPageTransition = () => {
   const container = document.getElementById('page-transition');
-  if (pageTransitionTimeout) {
-    clearTimeout(pageTransitionTimeout);
-    pageTransitionTimeout = null;
-  }
-  if (pageTransitionRoot) {
-    try {
-      pageTransitionRoot.unmount();
-    } catch (_e) {}
-    pageTransitionRoot = null;
-  } else if (container) {
-    try {
-      container.innerHTML = '';
-    } catch (_e) {}
+  if (container) {
+    if (container.__pageTransitionTimeout) {
+      clearTimeout(container.__pageTransitionTimeout);
+      container.__pageTransitionTimeout = null;
+    }
+    if (container.__pageTransitionRoot) {
+      try { container.__pageTransitionRoot.unmount(); } catch (_e) {}
+      container.__pageTransitionRoot = null;
+    } else {
+      try { container.innerHTML = ''; } catch (_e) {}
+    }
   }
   document.body.classList.remove('body-page-transition');
 };
