@@ -123,7 +123,7 @@ export default function Editor() {
     const file = ev.target.files && ev.target.files[0]; if (!file) return; try { const txt = await file.text(); const data = JSON.parse(txt); post(Messages.IMPORT_PAGE, { page: data }); } catch (e) { console.error(e); }
   };
 
-  const onIframeLoad = () => { try { postToEditor(iframeRef.current.contentWindow, Messages.INIT, { mode: 'draft' }); setIframeReady(true); } catch (e) { console.error(e); } };
+  const onIframeLoad = () => { try { postToEditor(iframeRef.current.contentWindow, Messages.INIT, { mode: editMode ? 'draft' : 'published' }); setIframeReady(true); } catch (e) { console.error(e); } };
 
   const handleDropFromLibrary = (e) => {
     e.preventDefault();
