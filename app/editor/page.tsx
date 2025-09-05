@@ -71,14 +71,18 @@ export default function EditorPage() {
               className='p-2 rounded-md hover:bg-gray-100'
               title='Undo'
             >
-              <i className='fa fa-undo text-gray-700' aria-hidden='true' />
+              <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5 text-gray-700' viewBox='0 0 20 20' fill='currentColor' aria-hidden='true'>
+                <path fillRule='evenodd' d='M9.707 4.293a1 1 0 010 1.414L7.414 8H12a4 4 0 110 8 1 1 0 110 2 6 6 0 100-12H7.414l2.293 2.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z' clipRule='evenodd' />
+              </svg>
             </button>
             <button
               onClick={() => postToIframe({ type: 'REDO' })}
               className='p-2 rounded-md hover:bg-gray-100'
               title='Redo'
             >
-              <i className='fa fa-redo text-gray-700' aria-hidden='true' />
+              <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5 text-gray-700' viewBox='0 0 20 20' fill='currentColor' aria-hidden='true'>
+                <path fillRule='evenodd' d='M10.293 15.707a1 1 0 010-1.414L12.586 12H8a4 4 0 110-8 1 1 0 110-2 6 6 0 100 12h4.586l-2.293-2.293a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z' clipRule='evenodd' />
+              </svg>
             </button>
           </div>
 
