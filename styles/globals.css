@@ -3,7 +3,7 @@
 .editor-controls{position:absolute;top:6px;right:6px;display:flex;gap:6px;z-index:2}
 .editor-drag-handle{cursor:move}
 .editor-selected{outline:2px dashed rgba(0,0,0,.3)}
-.editor-device-frame{border:1px solid rgba(0,0,0,.1);box-shadow:0 2px 12px rgba(0,0,0,.08);border-radius:6px;overflow:hidden}
+.editor-device-frame{border:1px solid rgba(0,0,0,.1);box-shadow:0 2px 12px rgba(0,0,0,.08);border-radius:6px;overflow:hidden;background:#fff}
 .editor-toolbar{background:var(--editor-toolbar-bg, #172b4d);color:#fff}
 .editor-sidebar{background:#fff;border-left:1px solid rgba(0,0,0,.1)}
 .editor-sidebar-panel{width:260px;padding:1rem}
@@ -16,7 +16,22 @@
 
 /* Editor layout helpers */
 .editor-main{flex:1;display:flex;flex-direction:column}
-.editor-canvas-wrap{flex:1;display:flex;position:relative;justify-content:center;align-items:center}
+/* keep canvas top-aligned so page content appears from the top, not centered vertically */
+.editor-canvas-wrap{flex:1;display:flex;position:relative;justify-content:center;align-items:flex-start;padding-top:12px}
+
+/* make device frame tall enough to show a full page preview */
+.editor-device-frame{min-height:900px;max-width:1200px;width:100%}
+
+/* smaller frame heights for tablet/mobile */
+@media (max-width: 1199.98px){
+  .editor-device-frame{min-height:800px}
+}
+@media (max-width: 991.98px){
+  .editor-device-frame{min-height:700px}
+}
+@media (max-width: 575.98px){
+  .editor-device-frame{min-height:640px}
+}
 
 /* Sidebar collapse behavior */
 .navbar-vertical{transition: width .25s ease, transform .25s ease}
@@ -49,7 +64,25 @@
   .navbar-vertical{transform:translateX(-250px)}
   .sidebar-collapsed .navbar-vertical{transform:translateX(-250px);width:250px}
   .main-content{margin-left:0}
+  /* stack editor on small screens */
+  .editor-root{flex-direction:column;height:auto}
+  .editor-sidebar-panel{width:100%;height:auto}
+  .editor-canvas-wrap{justify-content:flex-start}
 }
+
+/* ensure iframe content is not vertically centered */
+.editor-iframe{display:block}
+
+/* navbar background and colors */
+#navbar-main{background:var(--navbar-bg,#172b4d);color:#fff}
+#navbar-main .h4,#navbar-main .nav-link,#navbar-main .text-white{color:#fff}
+#navbar-main .navbar-brand-img{max-height:28px}
+.navbar-top.navbar-dark .navbar-toggler-icon{background-image:none}
+
+/* floating toggle adjustments */
+.sidebar-toggle-float{display:none;position:fixed;left:8px;top:12px;z-index:1050;background:var(--white,#fff);border-radius:6px;padding:6px;border:1px solid rgba(0,0,0,.06);box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.sidebar-toggle-float i{font-size:14px;color:#333}
+.sidebar-collapsed .sidebar-toggle-float{display:block}
 
 /* Ensure top navbar is fixed and body content sits below it */
 #navbar-main{position:fixed;top:0;left:0;right:0;z-index:1040}
