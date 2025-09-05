@@ -187,6 +187,15 @@ export default class MyApp extends App {
         });
       }
     } catch (e) {}
+
+    // allow manual clearing of page transition (from PageChange cancel button)
+    try {
+      if (typeof window !== 'undefined') {
+        window.addEventListener('clearPageTransition', () => {
+          try { clearPageTransition(); } catch (_e) {}
+        });
+      }
+    } catch (_e) {}
   }
   static async getInitialProps({ Component, router: _router, ctx }) {
     let pageProps = {};
