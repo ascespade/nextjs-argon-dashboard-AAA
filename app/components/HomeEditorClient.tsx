@@ -22,8 +22,6 @@ interface Component {
 
 interface EditorState {
   components: Component[];
-  history: Component[][];
-  historyIndex: number;
   editingComponent: string | null;
 }
 
@@ -32,8 +30,6 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
   const { t, isRTL } = useI18n();
   const [editorState, setEditorState] = useState<EditorState>({
     components: initialComponents || [],
-    history: [],
-    historyIndex: -1,
     editingComponent: null
   });
   const [isEditMode, setIsEditMode] = useState(false);
@@ -43,7 +39,7 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
   // Enhanced features
   const [autoSaveManager] = useState(() => new AutoSaveManager(
     async () => {
-      await savePage();
+      await saveToServer();
     },
     () => setIsAutoSaving(true),
     () => {
@@ -94,7 +90,7 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
         case 'INIT':
           setIsInitialized(true);
           // Send current theme and locale to parent
-          event.source?.postMessage({
+          (event.source as Window).postMessage({
             type: 'THEME_UPDATE',
             theme,
             locale: isRTL ? 'ar' : 'en'
@@ -137,9 +133,13 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
 
         case 'SYNC_STATE':
           // Send current state to parent
-          event.source?.postMessage({
+          (event.source as Window).postMessage({
             type: 'STATE_SYNC',
-            state: editorState
+            state: {
+              components: editorState.components,
+              canUndo: undoRedoManager.canUndo(),
+              canRedo: undoRedoManager.canRedo()
+            }
           }, event.origin);
           break;
       }
@@ -147,22 +147,7 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [editorState, theme, isRTL]);
-
-  // Save state to history
-  const saveToHistory = (newComponents: Component[]) => {
-    setEditorState(prev => {
-      const newHistory = prev.history.slice(0, prev.historyIndex + 1);
-      newHistory.push([...newComponents]);
-
-      return {
-        ...prev,
-        components: newComponents,
-        history: newHistory,
-        historyIndex: newHistory.length - 1
-      };
-    });
-  };
+  }, [editorState.components, theme, isRTL, undoRedoManager]);
 
   // Add component
   const addComponent = (component: any) => {
@@ -173,13 +158,12 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
     };
 
     const newComponents = [...editorState.components, newComponent];
-    saveToHistory(newComponents);
-
-    // Set as editing component
     setEditorState(prev => ({
       ...prev,
+      components: newComponents,
       editingComponent: newComponent.id
     }));
+    undoRedoManager.addState(newComponents, 'add_component');
   };
 
   // Update component
@@ -187,7 +171,8 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
     const newComponents = editorState.components.map(comp =>
       comp.id === componentId ? { ...comp, props: { ...comp.props, ...newProps } } : comp
     );
-    saveToHistory(newComponents);
+    setEditorState(prev => ({ ...prev, components: newComponents }));
+    undoRedoManager.addState(newComponents, 'update_component');
   };
 
   // Apply style to component
@@ -197,29 +182,18 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
         ? { ...comp, props: { ...comp.props, style: { ...comp.props.style, ...style } } }
         : comp
     );
-    saveToHistory(newComponents);
+    setEditorState(prev => ({ ...prev, components: newComponents }));
+    undoRedoManager.addState(newComponents, 'apply_style');
   };
 
   // Undo
   const undo = () => {
-    if (editorState.historyIndex > 0) {
-      setEditorState(prev => ({
-        ...prev,
-        historyIndex: prev.historyIndex - 1,
-        components: [...prev.history[prev.historyIndex - 1]]
-      }));
-    }
+    handleUndo();
   };
 
   // Redo
   const redo = () => {
-    if (editorState.historyIndex < editorState.history.length - 1) {
-      setEditorState(prev => ({
-        ...prev,
-        historyIndex: prev.historyIndex + 1,
-        components: [...prev.history[prev.historyIndex + 1]]
-      }));
-    }
+    handleRedo();
   };
 
   // Save to server
@@ -239,15 +213,15 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
         window.parent.postMessage({
           type: 'SAVE_ACK',
           success: true
-        }, '*');
+        }, window.location.origin);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error saving:', error);
       window.parent.postMessage({
         type: 'SAVE_ACK',
         success: false,
-        error: error.message
-      }, '*');
+        error: error instanceof Error ? error.message : 'An unknown error occurred'
+      }, window.location.origin);
     }
   };
 
@@ -268,15 +242,15 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
         window.parent.postMessage({
           type: 'PUBLISH_ACK',
           success: true
-        }, '*');
+        }, window.location.origin);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error publishing:', error);
       window.parent.postMessage({
         type: 'PUBLISH_ACK',
         success: false,
-        error: error.message
-      }, '*');
+        error: error instanceof Error ? error.message : 'An unknown error occurred'
+      }, window.location.origin);
     }
   };
 
@@ -430,7 +404,7 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
   // Initialize communication with parent
   useEffect(() => {
     if (isEditMode && !isInitialized) {
-      window.parent.postMessage({ type: 'INIT' }, '*');
+      window.parent.postMessage({ type: 'INIT' }, window.location.origin);
     }
   }, [isEditMode, isInitialized]);
 
@@ -442,7 +416,7 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
 
       // Setup keyboard shortcuts
       const shortcuts = createDefaultShortcuts(
-        () => savePage(),
+        () => saveToServer(),
         () => handleUndo(),
         () => handleRedo(),
         () => handleZoomIn(),
