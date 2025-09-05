@@ -331,7 +331,7 @@ const Homepage = () => {
       {/* Navigation Header */}
       <nav className='navbar navbar-expand-lg navbar-dark bg-primary fixed-top'>
         <Container>
-          <a role='button' className='navbar-brand fw-bold' onClick={() => { const r = require('next/router').useRouter ? null : null; }} href='/'>
+          <a role='button' className='navbar-brand fw-bold' onClick={(e) => { e.preventDefault(); router.push('/'); }} href='/'>
             <i className='fas fa-chart-line me-2'></i>
             NextJS Dashboard
           </a>
