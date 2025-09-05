@@ -1,13 +1,13 @@
-import React from "react";
-import { useRouter } from "next/router";
+import React from 'react';
+import { useRouter } from 'next/router';
 // reactstrap components
-import { Container } from "reactstrap";
+import { Container } from 'reactstrap';
 // core components
-import AdminNavbar from "components/Navbars/AdminNavbar.js";
-import AdminFooter from "components/Footers/AdminFooter.js";
-import Sidebar from "components/Sidebar/Sidebar.js";
+import AdminNavbar from 'components/Navbars/AdminNavbar.js';
+import AdminFooter from 'components/Footers/AdminFooter.js';
+import Sidebar from 'components/Sidebar/Sidebar.js';
 
-import routes from "routes.js";
+import routes from 'routes.js';
 
 function Admin(props) {
   // used for checking current route
@@ -24,7 +24,7 @@ function Admin(props) {
         return routes[i].name;
       }
     }
-    return "Brand";
+    return 'Brand';
   };
   return (
     <>
@@ -32,12 +32,12 @@ function Admin(props) {
         {...props}
         routes={routes}
         logo={{
-          innerLink: "/admin/dashboard",
-          imgSrc: require("assets/img/brand/nextjs_argon_black.png"),
-          imgAlt: "...",
+          innerLink: '/admin/dashboard',
+          imgSrc: require('assets/img/brand/nextjs_argon_black.png'),
+          imgAlt: '...',
         }}
       />
-      <div className="main-content" ref={mainContentRef}>
+      <div className='main-content' ref={mainContentRef}>
         <AdminNavbar {...props} brandText={getBrandText()} />
         {props.children}
         <Container fluid>

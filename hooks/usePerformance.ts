@@ -57,7 +57,8 @@ export const usePerformance = (options: PerformanceOptions = {}) => {
 
   const endRenderTimer = useCallback(() => {
     if (renderStartTimeRef.current > 0) {
-      metricsRef.current.renderTime = performance.now() - renderStartTimeRef.current;
+      metricsRef.current.renderTime =
+        performance.now() - renderStartTimeRef.current;
     }
   }, []);
 
@@ -80,17 +81,24 @@ export const usePerformance = (options: PerformanceOptions = {}) => {
   useEffect(() => {
     if (!enableNetworkTracking) return;
 
-    if (typeof PerformanceObserver === 'undefined' || typeof performance === 'undefined') {
+    if (
+      typeof PerformanceObserver === 'undefined' ||
+      typeof performance === 'undefined'
+    ) {
       return;
     }
 
     let requestCount = metricsRef.current.networkRequests || 0;
 
-    const observer = new PerformanceObserver((list) => {
+    const observer = new PerformanceObserver(list => {
       const entries = list.getEntries() || [];
       entries.forEach((entry: any) => {
         // Count resource fetches and XHR/fetch initiator types
-        if (entry.initiatorType === 'xmlhttprequest' || entry.initiatorType === 'fetch' || entry.entryType === 'resource') {
+        if (
+          entry.initiatorType === 'xmlhttprequest' ||
+          entry.initiatorType === 'fetch' ||
+          entry.entryType === 'resource'
+        ) {
           requestCount++;
           metricsRef.current.networkRequests = requestCount;
         }
@@ -110,7 +118,9 @@ export const usePerformance = (options: PerformanceOptions = {}) => {
     }
 
     return () => {
-      try { observer.disconnect(); } catch (_e) {}
+      try {
+        observer.disconnect();
+      } catch (_e) {}
     };
   }, [enableNetworkTracking]);
 
@@ -121,12 +131,21 @@ export const usePerformance = (options: PerformanceOptions = {}) => {
     const isNoisyNetworkError = (reason: any) => {
       try {
         if (!reason) return false;
-        const msg = typeof reason === 'string' ? reason : reason.message || reason.name || '';
+        const msg =
+          typeof reason === 'string'
+            ? reason
+            : reason.message || reason.name || '';
         const stack = reason && reason.stack ? String(reason.stack) : '';
         // Ignore generic network fetch failures and known 3rd-party hosts like fullstory
         if (msg.toLowerCase().includes('failed to fetch')) return true;
         if (stack.toLowerCase().includes('fullstory')) return true;
-        if ((reason && reason.name && reason.name === 'TypeError') && msg.toLowerCase().includes('failed')) return true;
+        if (
+          reason &&
+          reason.name &&
+          reason.name === 'TypeError' &&
+          msg.toLowerCase().includes('failed')
+        )
+          return true;
       } catch (_e) {
         // ignore
       }
@@ -137,13 +156,20 @@ export const usePerformance = (options: PerformanceOptions = {}) => {
       // Ignore noisy network errors from third-party scripts
       if (isNoisyNetworkError(event.error || event.message)) return;
       metricsRef.current.errors++;
-      try { console.error('Performance tracked error:', event.error || event.message); } catch (_e) {}
+      try {
+        console.error(
+          'Performance tracked error:',
+          event.error || event.message
+        );
+      } catch (_e) {}
     };
 
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
       if (isNoisyNetworkError(event.reason)) return;
       metricsRef.current.errors++;
-      try { console.error('Performance tracked unhandled rejection:', event.reason); } catch (_e) {}
+      try {
+        console.error('Performance tracked unhandled rejection:', event.reason);
+      } catch (_e) {}
     };
 
     window.addEventListener('error', handleError);
@@ -151,7 +177,10 @@ export const usePerformance = (options: PerformanceOptions = {}) => {
 
     return () => {
       window.removeEventListener('error', handleError);
-      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+      window.removeEventListener(
+        'unhandledrejection',
+        handleUnhandledRejection
+      );
     };
   }, [enableErrorTracking]);
 
@@ -184,37 +213,40 @@ export const usePerformance = (options: PerformanceOptions = {}) => {
   }, []);
 
   // Measure function execution time
-  const measureExecution = useCallback(async <T>(
-    fn: () => Promise<T> | T,
-    label?: string
-  ): Promise<T> => {
-    const start = performance.now();
-    try {
-      const result = await fn();
-      const end = performance.now();
-      const duration = end - start;
-      
-      if (label) {
-        console.log(`${label} took ${duration.toFixed(2)}ms`);
+  const measureExecution = useCallback(
+    async <T>(fn: () => Promise<T> | T, label?: string): Promise<T> => {
+      const start = performance.now();
+      try {
+        const result = await fn();
+        const end = performance.now();
+        const duration = end - start;
+
+        if (label) {
+          console.log(`${label} took ${duration.toFixed(2)}ms`);
+        }
+
+        return result;
+      } catch (error) {
+        const end = performance.now();
+        const duration = end - start;
+
+        if (label) {
+          console.error(
+            `${label} failed after ${duration.toFixed(2)}ms:`,
+            error
+          );
+        }
+
+        throw error;
       }
-      
-      return result;
-    } catch (error) {
-      const end = performance.now();
-      const duration = end - start;
-      
-      if (label) {
-        console.error(`${label} failed after ${duration.toFixed(2)}ms:`, error);
-      }
-      
-      throw error;
-    }
-  }, []);
+    },
+    []
+  );
 
   // Measure component render time
   const measureRender = useCallback((componentName: string) => {
     const start = performance.now();
-    
+
     return () => {
       const end = performance.now();
       const duration = end - start;
@@ -246,12 +278,12 @@ export const useComponentPerformance = (componentName: string) => {
 export const useApiPerformance = () => {
   const { measureExecution } = usePerformance();
 
-  const measureApiCall = useCallback(async <T>(
-    apiCall: () => Promise<T>,
-    endpoint: string
-  ): Promise<T> => {
-    return measureExecution(apiCall, `API call to ${endpoint}`);
-  }, [measureExecution]);
+  const measureApiCall = useCallback(
+    async <T>(apiCall: () => Promise<T>, endpoint: string): Promise<T> => {
+      return measureExecution(apiCall, `API call to ${endpoint}`);
+    },
+    [measureExecution]
+  );
 
   return { measureApiCall };
 };

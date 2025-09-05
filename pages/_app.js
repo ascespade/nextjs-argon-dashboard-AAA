@@ -1,29 +1,29 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
-import App from "next/app";
-import Head from "next/head";
-import Router from "next/router";
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from 'next/app';
+import Head from 'next/head';
+import Router from 'next/router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-import PageChange from "components/PageChange/PageChange.js";
-import ErrorBoundary from "components/common/ErrorBoundary";
-import PerformanceMonitor from "components/common/PerformanceMonitor";
-import { config } from "config/app.config";
+import PageChange from 'components/PageChange/PageChange.js';
+import ErrorBoundary from 'components/common/ErrorBoundary';
+import PerformanceMonitor from 'components/common/PerformanceMonitor';
+import { config } from 'config/app.config';
 
 // Preline CSS will be loaded via CDN in the Head component
-import "@fortawesome/fontawesome-free/css/all.min.css";
-import "assets/css/nextjs-argon-dashboard.min.css";
-import "assets/css/custom-home.css";
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import 'assets/css/nextjs-argon-dashboard.min.css';
+import 'assets/css/custom-home.css';
 
 // Page transition root (reused to avoid createRoot on same container multiple times)
 let pageTransitionRoot = null;
 let pageTransitionTimeout = null;
 
-Router.events.on("routeChangeStart", (url) => {
+Router.events.on('routeChangeStart', url => {
   console.log(`Loading: ${url}`);
-  document.body.classList.add("body-page-transition");
-  const container = document.getElementById("page-transition");
+  document.body.classList.add('body-page-transition');
+  const container = document.getElementById('page-transition');
   if (container) {
     try {
       if (!pageTransitionRoot) {
@@ -33,20 +33,26 @@ Router.events.on("routeChangeStart", (url) => {
       // Fallback to clear the transition if routeChangeComplete doesn't fire
       if (pageTransitionTimeout) clearTimeout(pageTransitionTimeout);
       pageTransitionTimeout = setTimeout(() => {
-        try { if (pageTransitionRoot) pageTransitionRoot.unmount(); } catch (_e) {}
+        try {
+          if (pageTransitionRoot) pageTransitionRoot.unmount();
+        } catch (_e) {}
         pageTransitionRoot = null;
-        try { container.innerHTML = ''; } catch (_e) {}
+        try {
+          container.innerHTML = '';
+        } catch (_e) {}
         document.body.classList.remove('body-page-transition');
       }, 10000);
     } catch (e) {
       // Fallback: ensure container isn't left in a broken state
-      try { container.innerHTML = ''; } catch (_e) {}
+      try {
+        container.innerHTML = '';
+      } catch (_e) {}
     }
   }
 });
 
 const clearPageTransition = () => {
-  const container = document.getElementById("page-transition");
+  const container = document.getElementById('page-transition');
   if (pageTransitionTimeout) {
     clearTimeout(pageTransitionTimeout);
     pageTransitionTimeout = null;
@@ -57,13 +63,15 @@ const clearPageTransition = () => {
     } catch (_e) {}
     pageTransitionRoot = null;
   } else if (container) {
-    try { container.innerHTML = ''; } catch (_e) {}
+    try {
+      container.innerHTML = '';
+    } catch (_e) {}
   }
-  document.body.classList.remove("body-page-transition");
+  document.body.classList.remove('body-page-transition');
 };
 
-Router.events.on("routeChangeComplete", clearPageTransition);
-Router.events.on("routeChangeError", clearPageTransition);
+Router.events.on('routeChangeComplete', clearPageTransition);
+Router.events.on('routeChangeError', clearPageTransition);
 
 // Create a client
 const queryClient = new QueryClient({
@@ -80,10 +88,13 @@ const queryClient = new QueryClient({
 export default class MyApp extends App {
   componentDidMount() {
     // Load Bootstrap JS (v5 bundle) for collapse/toggler functionality
-    try { import('bootstrap/dist/js/bootstrap.bundle.min.js'); } catch (_e) {}
+    try {
+      import('bootstrap/dist/js/bootstrap.bundle.min.js');
+    } catch (_e) {}
     // Load Preline from CDN
     const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.js';
+    script.src =
+      'https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.js';
     script.onload = () => {
       if (window.HSStaticMethods) {
         window.HSStaticMethods.autoInit();
@@ -121,7 +132,9 @@ export default class MyApp extends App {
         }
       } else {
         // Avoid loading placeholder key which causes InvalidKeyMapError
-        console.warn('Google Maps API key not set. To enable maps, set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY.');
+        console.warn(
+          'Google Maps API key not set. To enable maps, set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY.'
+        );
       }
     } catch (e) {
       console.warn('Error loading Google Maps script', e);
@@ -129,26 +142,29 @@ export default class MyApp extends App {
 
     // Client-side shim for __webpack_require__.nmd to support legacy UMD modules
     try {
-      if (typeof window !== 'undefined' && typeof __webpack_require__ !== 'undefined') {
+      if (
+        typeof window !== 'undefined' &&
+        typeof __webpack_require__ !== 'undefined'
+      ) {
         if (typeof __webpack_require__.nmd !== 'function') {
           __webpack_require__.nmd = function (module) {
             try {
               if (!module) return module;
               module.paths = module.paths || [];
               module.children = module.children || [];
-            } catch (_e) { }
+            } catch (_e) {}
             return module;
           };
         }
       }
-            } catch (_e) {
-          // Non-critical
-        }
+    } catch (_e) {
+      // Non-critical
+    }
 
     // Global client-side handlers to avoid noisy aborts/crashes in dev tooling
     try {
       if (typeof window !== 'undefined') {
-        window.addEventListener('unhandledrejection', (ev) => {
+        window.addEventListener('unhandledrejection', ev => {
           // swallow AbortError from overlays or HMR which are non-critical in dev
           try {
             const reason = ev && ev.reason;
@@ -156,19 +172,19 @@ export default class MyApp extends App {
               console.warn('Suppressed AbortError from dev overlay/HMR');
               ev.preventDefault && ev.preventDefault();
             }
-          } catch (_e) { }
+          } catch (_e) {}
         });
-        window.addEventListener('error', (ev) => {
+        window.addEventListener('error', ev => {
           // prevent dev overlay from stopping execution on non-critical errors
           try {
             const msg = ev && ev.message;
             if (msg && msg.indexOf('React Dev Overlay') !== -1) {
               ev.preventDefault && ev.preventDefault();
             }
-          } catch (_e) { }
+          } catch (_e) {}
         });
       }
-    } catch (e) { }
+    } catch (e) {}
   }
   static async getInitialProps({ Component, router: _router, ctx }) {
     let pageProps = {};
@@ -188,20 +204,23 @@ export default class MyApp extends App {
       <React.Fragment>
         <Head>
           <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+            name='viewport'
+            content='width=device-width, initial-scale=1, shrink-to-fit=no'
           />
           <title>{config.app.name}</title>
-          <meta name="description" content={config.app.description} />
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.css" />
+          <meta name='description' content={config.app.description} />
+          <link
+            rel='stylesheet'
+            href='https://cdn.jsdelivr.net/npm/preline@2.0.3/dist/preline.min.css'
+          />
         </Head>
-        
+
         <QueryClientProvider client={queryClient}>
           <ErrorBoundary>
             <Layout>
               <Component {...pageProps} />
             </Layout>
-            
+
             {/* Development tools */}
             {process.env.NODE_ENV === 'development' && (
               <>

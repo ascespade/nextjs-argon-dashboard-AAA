@@ -1,9 +1,9 @@
 /*eslint-disable*/
-import React from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import React from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 // nodejs library to set properties for components
-import { PropTypes } from "prop-types";
+import { PropTypes } from 'prop-types';
 
 // reactstrap components
 import {
@@ -33,7 +33,7 @@ import {
   Container,
   Row,
   Col,
-} from "reactstrap";
+} from 'reactstrap';
 
 var ps;
 
@@ -42,7 +42,7 @@ function Sidebar(props) {
   const router = useRouter();
   const [collapseOpen, setCollapseOpen] = React.useState(false);
   // verifies if routeName is the one active (in browser input)
-  const activeRoute = (routeName) => {
+  const activeRoute = routeName => {
     return router.route.indexOf(routeName) > -1;
   };
   // toggles collapse between opened and closed (true/false)
@@ -54,7 +54,7 @@ function Sidebar(props) {
     setCollapseOpen(false);
   };
   // creates the links that appear in the left menu / Sidebar
-  const createLinks = (routes) => {
+  const createLinks = routes => {
     return routes.map((prop, key) => {
       return (
         <NavItem key={key} active={activeRoute(prop.layout + prop.path)}>
@@ -73,43 +73,45 @@ function Sidebar(props) {
   };
   const { routes, logo } = props;
   let navbarBrand = (
-    <NavbarBrand className="pt-0" tag={Link} href={logo && logo.innerLink ? logo.innerLink : '#'}>
-      <img alt={logo.imgAlt} className="navbar-brand-img" src={logo.imgSrc} />
+    <NavbarBrand
+      className='pt-0'
+      tag={Link}
+      href={logo && logo.innerLink ? logo.innerLink : '#'}
+    >
+      <img alt={logo.imgAlt} className='navbar-brand-img' src={logo.imgSrc} />
     </NavbarBrand>
   );
   return (
     <Navbar
-      className="navbar-vertical fixed-left navbar-light bg-white"
-      expand="md"
-      id="sidenav-main"
+      className='navbar-vertical fixed-left navbar-light bg-white'
+      expand='md'
+      id='sidenav-main'
     >
       <Container fluid>
         {/* Toggler */}
         <button
-          className="navbar-toggler"
-          type="button"
+          className='navbar-toggler'
+          type='button'
           onClick={toggleCollapse}
         >
-          <span className="navbar-toggler-icon" />
+          <span className='navbar-toggler-icon' />
         </button>
         {/* Brand */}
-        {logo && logo.innerLink ? (
-          navbarBrand
-        ) : null}
+        {logo && logo.innerLink ? navbarBrand : null}
         {logo && logo.outterLink ? (
-          <a href={logo.innerLink} target="_blank">
+          <a href={logo.innerLink} target='_blank'>
             {navbarBrand}
           </a>
         ) : null}
         {/* User */}
-        <Nav className="align-items-center d-md-none">
+        <Nav className='align-items-center d-md-none'>
           <UncontrolledDropdown nav>
-            <DropdownToggle nav className="nav-link-icon">
-              <i className="ni ni-bell-55" />
+            <DropdownToggle nav className='nav-link-icon'>
+              <i className='ni ni-bell-55' />
             </DropdownToggle>
             <DropdownMenu
-              aria-labelledby="navbar-default_dropdown_1"
-              className="dropdown-menu-arrow"
+              aria-labelledby='navbar-default_dropdown_1'
+              className='dropdown-menu-arrow'
               right
             >
               <DropdownItem>Action</DropdownItem>
@@ -120,38 +122,38 @@ function Sidebar(props) {
           </UncontrolledDropdown>
           <UncontrolledDropdown nav>
             <DropdownToggle nav>
-              <Media className="align-items-center">
-                <span className="avatar avatar-sm rounded-circle">
+              <Media className='align-items-center'>
+                <span className='avatar avatar-sm rounded-circle'>
                   <img
-                    alt="..."
-                    src={require("assets/img/theme/team-1-800x800.jpg")}
+                    alt='...'
+                    src={require('assets/img/theme/team-1-800x800.jpg')}
                   />
                 </span>
               </Media>
             </DropdownToggle>
-            <DropdownMenu className="dropdown-menu-arrow" right>
-              <DropdownItem className="noti-title" header tag="div">
-                <h6 className="text-overflow m-0">Welcome!</h6>
+            <DropdownMenu className='dropdown-menu-arrow' right>
+              <DropdownItem className='noti-title' header tag='div'>
+                <h6 className='text-overflow m-0'>Welcome!</h6>
               </DropdownItem>
-              <DropdownItem tag={Link} href="/admin/profile">
-                  <i className="ni ni-single-02" />
-                  <span>My profile</span>
-                </DropdownItem>
-              <DropdownItem tag={Link} href="/admin/profile">
-                  <i className="ni ni-settings-gear-65" />
-                  <span>Settings</span>
-                </DropdownItem>
-              <DropdownItem tag={Link} href="/admin/profile">
-                  <i className="ni ni-calendar-grid-58" />
-                  <span>Activity</span>
-                </DropdownItem>
-              <DropdownItem tag={Link} href="/admin/profile">
-                  <i className="ni ni-support-16" />
-                  <span>Support</span>
-                </DropdownItem>
+              <DropdownItem tag={Link} href='/admin/profile'>
+                <i className='ni ni-single-02' />
+                <span>My profile</span>
+              </DropdownItem>
+              <DropdownItem tag={Link} href='/admin/profile'>
+                <i className='ni ni-settings-gear-65' />
+                <span>Settings</span>
+              </DropdownItem>
+              <DropdownItem tag={Link} href='/admin/profile'>
+                <i className='ni ni-calendar-grid-58' />
+                <span>Activity</span>
+              </DropdownItem>
+              <DropdownItem tag={Link} href='/admin/profile'>
+                <i className='ni ni-support-16' />
+                <span>Support</span>
+              </DropdownItem>
               <DropdownItem divider />
-              <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-                <i className="ni ni-user-run" />
+              <DropdownItem href='#pablo' onClick={e => e.preventDefault()}>
+                <i className='ni ni-user-run' />
                 <span>Logout</span>
               </DropdownItem>
             </DropdownMenu>
@@ -160,10 +162,10 @@ function Sidebar(props) {
         {/* Collapse */}
         <Collapse navbar isOpen={collapseOpen}>
           {/* Collapse header */}
-          <div className="navbar-collapse-header d-md-none">
+          <div className='navbar-collapse-header d-md-none'>
             <Row>
               {logo ? (
-                <Col className="collapse-brand" xs="6">
+                <Col className='collapse-brand' xs='6'>
                   {logo.innerLink ? (
                     <NavbarBrand tag={Link} href={logo.innerLink}>
                       <img alt={logo.imgAlt} src={logo.imgSrc} />
@@ -175,10 +177,10 @@ function Sidebar(props) {
                   )}
                 </Col>
               ) : null}
-              <Col className="collapse-close" xs="6">
+              <Col className='collapse-close' xs='6'>
                 <button
-                  className="navbar-toggler"
-                  type="button"
+                  className='navbar-toggler'
+                  type='button'
                   onClick={toggleCollapse}
                 >
                   <span />
@@ -188,50 +190,50 @@ function Sidebar(props) {
             </Row>
           </div>
           {/* Form */}
-          <Form className="mt-4 mb-3 d-md-none">
-            <InputGroup className="input-group-rounded input-group-merge">
+          <Form className='mt-4 mb-3 d-md-none'>
+            <InputGroup className='input-group-rounded input-group-merge'>
               <Input
-                aria-label="Search"
-                className="form-control-rounded form-control-prepended"
-                placeholder="Search"
-                type="search"
+                aria-label='Search'
+                className='form-control-rounded form-control-prepended'
+                placeholder='Search'
+                type='search'
               />
               <InputGroupText>
-                <span className="fa fa-search" />
+                <span className='fa fa-search' />
               </InputGroupText>
             </InputGroup>
           </Form>
           {/* Navigation */}
           <Nav navbar>{createLinks(routes)}</Nav>
           {/* Divider */}
-          <hr className="my-3" />
+          <hr className='my-3' />
           {/* Heading */}
-          <h6 className="navbar-heading text-muted">Documentation</h6>
+          <h6 className='navbar-heading text-muted'>Documentation</h6>
           {/* Navigation */}
-          <Nav className="mb-md-3" navbar>
+          <Nav className='mb-md-3' navbar>
             <NavItem>
-              <NavLink href="https://www.creative-tim.com/learning-lab/nextjs/overview/argon-dashboard?ref=njsad-admin-sidebar">
-                <i className="ni ni-spaceship" />
+              <NavLink href='https://www.creative-tim.com/learning-lab/nextjs/overview/argon-dashboard?ref=njsad-admin-sidebar'>
+                <i className='ni ni-spaceship' />
                 Getting started
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="https://www.creative-tim.com/learning-lab/nextjs/colors/argon-dashboard?ref=njsad-admin-sidebar">
-                <i className="ni ni-palette" />
+              <NavLink href='https://www.creative-tim.com/learning-lab/nextjs/colors/argon-dashboard?ref=njsad-admin-sidebar'>
+                <i className='ni ni-palette' />
                 Foundation
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="https://www.creative-tim.com/learning-lab/nextjs/avatar/argon-dashboard?ref=njsad-admin-sidebar">
-                <i className="ni ni-ui-04" />
+              <NavLink href='https://www.creative-tim.com/learning-lab/nextjs/avatar/argon-dashboard?ref=njsad-admin-sidebar'>
+                <i className='ni ni-ui-04' />
                 Components
               </NavLink>
             </NavItem>
           </Nav>
-          <Nav className="mb-md-3" navbar>
-            <NavItem className="active-pro active">
-              <NavLink href="https://www.creative-tim.com/product/argon-dashboard-pro-react?ref=njsad-admin-sidebar">
-                <i className="ni ni-spaceship" />
+          <Nav className='mb-md-3' navbar>
+            <NavItem className='active-pro active'>
+              <NavLink href='https://www.creative-tim.com/product/argon-dashboard-pro-react?ref=njsad-admin-sidebar'>
+                <i className='ni ni-spaceship' />
                 Upgrade to PRO
               </NavLink>
             </NavItem>

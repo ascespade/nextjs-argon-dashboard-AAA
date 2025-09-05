@@ -25,7 +25,7 @@ const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
     enableMemoryTracking: true,
     enableNetworkTracking: true,
     enableErrorTracking: true,
-    onMetricsUpdate: (newMetrics) => {
+    onMetricsUpdate: newMetrics => {
       setMetrics({
         loadTime: newMetrics.loadTime,
         renderTime: newMetrics.renderTime,
@@ -78,79 +78,78 @@ const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
   };
 
   return (
-    <Card
-      className={`${getPositionClass()} ${className} perf-monitor-card`}
-    >
-      <CardBody className="p-3">
-        <CardTitle tag="h6" className="mb-3 d-flex align-items-center">
-          <i className="fas fa-tachometer-alt me-2 text-primary"></i>
+    <Card className={`${getPositionClass()} ${className} perf-monitor-card`}>
+      <CardBody className='p-3'>
+        <CardTitle tag='h6' className='mb-3 d-flex align-items-center'>
+          <i className='fas fa-tachometer-alt me-2 text-primary'></i>
           Performance Monitor
         </CardTitle>
-        
-        <Row className="g-2">
-          <Col xs="6">
-            <div className="text-center">
-              <div className="small text-muted">Load Time</div>
-              <Badge 
+
+        <Row className='g-2'>
+          <Col xs='6'>
+            <div className='text-center'>
+              <div className='small text-muted'>Load Time</div>
+              <Badge
                 color={getLoadTimeColor(metrics.loadTime)}
-                className="fs-6"
+                className='fs-6'
               >
                 {metrics.loadTime > 0 ? `${metrics.loadTime}ms` : 'N/A'}
               </Badge>
             </div>
           </Col>
-          
-          <Col xs="6">
-            <div className="text-center">
-              <div className="small text-muted">Render Time</div>
-              <Badge 
+
+          <Col xs='6'>
+            <div className='text-center'>
+              <div className='small text-muted'>Render Time</div>
+              <Badge
                 color={metrics.renderTime < 16 ? 'success' : 'warning'}
-                className="fs-6"
+                className='fs-6'
               >
-                {metrics.renderTime > 0 ? `${metrics.renderTime.toFixed(1)}ms` : 'N/A'}
+                {metrics.renderTime > 0
+                  ? `${metrics.renderTime.toFixed(1)}ms`
+                  : 'N/A'}
               </Badge>
             </div>
           </Col>
-          
-          <Col xs="6">
-            <div className="text-center">
-              <div className="small text-muted">Memory</div>
-              <Badge 
+
+          <Col xs='6'>
+            <div className='text-center'>
+              <div className='small text-muted'>Memory</div>
+              <Badge
                 color={getMemoryColor(metrics.memoryUsage)}
-                className="fs-6"
+                className='fs-6'
               >
-                {metrics.memoryUsage > 0 ? `${metrics.memoryUsage.toFixed(1)}MB` : 'N/A'}
+                {metrics.memoryUsage > 0
+                  ? `${metrics.memoryUsage.toFixed(1)}MB`
+                  : 'N/A'}
               </Badge>
             </div>
           </Col>
-          
-          <Col xs="6">
-            <div className="text-center">
-              <div className="small text-muted">Requests</div>
-              <Badge 
-                color="info"
-                className="fs-6"
-              >
+
+          <Col xs='6'>
+            <div className='text-center'>
+              <div className='small text-muted'>Requests</div>
+              <Badge color='info' className='fs-6'>
                 {metrics.networkRequests}
               </Badge>
             </div>
           </Col>
-          
+
           {metrics.errors > 0 && (
-            <Col xs="12">
-              <div className="text-center">
-                <div className="small text-muted">Errors</div>
-                <Badge color="danger" className="fs-6">
+            <Col xs='12'>
+              <div className='text-center'>
+                <div className='small text-muted'>Errors</div>
+                <Badge color='danger' className='fs-6'>
                   {metrics.errors}
                 </Badge>
               </div>
             </Col>
           )}
         </Row>
-        
-        <div className="mt-3 pt-2 border-top">
-          <div className="small text-muted text-center">
-            <i className="fas fa-info-circle me-1"></i>
+
+        <div className='mt-3 pt-2 border-top'>
+          <div className='small text-muted text-center'>
+            <i className='fas fa-info-circle me-1'></i>
             Development Mode
           </div>
         </div>
