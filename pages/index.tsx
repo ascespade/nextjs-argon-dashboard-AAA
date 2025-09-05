@@ -356,7 +356,7 @@ const Homepage = () => {
                 </a>
               </li>
               <li className='nav-item'>
-                <a className='nav-link' role='button' onClick={(e) => { e.preventDefault(); const r = require('next/router').useRouter(); r && r.push('/auth/login'); window.scrollTo(0,0); }} href='/auth/login'>
+                <a className='nav-link' role='button' onClick={(e) => { e.preventDefault(); router.push('/auth/login'); window.scrollTo(0,0); }} href='/auth/login'>
                   Login
                 </a>
               </li>
