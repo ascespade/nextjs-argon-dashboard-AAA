@@ -1,5 +1,18 @@
 if (typeof window === "undefined") {
-  global.window = {};
+  try {
+    // Provide a minimal window mock with location to avoid Next.js URL parsing errors during SSR
+    const defaultUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    let host = 'localhost:3000';
+    let protocol = 'http:';
+    try {
+      const u = new URL(defaultUrl);
+      host = u.host || host;
+      protocol = u.protocol || protocol;
+    } catch (e) {}
+    global.window = { location: { protocol, host, href: defaultUrl, pathname: '/' } };
+  } catch (e) {
+    global.window = { location: { protocol: 'http:', host: 'localhost:3000', href: 'http://localhost:3000', pathname: '/' } };
+  }
 }
 if (typeof document === "undefined") {
   global.document = {
