@@ -1,0 +1,31 @@
+{
+  "id": "home",
+  "slug": "home",
+  "title_json": {
+    "en": "NextJS Enterprise Dashboard",
+    "ar": "لوحة التحكم"
+  },
+  "components_json": [
+    {
+      "type": "hero_banner",
+      "props": {
+        "title": "NextJS Enterprise Dashboard",
+        "subtitle": "A modern, responsive, and feature-rich dashboard built with Next.js and Tailwind + Preline",
+        "ctaText": "View Dashboard",
+        "ctaHref": "/admin/dashboard"
+      }
+    },
+    {
+      "type": "features",
+      "props": {}
+    },
+    {
+      "type": "stats",
+      "props": {}
+    }
+  ],
+  "status": "published",
+  "version": 1,
+  "updated_by": "system",
+  "updated_at": "2025-09-06T06:36:30.593Z"
+}
