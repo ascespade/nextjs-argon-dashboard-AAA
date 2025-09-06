@@ -1,5 +1,7 @@
 'use client';
 
+'use client';
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTheme } from '@/lib/theme';
 import { useI18n } from '@/lib/i18n';
