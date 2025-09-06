@@ -189,3 +189,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
+export async function GET(req: NextRequest) {
+  return POST(req);
+}
