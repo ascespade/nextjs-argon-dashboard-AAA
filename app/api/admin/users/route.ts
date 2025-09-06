@@ -1,13 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getSupabase(): SupabaseClient | null {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key, { global: { headers: { 'x-from': 'server' } } });
+}
 
 export async function GET() {
   try {
+    const supabase = getSupabase();
+    if (!supabase) {
+      return NextResponse.json({ success: true, data: [] });
+    }
     const { data, error } = await supabase
       .from('users_profiles')
       .select('*')
@@ -30,6 +36,13 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = getSupabase();
+    if (!supabase) {
+      return NextResponse.json(
+        { error: 'Supabase not configured' },
+        { status: 503 }
+      );
+    }
     const body = await request.json();
     const { email, full_name, role } = body;
 

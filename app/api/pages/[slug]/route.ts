@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readPage } from '@/lib/supabase';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const mode = searchParams.get('mode') || 'published';
-    const slug = params.slug;
+    const parts = new URL(request.url).pathname.split('/');
+    const slug = parts[parts.findIndex(p => p === 'pages') + 1];
 
     if (!slug) {
       return NextResponse.json({ error: 'Slug is required' }, { status: 400 });

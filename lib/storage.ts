@@ -53,4 +53,5 @@ export function ensureDemoPage() {
 // initialize demo data at startup
 ensureDemoPage();
 
-export default { readPage, writePage, ensureDemoPage };
+const storageApi = { readPage, writePage, ensureDemoPage };
+export default storageApi;

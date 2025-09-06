@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useI18n } from '@/lib/i18n';
-import { SEOData, SEOTools, SEOAnalysis } from '@/lib/seo-tools';
+import { SEOData, SEOTools as SEOService, SEOAnalysis } from '@/lib/seo-tools';
 
 interface SEOToolsProps {
     seoData: SEOData;
@@ -19,7 +19,7 @@ export default function SEOTools({ seoData, content, onUpdateSEO, isOpen, onClos
 
     React.useEffect(() => {
         if (isOpen) {
-            const seoAnalysis = SEOTools.analyzeSEO(currentSEO, content);
+            const seoAnalysis = SEOService.analyzeSEO(currentSEO, content);
             setAnalysis(seoAnalysis);
         }
     }, [currentSEO, content, isOpen]);

@@ -203,10 +203,9 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
   const isRTL = locale === 'ar';
 
   return (
-    <I18nContext.Provider value= {{ locale, setLocale, t, isRTL }
-}>
-  { children }
-  </I18nContext.Provider>
+    <I18nContext.Provider value={{ locale, setLocale, t, isRTL }}>
+      {children}
+    </I18nContext.Provider>
   );
 }
 

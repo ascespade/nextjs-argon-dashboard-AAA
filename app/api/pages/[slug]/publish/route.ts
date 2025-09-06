@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { publishPage } from '@/lib/supabase';
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
+export async function POST(request: NextRequest) {
   try {
-    const slug = params.slug;
+    const url = new URL(request.url);
+    const parts = url.pathname.split('/');
+    const slug = parts[parts.findIndex(p => p === 'pages') + 1];
     const body = await request.json();
 
     if (!slug) {

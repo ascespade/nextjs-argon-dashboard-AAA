@@ -282,10 +282,11 @@ export {
   uploadImageFromBase64,
   ensureDemoPage,
 };
-export default {
+const supabaseApi = {
   readPage,
   writePage,
   publishPage,
   uploadImageFromBase64,
   ensureDemoPage,
 };
+export default supabaseApi;
