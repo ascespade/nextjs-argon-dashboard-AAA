@@ -28,7 +28,7 @@
 /* Specific iframe styling per user request */
 .editor-canvas-iframe {
   background-color: #d1d5db !important; /* Tailwind gray-300 */
-  border: 1.5px solid #111111 !important; /* refined dark border */
+  border: none !important;
   border-radius: 10px !important;
 }
 
