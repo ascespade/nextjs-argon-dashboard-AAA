@@ -50,7 +50,7 @@ export default function RootLayout({
         ></script>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
       </head>
-      <body className='bg-gray-50 text-gray-900'>
+      <body className='bg-gray-50 text-gray-900' suppressHydrationWarning={true}>
         <Providers>
           <div id='page-transition'></div>
           <div className='min-h-screen relative'>{children}</div>

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 function getSupabase() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL as string | undefined;
+  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL as string | undefined;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY as string | undefined;
   if (!url || !key) return null;
   return createClient(url, key, {
@@ -219,7 +220,11 @@ export async function POST(req: NextRequest) {
   } catch (e: any) {
     console.error('Seed error:', e?.message || e);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      {
+        error: 'Internal server error',
+        details: e?.message || e,
+        code: e?.code || 'UNKNOWN'
+      },
       { status: 500 }
     );
   }
