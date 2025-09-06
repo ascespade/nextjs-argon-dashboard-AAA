@@ -1,10 +1,6 @@
 {
-  "id": "home",
   "slug": "home",
-  "title_json": {
-    "en": "NextJS Enterprise Dashboard",
-    "ar": "لوحة التحكم"
-  },
+  "title_json": null,
   "components_json": [
     {
       "type": "hero_banner",
@@ -24,8 +20,6 @@
       "props": {}
     }
   ],
-  "status": "published",
-  "version": 1,
-  "updated_by": "system",
-  "updated_at": "2025-09-06T06:36:30.593Z"
+  "status": "draft",
+  "updated_by": "editor"
 }
