@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTheme } from '@/lib/theme';
 import { useI18n } from '@/lib/i18n';
 import { AutoSaveManager } from '@/lib/auto-save';
@@ -72,138 +72,91 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
     ogImage: ''
   });
 
+  // Keep latest components without triggering function identity changes
+  const latestComponentsRef = useRef<Component[]>(editorState.components);
+  useEffect(() => {
+    latestComponentsRef.current = editorState.components;
+  }, [editorState.components]);
+
   // Check if we're in edit mode
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     setIsEditMode(urlParams.get('edit') === '1');
   }, []);
 
-  // Listen for postMessage from parent
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      // Security check - only accept messages from same origin
-      if (event.origin !== window.location.origin) return;
-
-      const { type, component, componentId, props, style } = event.data;
-
-      switch (type) {
-        case 'INIT':
-          setIsInitialized(true);
-          // Send current theme and locale to parent
-          (event.source as Window).postMessage({
-            type: 'THEME_UPDATE',
-            theme,
-            locale: isRTL ? 'ar' : 'en'
-          }, event.origin);
-          break;
-
-        case 'ADD_COMPONENT':
-          if (component) {
-            addComponent(component);
-          }
-          break;
-
-        case 'UPDATE_COMPONENT':
-          if (componentId && props) {
-            updateComponent(componentId, props);
-          }
-          break;
-
-        case 'APPLY_STYLE':
-          if (componentId && style) {
-            applyStyle(componentId, style);
-          }
-          break;
-
-        case 'UNDO':
-          undo();
-          break;
-
-        case 'REDO':
-          redo();
-          break;
-
-        case 'SAVE_REQUEST':
-          saveToServer();
-          break;
-
-        case 'PUBLISH_REQUEST':
-          publishToServer();
-          break;
-
-        case 'SYNC_STATE':
-          // Send current state to parent
-          (event.source as Window).postMessage({
-            type: 'STATE_SYNC',
-            state: {
-              components: editorState.components,
-              canUndo: undoRedoManager.canUndo(),
-              canRedo: undoRedoManager.canRedo()
-            }
-          }, event.origin);
-          break;
-      }
-    };
-
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, [editorState.components, theme, isRTL, undoRedoManager]);
+  
 
   // Add component
-  const addComponent = (component: any) => {
+  const addComponent = useCallback((component: any) => {
     const newComponent: Component = {
       id: `comp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       type: component.type,
       props: component.props_template || {}
     };
 
-    const newComponents = [...editorState.components, newComponent];
-    setEditorState(prev => ({
-      ...prev,
-      components: newComponents,
-      editingComponent: newComponent.id
-    }));
-    undoRedoManager.addState(newComponents, 'add_component');
-  };
+    setEditorState(prev => {
+      const newComponents = [...prev.components, newComponent];
+      undoRedoManager.addState(newComponents, 'add_component');
+      return { ...prev, components: newComponents, editingComponent: newComponent.id };
+    });
+  }, [undoRedoManager]);
 
   // Update component
-  const updateComponent = (componentId: string, newProps: any) => {
-    const newComponents = editorState.components.map(comp =>
-      comp.id === componentId ? { ...comp, props: { ...comp.props, ...newProps } } : comp
-    );
-    setEditorState(prev => ({ ...prev, components: newComponents }));
-    undoRedoManager.addState(newComponents, 'update_component');
-  };
+  const updateComponent = useCallback((componentId: string, newProps: any) => {
+    setEditorState(prev => {
+      const newComponents = prev.components.map(comp =>
+        comp.id === componentId ? { ...comp, props: { ...comp.props, ...newProps } } : comp
+      );
+      undoRedoManager.addState(newComponents, 'update_component');
+      return { ...prev, components: newComponents };
+    });
+  }, [undoRedoManager]);
 
   // Apply style to component
-  const applyStyle = (componentId: string, style: any) => {
-    const newComponents = editorState.components.map(comp =>
-      comp.id === componentId
-        ? { ...comp, props: { ...comp.props, style: { ...comp.props.style, ...style } } }
-        : comp
-    );
-    setEditorState(prev => ({ ...prev, components: newComponents }));
-    undoRedoManager.addState(newComponents, 'apply_style');
-  };
+  const applyStyle = useCallback((componentId: string, style: any) => {
+    setEditorState(prev => {
+      const newComponents = prev.components.map(comp =>
+        comp.id === componentId
+          ? { ...comp, props: { ...comp.props, style: { ...comp.props.style, ...style } } }
+          : comp
+      );
+      undoRedoManager.addState(newComponents, 'apply_style');
+      return { ...prev, components: newComponents };
+    });
+  }, [undoRedoManager]);
 
   // Undo
-  const undo = () => {
-    handleUndo();
-  };
+  const undo = useCallback(() => {
+    const previousState = undoRedoManager.undo();
+    if (previousState) {
+      setEditorState(prev => ({
+        ...prev,
+        components: previousState
+      }));
+      analytics.trackEditorAction('undo');
+    }
+  }, [undoRedoManager, analytics]);
 
   // Redo
-  const redo = () => {
-    handleRedo();
-  };
+  const redo = useCallback(() => {
+    const nextState = undoRedoManager.redo();
+    if (nextState) {
+      setEditorState(prev => ({
+        ...prev,
+        components: nextState
+      }));
+      analytics.trackEditorAction('redo');
+    }
+  }, [undoRedoManager, analytics]);
 
   // Save to server
-  const saveToServer = async () => {
+  const saveToServer = useCallback(async () => {
     try {
       const response = await fetch('/api/pages/home/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          components_json: editorState.components,
+          components_json: latestComponentsRef.current,
           updated_by: 'editor'
         })
       });
@@ -223,16 +176,16 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
         error: error instanceof Error ? error.message : 'An unknown error occurred'
       }, window.location.origin);
     }
-  };
+  }, []);
 
   // Publish to server
-  const publishToServer = async () => {
+  const publishToServer = useCallback(async () => {
     try {
       const response = await fetch('/api/pages/home/publish', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          components_json: editorState.components,
+          components_json: latestComponentsRef.current,
           updated_by: 'editor'
         })
       });
@@ -252,7 +205,71 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
         error: error instanceof Error ? error.message : 'An unknown error occurred'
       }, window.location.origin);
     }
-  };
+  }, []);
+
+  // Listen for postMessage from parent
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      // Security check - only accept messages from same origin
+      if (event.origin !== window.location.origin) return;
+
+      const { type, component, componentId, props, style } = event.data;
+
+      switch (type) {
+        case 'INIT':
+          setIsInitialized(true);
+          // Send current theme and locale to parent
+          (event.source as Window).postMessage({
+            type: 'THEME_UPDATE',
+            theme,
+            locale: isRTL ? 'ar' : 'en'
+          }, event.origin);
+          break;
+        case 'ADD_COMPONENT':
+          if (component) {
+            addComponent(component);
+          }
+          break;
+        case 'UPDATE_COMPONENT':
+          if (componentId && props) {
+            updateComponent(componentId, props);
+          }
+          break;
+        case 'APPLY_STYLE':
+          if (componentId && style) {
+            applyStyle(componentId, style);
+          }
+          break;
+        case 'UNDO':
+          undo();
+          break;
+        case 'REDO':
+          redo();
+          break;
+        case 'SAVE_REQUEST':
+          saveToServer();
+          break;
+        case 'PUBLISH_REQUEST':
+          publishToServer();
+          break;
+        case 'SYNC_STATE':
+          // Send current state to parent
+          (event.source as Window).postMessage({
+            type: 'STATE_SYNC',
+            state: {
+              components: latestComponentsRef.current,
+              canUndo: undoRedoManager.canUndo(),
+              canRedo: undoRedoManager.canRedo()
+            }
+          }, event.origin);
+          break;
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [addComponent, updateComponent, applyStyle, undo, redo, saveToServer, publishToServer, theme, isRTL, undoRedoManager]);
 
   // Handle inline editing
   const handleInlineEdit = (componentId: string, field: string, value: any) => {
@@ -417,8 +434,8 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
       // Setup keyboard shortcuts
       const shortcuts = createDefaultShortcuts(
         () => saveToServer(),
-        () => handleUndo(),
-        () => handleRedo(),
+        () => undo(),
+        () => redo(),
         () => handleZoomIn(),
         () => handleZoomOut(),
         () => handleResetZoom(),
@@ -440,30 +457,11 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
       keyboardShortcuts.destroy();
       autoSaveManager.destroy();
     };
-  }, [isEditMode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEditMode, editorState.components]);
 
   // Enhanced functions
-  const handleUndo = () => {
-    const previousState = undoRedoManager.undo();
-    if (previousState) {
-      setEditorState(prev => ({
-        ...prev,
-        components: previousState
-      }));
-      analytics.trackEditorAction('undo');
-    }
-  };
-
-  const handleRedo = () => {
-    const nextState = undoRedoManager.redo();
-    if (nextState) {
-      setEditorState(prev => ({
-        ...prev,
-        components: nextState
-      }));
-      analytics.trackEditorAction('redo');
-    }
-  };
+  // Internal handlers removed; undo/redo use callbacks above
 
   const handleZoomIn = () => {
     analytics.trackEditorAction('zoom_in');
@@ -544,7 +542,7 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
 
             <div className="flex items-center space-x-2">
               <button
-                onClick={handleUndo}
+                onClick={undo}
                 disabled={!undoRedoManager.canUndo()}
                 className="p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -554,7 +552,7 @@ export default function HomeEditorClient({ initialComponents }: { initialCompone
               </button>
 
               <button
-                onClick={handleRedo}
+                onClick={redo}
                 disabled={!undoRedoManager.canRedo()}
                 className="p-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >

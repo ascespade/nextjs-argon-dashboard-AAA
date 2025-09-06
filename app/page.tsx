@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './components/Header';
-import HomeEditorClient from './components/HomeEditorClient';
+import HomeEditorWrapper from './components/HomeEditorWrapper';
 import { readPage } from '@/lib/supabase';
 
 export default async function HomePage() {
@@ -17,7 +17,7 @@ export default async function HomePage() {
   return (
     <div className='min-h-screen'>
       <Header />
-      <HomeEditorClient initialComponents={components} />
+      <HomeEditorWrapper initialComponents={components} />
     </div>
   );
 }

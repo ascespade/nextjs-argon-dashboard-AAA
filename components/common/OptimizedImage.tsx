@@ -67,6 +67,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   }, [width, height, quality]);
 
   const optimizedSrc = getOptimizedSrc(currentSrc);
+  const fetchPriority = priority ? 1 : undefined;
 
   return (
     <div 
@@ -91,6 +92,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         width={width}
         height={height}
         loading={priority ? 'eager' : loading}
+        fetchPriority={fetchPriority as any}
         onLoad={handleLoad}
         onError={handleError}
         style={{

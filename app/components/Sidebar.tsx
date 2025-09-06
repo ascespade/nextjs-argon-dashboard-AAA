@@ -9,8 +9,8 @@ const Sidebar: React.FC = () => {
   return (
     <aside
       className={`fixed top-0 left-0 h-full bg-white border-r shadow-sm z-40 flex flex-col transition-all duration-200 ${collapsed ? 'w-20' : 'w-64'}`}
-      aria-expanded={!collapsed}
       aria-label='Sidebar navigation'
+      data-expanded={!collapsed}
     >
       <div className='flex items-center justify-between px-3 h-16'>
         <Link href='/' className='flex items-center gap-3'>

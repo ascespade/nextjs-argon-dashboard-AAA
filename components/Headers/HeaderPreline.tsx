@@ -8,7 +8,22 @@ import React from 'react';
 //   actions?: React.ReactNode;
 // }
 
-const HeaderPreline = ({
+interface HeaderPrelineProps {
+    title?: string;
+    subtitle?: string;
+    stats?: Array<{
+        id: string;
+        title: string;
+        value: string;
+        change: number;
+        changeType: 'increase' | 'decrease';
+        icon: string;
+        color: string;
+    }>;
+    actions?: React.ReactNode;
+}
+
+const HeaderPreline: React.FC<HeaderPrelineProps> = ({
     title = 'Dashboard',
     subtitle,
     stats = [],

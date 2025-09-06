@@ -1,8 +1,7 @@
 const path = require("path");
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  webpack(config, options) {
+const baseWebpack = (config, options) => {
     // Handle images imported via require/import
     config.module.rules.push({
       test: /\.(png|jpe?g|gif|svg|ico|webp|bmp)$/i,
@@ -55,6 +54,11 @@ const nextConfig = {
     }
 
     return config;
+};
+
+const nextConfig = {
+  webpack(config, options) {
+    return baseWebpack(config, options);
   },
   // Disable Next's static image handling so webpack asset modules handle imports
   images: { 
@@ -81,9 +85,10 @@ const nextConfig = {
   // Optimize bundle analyzer
   ...(process.env.ANALYZE === 'true' && {
     webpack: (config, { isServer }) => {
+      const cfg = baseWebpack(config, { isServer });
       if (!isServer) {
         const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-        config.plugins.push(
+        cfg.plugins.push(
           new BundleAnalyzerPlugin({
             analyzerMode: 'static',
             openAnalyzer: false,
@@ -91,7 +96,7 @@ const nextConfig = {
           })
         );
       }
-      return config;
+      return cfg;
     },
   }),
 };

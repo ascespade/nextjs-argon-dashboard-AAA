@@ -85,10 +85,4 @@ export default function Header() {
       </div>
     </header>
   );
-<<<<<<< Current (Your changes)
-};
-
-export default Header;
-=======
 }
->>>>>>> Incoming (Background Agent changes)
