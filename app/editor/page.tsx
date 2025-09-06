@@ -383,7 +383,7 @@ export default function EditorPage() {
                 <iframe
                   ref={iframeRef}
                   src='/?edit=1'
-                  className='w-full h-[600px] border-0'
+                  className='w-full h-[600px] editor-canvas-iframe border border-black bg-gray-200'
                   title='Editor Canvas'
                 />
               </div>
