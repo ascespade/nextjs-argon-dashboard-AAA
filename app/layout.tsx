@@ -13,6 +13,8 @@ import './globals.css';
 // import { ThemeProvider } from '@/lib/theme';
 // import { I18nProvider } from '@/lib/i18n';
 
+import Providers from './providers';
+
 export default function RootLayout({
   children,
 }: {
@@ -49,8 +51,10 @@ export default function RootLayout({
         <meta name='viewport' content='width=device-width, initial-scale=1' />
       </head>
       <body className='bg-gray-50 text-gray-900'>
-        <div id='page-transition'></div>
-        <div className='min-h-screen relative'>{children}</div>
+        <Providers>
+          <div id='page-transition'></div>
+          <div className='min-h-screen relative'>{children}</div>
+        </Providers>
       </body>
     </html>
   );
