@@ -51,67 +51,67 @@ async function readPage(slug: string) {
 async function writePage(slug: string, data: any) {
   if (supabase) {
     try {
-    // Upsert page row and create a page_versions entry
-    const { data: existing, error: selErr } = await supabase
-      .from('pages')
-      .select('*')
-      .eq('slug', slug)
-      .limit(1)
-      .maybeSingle();
-    if (selErr) throw selErr;
+      // Upsert page row and create a page_versions entry
+      const { data: existing, error: selErr } = await supabase
+        .from('pages')
+        .select('*')
+        .eq('slug', slug)
+        .limit(1)
+        .maybeSingle();
+      if (selErr) throw selErr;
 
-    if (existing) {
-      const updated = {
-        ...existing,
-        ...data,
-        slug,
-        updated_at: new Date().toISOString(),
-      };
-      const { error: updErr } = await supabase
-        .from('pages')
-        .update(updated)
-        .eq('id', existing.id);
-      if (updErr) throw updErr;
-      // insert version
-      const version = (existing.version || 0) + 1;
-      const { error: verErr } = await supabase.from('page_versions').insert([
-        {
-          page_id: existing.id,
-          version,
-          components_json: updated.components_json,
-          created_by: updated.updated_by || 'unknown',
-        },
-      ]);
-      if (verErr) throw verErr;
-      return updated;
-    } else {
-      const toInsert = {
-        slug,
-        title_json: data.title_json || null,
-        components_json: data.components_json || data.components || [],
-        status: data.status || 'draft',
-        version: data.version || 1,
-        updated_by: data.updated_by || 'unknown',
-        updated_at: new Date().toISOString(),
-      };
-      const { data: insData, error: insErr } = await supabase
-        .from('pages')
-        .insert([toInsert])
-        .select()
-        .single();
-      if (insErr) throw insErr;
-      // insert initial version
-      const { error: verErr } = await supabase.from('page_versions').insert([
-        {
-          page_id: insData.id,
-          version: insData.version || 1,
-          components_json: toInsert.components_json,
-          created_by: toInsert.updated_by,
-        },
-      ]);
-      if (verErr) throw verErr;
-      return insData;
-    }
+      if (existing) {
+        const updated = {
+          ...existing,
+          ...data,
+          slug,
+          updated_at: new Date().toISOString(),
+        };
+        const { error: updErr } = await supabase
+          .from('pages')
+          .update(updated)
+          .eq('id', existing.id);
+        if (updErr) throw updErr;
+        // insert version
+        const version = (existing.version || 0) + 1;
+        const { error: verErr } = await supabase.from('page_versions').insert([
+          {
+            page_id: existing.id,
+            version,
+            components_json: updated.components_json,
+            created_by: updated.updated_by || 'unknown',
+          },
+        ]);
+        if (verErr) throw verErr;
+        return updated;
+      } else {
+        const toInsert = {
+          slug,
+          title_json: data.title_json || null,
+          components_json: data.components_json || data.components || [],
+          status: data.status || 'draft',
+          version: data.version || 1,
+          updated_by: data.updated_by || 'unknown',
+          updated_at: new Date().toISOString(),
+        };
+        const { data: insData, error: insErr } = await supabase
+          .from('pages')
+          .insert([toInsert])
+          .select()
+          .single();
+        if (insErr) throw insErr;
+        // insert initial version
+        const { error: verErr } = await supabase.from('page_versions').insert([
+          {
+            page_id: insData.id,
+            version: insData.version || 1,
+            components_json: toInsert.components_json,
+            created_by: toInsert.updated_by,
+          },
+        ]);
+        if (verErr) throw verErr;
+        return insData;
+      }
     } catch (e) {
       console.warn('Supabase writePage failed, falling back to filesystem:', e);
     }
@@ -125,37 +125,40 @@ async function writePage(slug: string, data: any) {
 async function publishPage(slug: string) {
   if (supabase) {
     try {
-    const { data: existing, error: selErr } = await supabase
-      .from('pages')
-      .select('*')
-      .eq('slug', slug)
-      .limit(1)
-      .maybeSingle();
-    if (selErr) throw selErr;
-    if (!existing) throw new Error('Page not found');
-    const draft = {
-      ...existing,
-      status: 'published',
-      version: (existing.version || 0) + 1,
-      updated_at: new Date().toISOString(),
-    };
-    const { error: updErr } = await supabase
-      .from('pages')
-      .update(draft)
-      .eq('id', existing.id);
-    if (updErr) throw updErr;
-    const { error: verErr } = await supabase.from('page_versions').insert([
-      {
-        page_id: existing.id,
-        version: draft.version,
-        components_json: draft.components_json,
-        created_by: draft.updated_by,
-      },
-    ]);
-    if (verErr) throw verErr;
-    return draft;
+      const { data: existing, error: selErr } = await supabase
+        .from('pages')
+        .select('*')
+        .eq('slug', slug)
+        .limit(1)
+        .maybeSingle();
+      if (selErr) throw selErr;
+      if (!existing) throw new Error('Page not found');
+      const draft = {
+        ...existing,
+        status: 'published',
+        version: (existing.version || 0) + 1,
+        updated_at: new Date().toISOString(),
+      };
+      const { error: updErr } = await supabase
+        .from('pages')
+        .update(draft)
+        .eq('id', existing.id);
+      if (updErr) throw updErr;
+      const { error: verErr } = await supabase.from('page_versions').insert([
+        {
+          page_id: existing.id,
+          version: draft.version,
+          components_json: draft.components_json,
+          created_by: draft.updated_by,
+        },
+      ]);
+      if (verErr) throw verErr;
+      return draft;
     } catch (e) {
-      console.warn('Supabase publishPage failed, falling back to filesystem:', e);
+      console.warn(
+        'Supabase publishPage failed, falling back to filesystem:',
+        e
+      );
     }
   }
 
@@ -184,17 +187,20 @@ async function uploadImageFromBase64(filename: string, base64Data: string) {
 
   if (supabase) {
     try {
-    // Ensure bucket exists or rely on existing bucket
-    const { error: upErr } = await supabase.storage
-      .from(SUPABASE_BUCKET)
-      .upload(filepath, buffer, { upsert: true, contentType: 'image/png' });
-    if (upErr) throw upErr;
-    const { data } = supabase.storage
-      .from(SUPABASE_BUCKET)
-      .getPublicUrl(filepath);
-    return data.publicUrl;
+      // Ensure bucket exists or rely on existing bucket
+      const { error: upErr } = await supabase.storage
+        .from(SUPABASE_BUCKET)
+        .upload(filepath, buffer, { upsert: true, contentType: 'image/png' });
+      if (upErr) throw upErr;
+      const { data } = supabase.storage
+        .from(SUPABASE_BUCKET)
+        .getPublicUrl(filepath);
+      return data.publicUrl;
     } catch (e) {
-      console.warn('Supabase uploadImage failed, falling back to local storage:', e);
+      console.warn(
+        'Supabase uploadImage failed, falling back to local storage:',
+        e
+      );
     }
   }
 
@@ -208,53 +214,56 @@ async function uploadImageFromBase64(filename: string, base64Data: string) {
 async function ensureDemoPage() {
   if (supabase) {
     try {
-    const { data: existing, error: selErr } = await supabase
-      .from('pages')
-      .select('*')
-      .eq('slug', 'home')
-      .limit(1)
-      .maybeSingle();
-    if (selErr) throw selErr;
-    if (existing) return;
-    const sample = {
-      slug: 'home',
-      title_json: { en: 'NextJS Enterprise Dashboard', ar: 'لوحة التحكم' },
-      components_json: [
-        {
-          type: 'hero_banner',
-          props: {
-            title: 'NextJS Enterprise Dashboard',
-            subtitle:
-              'A modern, responsive, and feature-rich dashboard built with Next.js and Tailwind + Preline',
-            ctaText: 'View Dashboard',
-            ctaHref: '/admin/dashboard',
+      const { data: existing, error: selErr } = await supabase
+        .from('pages')
+        .select('*')
+        .eq('slug', 'home')
+        .limit(1)
+        .maybeSingle();
+      if (selErr) throw selErr;
+      if (existing) return;
+      const sample = {
+        slug: 'home',
+        title_json: { en: 'NextJS Enterprise Dashboard', ar: 'لوحة التحكم' },
+        components_json: [
+          {
+            type: 'hero_banner',
+            props: {
+              title: 'NextJS Enterprise Dashboard',
+              subtitle:
+                'A modern, responsive, and feature-rich dashboard built with Next.js and Tailwind + Preline',
+              ctaText: 'View Dashboard',
+              ctaHref: '/admin/dashboard',
+            },
           },
-        },
-        { type: 'features', props: {} },
-        { type: 'stats', props: {} },
-      ],
-      status: 'published',
-      version: 1,
-      updated_by: 'system',
-      updated_at: new Date().toISOString(),
-    };
-    const { data: insData, error: insErr } = await supabase
-      .from('pages')
-      .insert([sample])
-      .select()
-      .single();
-    if (insErr) throw insErr;
-    await supabase.from('page_versions').insert([
-      {
-        page_id: insData.id,
+          { type: 'features', props: {} },
+          { type: 'stats', props: {} },
+        ],
+        status: 'published',
         version: 1,
-        components_json: sample.components_json,
-        created_by: 'system',
-      },
-    ]);
-    return;
+        updated_by: 'system',
+        updated_at: new Date().toISOString(),
+      };
+      const { data: insData, error: insErr } = await supabase
+        .from('pages')
+        .insert([sample])
+        .select()
+        .single();
+      if (insErr) throw insErr;
+      await supabase.from('page_versions').insert([
+        {
+          page_id: insData.id,
+          version: 1,
+          components_json: sample.components_json,
+          created_by: 'system',
+        },
+      ]);
+      return;
     } catch (e) {
-      console.warn('Supabase ensureDemoPage failed, falling back to filesystem:', e);
+      console.warn(
+        'Supabase ensureDemoPage failed, falling back to filesystem:',
+        e
+      );
     }
   }
 

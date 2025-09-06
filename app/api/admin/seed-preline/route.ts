@@ -5,18 +5,26 @@ function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL as string | undefined;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY as string | undefined;
   if (!url || !key) return null;
-  return createClient(url, key, { global: { headers: { 'x-from': 'server' } } });
+  return createClient(url, key, {
+    global: { headers: { 'x-from': 'server' } },
+  });
 }
 
 export async function POST(req: NextRequest) {
   try {
     if (process.env.NODE_ENV === 'production') {
-      return NextResponse.json({ error: 'Disabled in production' }, { status: 403 });
+      return NextResponse.json(
+        { error: 'Disabled in production' },
+        { status: 403 }
+      );
     }
 
     const supabase = getSupabase();
     if (!supabase) {
-      return NextResponse.json({ error: 'Supabase not configured' }, { status: 500 });
+      return NextResponse.json(
+        { error: 'Supabase not configured' },
+        { status: 500 }
+      );
     }
 
     // Build 100+ components across categories
@@ -85,7 +93,10 @@ export async function POST(req: NextRequest) {
           preview_meta: { thumbnail: '' },
           props_template: {
             title: { ar: `${cat} ${i}`, en: `${cat} ${i}` },
-            description: { ar: `وصف ${cat} ${i}`, en: `Description for ${cat} ${i}` },
+            description: {
+              ar: `وصف ${cat} ${i}`,
+              en: `Description for ${cat} ${i}`,
+            },
             items: [],
           },
         });
@@ -93,7 +104,9 @@ export async function POST(req: NextRequest) {
     });
 
     // Upsert components into components_library
-    const { error: upsertErr } = await supabase.from('components_library').upsert(library, { onConflict: 'type' });
+    const { error: upsertErr } = await supabase
+      .from('components_library')
+      .upsert(library, { onConflict: 'type' });
     if (upsertErr) throw upsertErr;
 
     // Prepare professional homepage using a subset
@@ -102,7 +115,10 @@ export async function POST(req: NextRequest) {
         type: 'hero_gradient',
         props: {
           title: { ar: 'لوحة تحكم احترافية', en: 'Professional Dashboard' },
-          subtitle: { ar: 'قوالب جاهزة مع Preline', en: 'Preline-ready templates' },
+          subtitle: {
+            ar: 'قوالب جاهزة مع Preline',
+            en: 'Preline-ready templates',
+          },
           gradientFrom: '#4f46e5',
           gradientTo: '#7c3aed',
           ctaText: { ar: 'ابدأ الآن', en: 'Get Started' },
@@ -114,9 +130,21 @@ export async function POST(req: NextRequest) {
         props: {
           title: { ar: 'مزايا قوية', en: 'Powerful Features' },
           items: [
-            { title: { ar: 'سهولة', en: 'Ease' }, description: { ar: 'واجهة سهلة', en: 'Easy UI' }, icon: 'fas fa-magic' },
-            { title: { ar: 'سرعة', en: 'Speed' }, description: { ar: 'أداء عالٍ', en: 'High performance' }, icon: 'fas fa-gauge-high' },
-            { title: { ar: 'توفر', en: 'Availability' }, description: { ar: 'جاهز دائماً', en: 'Always ready' }, icon: 'fas fa-cloud' },
+            {
+              title: { ar: 'سهولة', en: 'Ease' },
+              description: { ar: 'واجهة سهلة', en: 'Easy UI' },
+              icon: 'fas fa-magic',
+            },
+            {
+              title: { ar: 'سرعة', en: 'Speed' },
+              description: { ar: 'أداء عالٍ', en: 'High performance' },
+              icon: 'fas fa-gauge-high',
+            },
+            {
+              title: { ar: 'توفر', en: 'Availability' },
+              description: { ar: 'جاهز دائماً', en: 'Always ready' },
+              icon: 'fas fa-cloud',
+            },
           ],
         },
       },
@@ -183,10 +211,17 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    return NextResponse.json({ success: true, inserted: library.length, homepage: 'updated' });
+    return NextResponse.json({
+      success: true,
+      inserted: library.length,
+      homepage: 'updated',
+    });
   } catch (e: any) {
     console.error('Seed error:', e?.message || e);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 

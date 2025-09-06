@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React from 'react';
 import { ThemeProvider } from '@/lib/theme';
 import { I18nProvider } from '@/lib/i18n';

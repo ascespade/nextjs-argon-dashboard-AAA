@@ -268,28 +268,31 @@ export default function EditorPage() {
           <div className='flex items-center space-x-2'>
             <button
               onClick={() => handleDevicePreview('desktop')}
-              className={`p-2 rounded-lg transition-colors h-11 ${devicePreview === 'desktop'
+              className={`p-2 rounded-lg transition-colors h-11 ${
+                devicePreview === 'desktop'
                   ? 'bg-indigo-600 text-white'
                   : 'hover:bg-gray-100 dark:hover:bg-gray-700'
-                }`}
+              }`}
             >
               <Monitor className='w-4 h-4' />
             </button>
             <button
               onClick={() => handleDevicePreview('tablet')}
-              className={`p-2 rounded-lg transition-colors h-11 ${devicePreview === 'tablet'
+              className={`p-2 rounded-lg transition-colors h-11 ${
+                devicePreview === 'tablet'
                   ? 'bg-indigo-600 text-white'
                   : 'hover:bg-gray-100 dark:hover:bg-gray-700'
-                }`}
+              }`}
             >
               <Tablet className='w-4 h-4' />
             </button>
             <button
               onClick={() => handleDevicePreview('mobile')}
-              className={`p-2 rounded-lg transition-colors h-11 ${devicePreview === 'mobile'
+              className={`p-2 rounded-lg transition-colors h-11 ${
+                devicePreview === 'mobile'
                   ? 'bg-indigo-600 text-white'
                   : 'hover:bg-gray-100 dark:hover:bg-gray-700'
-                }`}
+              }`}
             >
               <Smartphone className='w-4 h-4' />
             </button>
@@ -300,8 +303,9 @@ export default function EditorPage() {
       <div className='flex flex-1 overflow-hidden'>
         {/* Left Sidebar */}
         <div
-          className={`bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ${leftSidebarOpen ? 'w-64' : 'w-0'
-            } overflow-hidden z-20 ${isSmallScreen ? 'fixed inset-y-0 left-0' : ''}`}
+          className={`bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ${
+            leftSidebarOpen ? 'w-64' : 'w-0'
+          } overflow-hidden z-20 ${isSmallScreen ? 'fixed inset-y-0 left-0' : ''}`}
         >
           <div className='p-4 h-full flex flex-col'>
             <div className='flex items-center justify-between mb-4'>
@@ -393,8 +397,9 @@ export default function EditorPage() {
 
         {/* Right Sidebar */}
         <div
-          className={`bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 transition-all duration-300 ${rightSidebarOpen ? 'w-80' : 'w-0'
-            } overflow-hidden z-20 ${isSmallScreen ? 'fixed inset-y-0 right-0' : ''}`}
+          className={`bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 transition-all duration-300 ${
+            rightSidebarOpen ? 'w-80' : 'w-0'
+          } overflow-hidden z-20 ${isSmallScreen ? 'fixed inset-y-0 right-0' : ''}`}
         >
           <div className='p-4 h-full flex flex-col'>
             <div className='flex items-center justify-between mb-4'>
