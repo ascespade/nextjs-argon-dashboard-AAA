@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { readPage } from '@/lib/supabase';
+import { readPage, ensureDemoPage } from '@/lib/supabase';
 import HomeEditorWrapper from './components/HomeEditorWrapper';
 
 export default async function HomePage({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) {
+  await ensureDemoPage();
   const page = await readPage('home');
   const isEdit = searchParams?.edit === '1';
 
