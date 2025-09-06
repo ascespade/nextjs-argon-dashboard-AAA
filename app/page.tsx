@@ -3,14 +3,11 @@ import React from 'react';
 import { readPage, ensureDemoPage } from '@/lib/supabase';
 import HomeEditorWrapper from './components/HomeEditorWrapper';
 
-export default async function HomePage({
-  searchParams,
-}: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
+export default async function HomePage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   await ensureDemoPage();
   const page = await readPage('home');
-  const isEdit = searchParams?.edit === '1';
+  const params = await props.searchParams;
+  const isEdit = params?.edit === '1';
 
   if (isEdit) {
     return (
@@ -19,6 +16,16 @@ export default async function HomePage({
   }
 
   const components = page?.components_json || [];
+
+  const asText = (v: any): string => {
+    if (v === null || v === undefined) return '';
+    if (typeof v === 'string' || typeof v === 'number') return String(v);
+    if (typeof v === 'object') {
+      if ('en' in v && typeof (v as any).en !== 'object') return String((v as any).en ?? '');
+      if ('ar' in v && typeof (v as any).ar !== 'object') return String((v as any).ar ?? '');
+    }
+    return '';
+  };
 
   const renderComponent = (component: any, index: number) => {
     const { type, props = {} } = component;
@@ -31,17 +38,17 @@ export default async function HomePage({
           >
             <div className='max-w-5xl mx-auto px-4 text-center'>
               <h1 className='text-4xl font-bold mb-4'>
-                {props.title?.en || props.title || 'Welcome'}
+                {asText(props.title) || 'Welcome'}
               </h1>
               <p className='mb-6'>
-                {props.subtitle?.en || props.subtitle || ''}
+                {asText(props.subtitle)}
               </p>
               <div className='flex justify-center gap-3'>
                 <a
                   href={props.ctaHref || '/admin/dashboard'}
                   className='bg-white text-indigo-600 px-6 py-3 rounded font-semibold hover:bg-gray-100 transition-colors'
                 >
-                  {props.ctaText?.en || props.ctaText || 'Get Started'}
+                  {asText(props.ctaText) || 'Get Started'}
                 </a>
               </div>
             </div>
@@ -58,17 +65,17 @@ export default async function HomePage({
           >
             <div className='max-w-5xl mx-auto px-4 text-center'>
               <h1 className='text-4xl font-bold mb-4'>
-                {props.title?.en || props.title || 'Welcome'}
+                {asText(props.title) || 'Welcome'}
               </h1>
               <p className='mb-6'>
-                {props.subtitle?.en || props.subtitle || ''}
+                {asText(props.subtitle)}
               </p>
               <div className='flex justify-center gap-3'>
                 <a
                   href={props.ctaHref || '/admin/dashboard'}
                   className='bg-white text-indigo-600 px-6 py-3 rounded font-semibold hover:bg-gray-100 transition-colors'
                 >
-                  {props.ctaText?.en || props.ctaText || 'Get Started'}
+                  {asText(props.ctaText) || 'Get Started'}
                 </a>
               </div>
             </div>
@@ -79,7 +86,7 @@ export default async function HomePage({
           <section key={index} className='py-16'>
             <div className='max-w-6xl mx-auto px-4'>
               <h2 className='text-2xl font-bold mb-4'>
-                {props.title?.en || props.title || 'Features'}
+                {asText(props.title) || 'Features'}
               </h2>
               <div className='grid md:grid-cols-3 gap-8'>
                 {(props.items || []).map((item: any, i: number) => (
@@ -90,10 +97,10 @@ export default async function HomePage({
                       />
                     </div>
                     <h3 className='text-xl font-semibold mb-2'>
-                      {item.title?.en || item.title || 'Feature'}
+                      {asText(item.title) || 'Feature'}
                     </h3>
                     <p className='text-gray-600'>
-                      {item.description?.en || item.description || ''}
+                      {asText(item.description)}
                     </p>
                   </div>
                 ))}
@@ -112,7 +119,7 @@ export default async function HomePage({
                       {item.value || '0'}
                     </div>
                     <div className='text-gray-600'>
-                      {item.label?.en || item.label || 'Stat'}
+                      {asText(item.label) || 'Stat'}
                     </div>
                   </div>
                 ))}
