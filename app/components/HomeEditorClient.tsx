@@ -448,7 +448,7 @@ export default function HomeEditorClient({
               </h2>
               <div className='grid md:grid-cols-3 gap-8'>
                 {(props.items || []).map((item: any, index: number) => (
-                  <div key={index} className='text-center'>
+                  <div key={`${component.id}_${index}`} className='text-center'>
                     <div className='w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4'>
                       <i
                         className={`${item.icon || 'fas fa-star'} text-indigo-600 text-2xl`}
@@ -477,7 +477,7 @@ export default function HomeEditorClient({
             <div className='max-w-6xl mx-auto px-4'>
               <div className='grid md:grid-cols-4 gap-8 text-center'>
                 {(props.items || []).map((item: any, index: number) => (
-                  <div key={index}>
+                  <div key={`${component.id}_${index}`}>
                     <div className='text-3xl font-bold text-indigo-600 mb-2'>
                       {item.value || '0'}
                     </div>
@@ -711,7 +711,9 @@ export default function HomeEditorClient({
         </div>
       )}
 
-      {editorState.components.map(renderComponent)}
+      {editorState.components.map(c => (
+        <React.Fragment key={c.id}>{renderComponent(c)}</React.Fragment>
+      ))}
 
       {isEditMode && editorState.components.length === 0 && (
         <div className='min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900'>
