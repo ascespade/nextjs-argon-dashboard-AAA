@@ -3,7 +3,9 @@ import React from 'react';
 import { readPage, ensureDemoPage } from '@/lib/supabase';
 import HomeEditorWrapper from './components/HomeEditorWrapper';
 
-export default async function HomePage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+export default async function HomePage(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   await ensureDemoPage();
   const page = await readPage('home');
   const params = await props.searchParams;
@@ -21,8 +23,10 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
     if (v === null || v === undefined) return '';
     if (typeof v === 'string' || typeof v === 'number') return String(v);
     if (typeof v === 'object') {
-      if ('en' in v && typeof (v as any).en !== 'object') return String((v as any).en ?? '');
-      if ('ar' in v && typeof (v as any).ar !== 'object') return String((v as any).ar ?? '');
+      if ('en' in v && typeof (v as any).en !== 'object')
+        return String((v as any).en ?? '');
+      if ('ar' in v && typeof (v as any).ar !== 'object')
+        return String((v as any).ar ?? '');
     }
     return '';
   };
@@ -40,9 +44,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
               <h1 className='text-4xl font-bold mb-4'>
                 {asText(props.title) || 'Welcome'}
               </h1>
-              <p className='mb-6'>
-                {asText(props.subtitle)}
-              </p>
+              <p className='mb-6'>{asText(props.subtitle)}</p>
               <div className='flex justify-center gap-3'>
                 <a
                   href={props.ctaHref || '/admin/dashboard'}
@@ -67,9 +69,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
               <h1 className='text-4xl font-bold mb-4'>
                 {asText(props.title) || 'Welcome'}
               </h1>
-              <p className='mb-6'>
-                {asText(props.subtitle)}
-              </p>
+              <p className='mb-6'>{asText(props.subtitle)}</p>
               <div className='flex justify-center gap-3'>
                 <a
                   href={props.ctaHref || '/admin/dashboard'}
@@ -99,9 +99,7 @@ export default async function HomePage(props: { searchParams: Promise<{ [key: st
                     <h3 className='text-xl font-semibold mb-2'>
                       {asText(item.title) || 'Feature'}
                     </h3>
-                    <p className='text-gray-600'>
-                      {asText(item.description)}
-                    </p>
+                    <p className='text-gray-600'>{asText(item.description)}</p>
                   </div>
                 ))}
               </div>
