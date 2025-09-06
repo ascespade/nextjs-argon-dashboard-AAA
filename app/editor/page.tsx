@@ -371,7 +371,7 @@ export default function EditorPage() {
           <div className='flex-1 canvas-container bg-white p-4 overflow-auto'>
             <div className='flex justify-center items-center min-h-full'>
               <div
-                className='bg-white dark:bg-gray-900 shadow-lg rounded-lg overflow-hidden'
+                className='editor-window-frame overflow-hidden'
                 style={{
                   width: getDeviceWidth(),
                   transform: `scale(${zoom / 100})`,
