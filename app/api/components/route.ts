@@ -5,7 +5,9 @@ function getSupabase(): SupabaseClient | null {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return null;
-  return createClient(url, key, { global: { headers: { 'x-from': 'server' } } });
+  return createClient(url, key, {
+    global: { headers: { 'x-from': 'server' } },
+  });
 }
 
 export async function GET(request: NextRequest) {
@@ -38,7 +40,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: data || []
+      data: data || [],
     });
   } catch (error) {
     console.error('Error fetching components:', error);

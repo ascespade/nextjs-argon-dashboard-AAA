@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       url: publicUrl,
-      filename: uniqueFilename
+      filename: uniqueFilename,
     });
   } catch (error) {
     console.error('Error uploading image:', error);

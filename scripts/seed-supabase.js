@@ -17,7 +17,7 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
 }
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-  auth: { autoRefreshToken: false, persistSession: false }
+  auth: { autoRefreshToken: false, persistSession: false },
 });
 
 // Generate secure password
@@ -33,43 +33,58 @@ const componentsLibrary = [
     name: 'Hero Banner',
     category: 'hero',
     description: 'Large banner with title, subtitle and CTA button',
-    preview_meta: { thumbnail: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjkwIiB2aWV3Qm94PSIwIDAgMTYwIDkwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iOTAiIGZpbGw9IiM2MzY2RjEiLz48dGV4dCB4PSI4MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkhlcm8gQmFubmVyPC90ZXh0Pjwvc3ZnPg==' },
+    preview_meta: {
+      thumbnail:
+        'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjkwIiB2aWV3Qm94PSIwIDAgMTYwIDkwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iOTAiIGZpbGw9IiM2MzY2RjEiLz48dGV4dCB4PSI4MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkhlcm8gQmFubmVyPC90ZXh0Pjwvc3ZnPg==',
+    },
     props_template: {
       title: { ar: 'عنوان رئيسي', en: 'Main Title' },
       subtitle: { ar: 'وصف فرعي', en: 'Subtitle description' },
       ctaText: { ar: 'ابدأ الآن', en: 'Get Started' },
       ctaHref: '/dashboard',
       backgroundImage: '',
-      textColor: 'white'
-    }
+      textColor: 'white',
+    },
   },
   {
     type: 'hero_gradient',
     name: 'Gradient Hero',
     category: 'hero',
     description: 'Hero section with gradient background',
-    preview_meta: { thumbnail: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjkwIiB2aWV3Qm94PSIwIDAgMTYwIDkwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM2MzY2RjEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM4QjVDQjYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjkwIiBmaWxsPSJ1cmwoI2dyYWRpZW50KSIvPjx0ZXh0IHg9IjgwIiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R3JhZGllbnQgSGVybzwvdGV4dD48L3N2Zz4=' },
+    preview_meta: {
+      thumbnail:
+        'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjkwIiB2aWV3Qm94PSIwIDAgMTYwIDkwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM2MzY2RjEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM4QjVDQjYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjkwIiBmaWxsPSJ1cmwoI2dyYWRpZW50KSIvPjx0ZXh0IHg9IjgwIiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R3JhZGllbnQgSGVybzwvdGV4dD48L3N2Zz4=',
+    },
     props_template: {
       title: { ar: 'عنوان متدرج', en: 'Gradient Title' },
-      subtitle: { ar: 'وصف مع خلفية متدرجة', en: 'Description with gradient background' },
+      subtitle: {
+        ar: 'وصف مع خلفية متدرجة',
+        en: 'Description with gradient background',
+      },
       gradientFrom: '#6366F1',
       gradientTo: '#8B5CF6',
-      ctaText: { ar: 'اكتشف المزيد', en: 'Learn More' }
-    }
+      ctaText: { ar: 'اكتشف المزيد', en: 'Learn More' },
+    },
   },
   {
     type: 'hero_video',
     name: 'Video Hero',
     category: 'hero',
     description: 'Hero section with background video',
-    preview_meta: { thumbnail: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjkwIiB2aWV3Qm94PSIwIDAgMTYwIDkwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iOTAiIGZpbGw9IiMzMzMiLz48Y2lyY2xlIGN4PSI4MCIgY3k9IjQ1IiByPSIyMCIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuOCIvPjxwb2x5Z29uIHBvaW50cz0iNzAsNDAgOTAsNDUgNzAsNTAiIGZpbGw9IiMzMzMiLz48L3N2Zz4=' },
+    preview_meta: {
+      thumbnail:
+        'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjkwIiB2aWV3Qm94PSIwIDAgMTYwIDkwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iOTAiIGZpbGw9IiMzMzMiLz48Y2lyY2xlIGN4PSI4MCIgY3k9IjQ1IiByPSIyMCIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuOCIvPjxwb2x5Z29uIHBvaW50cz0iNzAsNDAgOTAsNDUgNzAsNTAiIGZpbGw9IiMzMzMiLz48L3N2Zz4=',
+    },
     props_template: {
       title: { ar: 'فيديو توضيحي', en: 'Video Hero' },
-      subtitle: { ar: 'وصف مع فيديو خلفية', en: 'Description with background video' },
+      subtitle: {
+        ar: 'وصف مع فيديو خلفية',
+        en: 'Description with background video',
+      },
       videoUrl: '',
-      overlayOpacity: 0.5
-    }
-  }
+      overlayOpacity: 0.5,
+    },
+  },
 ];
 
 // Add more components (continuing with features, cards, etc.)
@@ -95,7 +110,7 @@ const addMoreComponents = () => {
     { name: 'sliders', label: 'Sliders' },
     { name: 'accordions', label: 'Accordions' },
     { name: 'maps', label: 'Maps' },
-    { name: 'client_logos', label: 'Client Logos' }
+    { name: 'client_logos', label: 'Client Logos' },
   ];
 
   categories.forEach(category => {
@@ -105,12 +120,17 @@ const addMoreComponents = () => {
         name: `${category.label} ${i}`,
         category: category.name,
         description: `${category.label} component variant ${i}`,
-        preview_meta: { thumbnail: `data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjkwIiB2aWV3Qm94PSIwIDAgMTYwIDkwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iOTAiIGZpbGw9IiNmM2Y0ZjYiLz48dGV4dCB4PSI4MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzM3NDE1MSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+${encodeURIComponent(category.label)} ${i}</dGV4dD48L3N2Zz4=` },
+        preview_meta: {
+          thumbnail: `data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjkwIiB2aWV3Qm94PSIwIDAgMTYwIDkwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iOTAiIGZpbGw9IiNmM2Y0ZjYiLz48dGV4dCB4PSI4MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzM3NDE1MSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+${encodeURIComponent(category.label)} ${i}</dGV4dD48L3N2Zz4=`,
+        },
         props_template: {
           title: { ar: `${category.label} ${i}`, en: `${category.label} ${i}` },
-          description: { ar: `وصف ${category.label} ${i}`, en: `Description for ${category.label} ${i}` },
-          items: []
-        }
+          description: {
+            ar: `وصف ${category.label} ${i}`,
+            en: `Description for ${category.label} ${i}`,
+          },
+          items: [],
+        },
       });
     }
   });
@@ -125,9 +145,18 @@ async function seedSupabase() {
 
     // 1. Clear existing data
     console.log('🧹 Clearing existing data...');
-    await supabase.from('page_versions').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-    await supabase.from('pages').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-    await supabase.from('components_library').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    await supabase
+      .from('page_versions')
+      .delete()
+      .neq('id', '00000000-0000-0000-0000-000000000000');
+    await supabase
+      .from('pages')
+      .delete()
+      .neq('id', '00000000-0000-0000-0000-000000000000');
+    await supabase
+      .from('components_library')
+      .delete()
+      .neq('id', '00000000-0000-0000-0000-000000000000');
 
     // 2. Insert components library
     console.log('📦 Inserting components library...');
@@ -144,11 +173,12 @@ async function seedSupabase() {
     const adminPassword = generatePassword();
     const adminEmail = 'info@cw.com.sa';
 
-    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-      email: adminEmail,
-      password: adminPassword,
-      email_confirm: true
-    });
+    const { data: authData, error: authError } =
+      await supabase.auth.admin.createUser({
+        email: adminEmail,
+        password: adminPassword,
+        email_confirm: true,
+      });
 
     if (authError) throw authError;
 
@@ -159,7 +189,7 @@ async function seedSupabase() {
         user_id: authData.user.id,
         email: adminEmail,
         full_name: 'Admin User',
-        role: 'admin'
+        role: 'admin',
       });
 
     if (profileError) throw profileError;
@@ -172,10 +202,13 @@ async function seedSupabase() {
         type: 'hero_banner',
         props: {
           title: { ar: 'لوحة التحكم المؤسسية', en: 'Enterprise Dashboard' },
-          subtitle: { ar: 'لوحة تحكم حديثة ومتجاوبة مع أحدث التقنيات', en: 'Modern, responsive dashboard with latest technologies' },
+          subtitle: {
+            ar: 'لوحة تحكم حديثة ومتجاوبة مع أحدث التقنيات',
+            en: 'Modern, responsive dashboard with latest technologies',
+          },
           ctaText: { ar: 'ابدأ الآن', en: 'Get Started' },
-          ctaHref: '/admin/dashboard'
-        }
+          ctaHref: '/admin/dashboard',
+        },
       },
       {
         type: 'features_1',
@@ -184,21 +217,30 @@ async function seedSupabase() {
           items: [
             {
               title: { ar: 'تصميم متجاوب', en: 'Responsive Design' },
-              description: { ar: 'يعمل على جميع الأجهزة', en: 'Works on all devices' },
-              icon: 'fas fa-mobile-alt'
+              description: {
+                ar: 'يعمل على جميع الأجهزة',
+                en: 'Works on all devices',
+              },
+              icon: 'fas fa-mobile-alt',
             },
             {
               title: { ar: 'أمان عالي', en: 'High Security' },
-              description: { ar: 'حماية متقدمة للبيانات', en: 'Advanced data protection' },
-              icon: 'fas fa-shield-alt'
+              description: {
+                ar: 'حماية متقدمة للبيانات',
+                en: 'Advanced data protection',
+              },
+              icon: 'fas fa-shield-alt',
             },
             {
               title: { ar: 'أداء سريع', en: 'Fast Performance' },
-              description: { ar: 'تحميل سريع ومرن', en: 'Fast and flexible loading' },
-              icon: 'fas fa-bolt'
-            }
-          ]
-        }
+              description: {
+                ar: 'تحميل سريع ومرن',
+                en: 'Fast and flexible loading',
+              },
+              icon: 'fas fa-bolt',
+            },
+          ],
+        },
       },
       {
         type: 'stats_1',
@@ -207,10 +249,10 @@ async function seedSupabase() {
             { label: { ar: 'المستخدمين', en: 'Users' }, value: '10K+' },
             { label: { ar: 'المشاريع', en: 'Projects' }, value: '500+' },
             { label: { ar: 'المراجعات', en: 'Reviews' }, value: '4.9' },
-            { label: { ar: 'الدعم', en: 'Support' }, value: '24/7' }
-          ]
-        }
-      }
+            { label: { ar: 'الدعم', en: 'Support' }, value: '24/7' },
+          ],
+        },
+      },
     ];
 
     const { data: pageData, error: pageError } = await supabase
@@ -221,7 +263,7 @@ async function seedSupabase() {
         components_json: homepageComponents,
         status: 'published',
         version: 1,
-        updated_by: 'system'
+        updated_by: 'system',
       })
       .select()
       .single();
@@ -229,19 +271,21 @@ async function seedSupabase() {
     if (pageError) throw pageError;
 
     // Create initial version
-    await supabase
-      .from('page_versions')
-      .insert({
-        page_id: pageData.id,
-        version: 1,
-        components_json: homepageComponents,
-        created_by: 'system'
-      });
+    await supabase.from('page_versions').insert({
+      page_id: pageData.id,
+      version: 1,
+      components_json: homepageComponents,
+      created_by: 'system',
+    });
 
     console.log('✅ Homepage created');
 
     // 6. Save admin credentials
-    const credentialsPath = path.join(process.cwd(), 'docs', 'ADMIN_CREDENTIALS.md');
+    const credentialsPath = path.join(
+      process.cwd(),
+      'docs',
+      'ADMIN_CREDENTIALS.md'
+    );
     const credentialsContent = `# Admin Credentials
 
 ## Generated Admin Account
@@ -287,7 +331,6 @@ async function seedSupabase() {
     console.log(`   - Admin user: ${adminEmail}`);
     console.log(`   - Homepage: Created`);
     console.log(`   - Credentials: docs/ADMIN_CREDENTIALS.md`);
-
   } catch (error) {
     console.error('❌ Seeding failed:', error.message);
     process.exit(1);

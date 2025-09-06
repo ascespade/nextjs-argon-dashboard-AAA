@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
         title_json: body.title_json || null,
         components_json: body.components_json,
         status: 'draft',
-        updated_by: body.updated_by || 'anonymous'
+        updated_by: body.updated_by || 'anonymous',
       });
     }
 
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: result
+      data: result,
     });
   } catch (error) {
     console.error('Error publishing page:', error);

@@ -1,10 +1,11 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { useSidebar } from './SidebarContext';
 
 const Sidebar: React.FC = () => {
-  const { collapsed, toggle } = useSidebar();
+  // Simplified version without SidebarProvider
+  const [collapsed, setCollapsed] = useState(false);
+  const toggle = () => setCollapsed(v => !v);
 
   return (
     <aside

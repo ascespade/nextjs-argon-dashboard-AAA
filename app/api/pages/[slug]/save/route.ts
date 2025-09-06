@@ -24,14 +24,14 @@ export async function POST(request: NextRequest) {
       components_json: body.components_json,
       status: 'draft',
       updated_by: body.updated_by || 'anonymous',
-      ...body
+      ...body,
     };
 
     const result = await writePage(slug, pageData);
 
     return NextResponse.json({
       success: true,
-      data: result
+      data: result,
     });
   } catch (error) {
     console.error('Error saving page:', error);

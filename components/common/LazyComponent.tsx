@@ -8,22 +8,18 @@ interface LazyComponentProps {
 
 // Default loading fallback
 const DefaultFallback = () => (
-  <div className="d-flex justify-content-center align-items-center py-5">
-    <Spinner color="primary" />
-    <span className="ms-2">Loading...</span>
+  <div className='d-flex justify-content-center align-items-center py-5'>
+    <Spinner color='primary' />
+    <span className='ms-2'>Loading...</span>
   </div>
 );
 
 // Lazy component wrapper with error boundary
-export const LazyComponent: React.FC<LazyComponentProps> = ({ 
-  fallback = <DefaultFallback />, 
-  children 
+export const LazyComponent: React.FC<LazyComponentProps> = ({
+  fallback = <DefaultFallback />,
+  children,
 }) => {
-  return (
-    <Suspense fallback={fallback}>
-      {children}
-    </Suspense>
-  );
+  return <Suspense fallback={fallback}>{children}</Suspense>;
 };
 
 // Higher-order component for lazy loading
@@ -38,7 +34,7 @@ export const withLazyLoading = <P extends object>(
   );
 
   LazyWrappedComponent.displayName = `withLazyLoading(${Component.displayName || Component.name})`;
-  
+
   return LazyWrappedComponent;
 };
 
@@ -48,7 +44,7 @@ export const lazyLoadComponent = <P extends object>(
   fallback?: ReactNode
 ) => {
   const LazyComponent = React.lazy(importFunc);
-  
+
   const WrappedComponent = (props: P) => (
     <Suspense fallback={fallback || <DefaultFallback />}>
       <LazyComponent {...(props as any)} />
@@ -56,7 +52,7 @@ export const lazyLoadComponent = <P extends object>(
   );
 
   WrappedComponent.displayName = `lazyLoadComponent(Component)`;
-  
+
   return WrappedComponent;
 };
 

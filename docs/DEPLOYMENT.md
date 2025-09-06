@@ -46,6 +46,7 @@ This guide covers deploying the NextJS Argon Dashboard Editable Website to vario
    - Click "New site from Git" and connect your repository
 
 2. **Build Settings**:
+
    ```
    Build command: npm run build
    Publish directory: .next
@@ -66,6 +67,7 @@ This guide covers deploying the NextJS Argon Dashboard Editable Website to vario
    - Connect your repository
 
 2. **Configuration**:
+
    ```
    Build Command: npm install && npm run build
    Start Command: npm start
@@ -80,11 +82,13 @@ This guide covers deploying the NextJS Argon Dashboard Editable Website to vario
 ### Docker Deployment
 
 1. **Build Image**:
+
    ```bash
    docker build -t nextjs-argon-dashboard .
    ```
 
 2. **Run Container**:
+
    ```bash
    docker run -p 3000:3000 \
      -e NEXT_PUBLIC_SUPABASE_URL=your_url \
@@ -99,7 +103,7 @@ This guide covers deploying the NextJS Argon Dashboard Editable Website to vario
      app:
        build: .
        ports:
-         - "3000:3000"
+         - '3000:3000'
        environment:
          - NEXT_PUBLIC_SUPABASE_URL=${SUPABASE_URL}
          - SUPABASE_SERVICE_ROLE_KEY=${SERVICE_ROLE_KEY}

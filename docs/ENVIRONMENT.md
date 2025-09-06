@@ -21,9 +21,9 @@ This document explains how to configure the environment variables for the NextJS
 
 <<<<<<< Current (Your changes)
 Note: This project currently includes a filesystem-based fallback for storing pages and uploads (in `data/` and `public/uploads`) when Supabase keys are not configured. To use a real Supabase backend, install and configure `@supabase/supabase-js` and replace the storage helper with actual Supabase calls as described in README.
-=======
-4. **SUPABASE_BUCKET**: Storage bucket name (default: `public`)
-   - Create a public bucket in Supabase Storage if it doesn't exist
+======= 4. **SUPABASE_BUCKET**: Storage bucket name (default: `public`)
+
+- Create a public bucket in Supabase Storage if it doesn't exist
 
 ### Next.js Configuration
 
@@ -48,6 +48,7 @@ Note: This project currently includes a filesystem-based fallback for storing pa
 ## Setup Instructions
 
 1. Copy `.env.example` to `.env.local`:
+
    ```bash
    cp .env.example .env.local
    ```
@@ -58,20 +59,23 @@ Note: This project currently includes a filesystem-based fallback for storing pa
    - Create a public storage bucket named `public`
 
 3. Generate a NextAuth secret:
+
    ```bash
    openssl rand -base64 32
    ```
 
 4. Run the database initialization:
+
    ```bash
    # Run the SQL schema
    psql -h your-db-host -U postgres -d postgres -f supabase/init.sql
-   
+
    # Or use Supabase CLI
    supabase db reset
    ```
 
 5. Seed the database with components and admin user:
+
    ```bash
    node scripts/seed-supabase.js
    ```
@@ -94,4 +98,4 @@ For production deployment:
 - Use different Supabase projects for development and production
 - Regularly rotate service role keys
 - Monitor Supabase usage and set up billing alerts
->>>>>>> Incoming (Background Agent changes)
+  > > > > > > > Incoming (Background Agent changes)

@@ -69,16 +69,14 @@ async function writePage(slug: string, data: any) {
       if (updErr) throw updErr;
       // insert version
       const version = (existing.version || 0) + 1;
-      const { error: verErr } = await supabase
-        .from('page_versions')
-        .insert([
-          {
-            page_id: existing.id,
-            version,
-            components_json: updated.components_json,
-            created_by: updated.updated_by || 'unknown',
-          },
-        ]);
+      const { error: verErr } = await supabase.from('page_versions').insert([
+        {
+          page_id: existing.id,
+          version,
+          components_json: updated.components_json,
+          created_by: updated.updated_by || 'unknown',
+        },
+      ]);
       if (verErr) throw verErr;
       return updated;
     } else {
@@ -98,16 +96,14 @@ async function writePage(slug: string, data: any) {
         .single();
       if (insErr) throw insErr;
       // insert initial version
-      const { error: verErr } = await supabase
-        .from('page_versions')
-        .insert([
-          {
-            page_id: insData.id,
-            version: insData.version || 1,
-            components_json: toInsert.components_json,
-            created_by: toInsert.updated_by,
-          },
-        ]);
+      const { error: verErr } = await supabase.from('page_versions').insert([
+        {
+          page_id: insData.id,
+          version: insData.version || 1,
+          components_json: toInsert.components_json,
+          created_by: toInsert.updated_by,
+        },
+      ]);
       if (verErr) throw verErr;
       return insData;
     }
@@ -139,16 +135,14 @@ async function publishPage(slug: string) {
       .update(draft)
       .eq('id', existing.id);
     if (updErr) throw updErr;
-    const { error: verErr } = await supabase
-      .from('page_versions')
-      .insert([
-        {
-          page_id: existing.id,
-          version: draft.version,
-          components_json: draft.components_json,
-          created_by: draft.updated_by,
-        },
-      ]);
+    const { error: verErr } = await supabase.from('page_versions').insert([
+      {
+        page_id: existing.id,
+        version: draft.version,
+        components_json: draft.components_json,
+        created_by: draft.updated_by,
+      },
+    ]);
     if (verErr) throw verErr;
     return draft;
   }
@@ -233,16 +227,14 @@ async function ensureDemoPage() {
       .select()
       .single();
     if (insErr) throw insErr;
-    await supabase
-      .from('page_versions')
-      .insert([
-        {
-          page_id: insData.id,
-          version: 1,
-          components_json: sample.components_json,
-          created_by: 'system',
-        },
-      ]);
+    await supabase.from('page_versions').insert([
+      {
+        page_id: insData.id,
+        version: 1,
+        components_json: sample.components_json,
+        created_by: 'system',
+      },
+    ]);
     return;
   }
 

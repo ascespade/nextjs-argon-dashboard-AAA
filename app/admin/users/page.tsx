@@ -21,7 +21,7 @@ export default function AdminUsersPage() {
   const [formData, setFormData] = useState({
     email: '',
     full_name: '',
-    role: 'user'
+    role: 'user',
   });
 
   useEffect(() => {
@@ -46,13 +46,15 @@ export default function AdminUsersPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const url = editingUser ? `/api/admin/users/${editingUser.id}` : '/api/admin/users';
+      const url = editingUser
+        ? `/api/admin/users/${editingUser.id}`
+        : '/api/admin/users';
       const method = editingUser ? 'PUT' : 'POST';
-      
+
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
@@ -68,10 +70,10 @@ export default function AdminUsersPage() {
 
   const handleDelete = async (userId: string) => {
     if (!confirm('Are you sure you want to delete this user?')) return;
-    
+
     try {
       const response = await fetch(`/api/admin/users/${userId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
       });
 
       if (response.ok) {
@@ -87,7 +89,7 @@ export default function AdminUsersPage() {
     setFormData({
       email: user.email,
       full_name: user.full_name || '',
-      role: user.role
+      role: user.role,
     });
     setShowAddModal(true);
   };
@@ -95,11 +97,11 @@ export default function AdminUsersPage() {
   const getRoleIcon = (role: string) => {
     switch (role) {
       case 'admin':
-        return <Shield className="w-4 h-4 text-red-500" />;
+        return <Shield className='w-4 h-4 text-red-500' />;
       case 'editor':
-        return <Edit className="w-4 h-4 text-blue-500" />;
+        return <Edit className='w-4 h-4 text-blue-500' />;
       default:
-        return <User className="w-4 h-4 text-gray-500" />;
+        return <User className='w-4 h-4 text-gray-500' />;
     }
   };
 
@@ -107,99 +109,104 @@ export default function AdminUsersPage() {
     const colors = {
       admin: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
       editor: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-      user: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+      user: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200',
     };
-    
+
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${colors[role as keyof typeof colors]}`}>
+      <span
+        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${colors[role as keyof typeof colors]}`}
+      >
         {getRoleIcon(role)}
-        <span className="ml-1 capitalize">{role}</span>
+        <span className='ml-1 capitalize'>{role}</span>
       </span>
     );
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+    <div className='min-h-screen bg-gray-50 dark:bg-gray-900'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
+        <div className='bg-white dark:bg-gray-800 shadow rounded-lg'>
+          <div className='px-6 py-4 border-b border-gray-200 dark:border-gray-700'>
+            <div className='flex items-center justify-between'>
+              <h1 className='text-2xl font-bold text-gray-900 dark:text-white'>
                 User Management
               </h1>
               <button
                 onClick={() => setShowAddModal(true)}
-                className="flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+                className='flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors'
               >
-                <Plus className="w-4 h-4" />
+                <Plus className='w-4 h-4' />
                 <span>Add User</span>
               </button>
             </div>
           </div>
 
-          <div className="p-6">
+          <div className='p-6'>
             {loading ? (
-              <div className="flex justify-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+              <div className='flex justify-center py-8'>
+                <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600'></div>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                  <thead className="bg-gray-50 dark:bg-gray-700">
+              <div className='overflow-x-auto'>
+                <table className='min-w-full divide-y divide-gray-200 dark:divide-gray-700'>
+                  <thead className='bg-gray-50 dark:bg-gray-700'>
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider'>
                         User
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider'>
                         Role
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider'>
                         Created
                       </th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      <th className='px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider'>
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                    {users.map((user) => (
-                      <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0 h-10 w-10">
-                              <div className="h-10 w-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
-                                <UserCheck className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                  <tbody className='bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700'>
+                    {users.map(user => (
+                      <tr
+                        key={user.id}
+                        className='hover:bg-gray-50 dark:hover:bg-gray-700'
+                      >
+                        <td className='px-6 py-4 whitespace-nowrap'>
+                          <div className='flex items-center'>
+                            <div className='flex-shrink-0 h-10 w-10'>
+                              <div className='h-10 w-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center'>
+                                <UserCheck className='h-5 w-5 text-indigo-600 dark:text-indigo-400' />
                               </div>
                             </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900 dark:text-white">
+                            <div className='ml-4'>
+                              <div className='text-sm font-medium text-gray-900 dark:text-white'>
                                 {user.full_name || 'No name'}
                               </div>
-                              <div className="text-sm text-gray-500 dark:text-gray-400">
+                              <div className='text-sm text-gray-500 dark:text-gray-400'>
                                 {user.email}
                               </div>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className='px-6 py-4 whitespace-nowrap'>
                           {getRoleBadge(user.role)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                        <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400'>
                           {new Date(user.created_at).toLocaleDateString()}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <div className="flex items-center justify-end space-x-2">
+                        <td className='px-6 py-4 whitespace-nowrap text-right text-sm font-medium'>
+                          <div className='flex items-center justify-end space-x-2'>
                             <button
                               onClick={() => handleEdit(user)}
-                              className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                              className='text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300'
                             >
-                              <Edit className="w-4 h-4" />
+                              <Edit className='w-4 h-4' />
                             </button>
                             <button
                               onClick={() => handleDelete(user.id)}
-                              className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                              className='text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300'
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className='w-4 h-4' />
                             </button>
                           </div>
                         </td>
@@ -215,65 +222,71 @@ export default function AdminUsersPage() {
 
       {/* Add/Edit Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
-            <div className="mt-3">
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
+        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50'>
+          <div className='relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800'>
+            <div className='mt-3'>
+              <h3 className='text-lg font-medium text-gray-900 dark:text-white mb-4'>
                 {editingUser ? 'Edit User' : 'Add New User'}
               </h3>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className='space-y-4'>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
                     Email
                   </label>
                   <input
-                    type="email"
+                    type='email'
                     required
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    onChange={e =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
+                    className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white'
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
                     Full Name
                   </label>
                   <input
-                    type="text"
+                    type='text'
                     value={formData.full_name}
-                    onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    onChange={e =>
+                      setFormData({ ...formData, full_name: e.target.value })
+                    }
+                    className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white'
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
                     Role
                   </label>
                   <select
                     value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    onChange={e =>
+                      setFormData({ ...formData, role: e.target.value })
+                    }
+                    className='w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white'
                   >
-                    <option value="user">User</option>
-                    <option value="editor">Editor</option>
-                    <option value="admin">Admin</option>
+                    <option value='user'>User</option>
+                    <option value='editor'>Editor</option>
+                    <option value='admin'>Admin</option>
                   </select>
                 </div>
-                <div className="flex justify-end space-x-3 pt-4">
+                <div className='flex justify-end space-x-3 pt-4'>
                   <button
-                    type="button"
+                    type='button'
                     onClick={() => {
                       setShowAddModal(false);
                       setEditingUser(null);
                       setFormData({ email: '', full_name: '', role: 'user' });
                     }}
-                    className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                    className='px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors'
                   >
                     Cancel
                   </button>
                   <button
-                    type="submit"
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                    type='submit'
+                    className='px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors'
                   >
                     {editingUser ? 'Update' : 'Create'}
                   </button>

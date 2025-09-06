@@ -1,15 +1,16 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
-import { useSidebar } from '../components/SidebarContext';
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { collapsed } = useSidebar();
+  // Simplified version without SidebarProvider
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
     <div className='flex'>
       <Sidebar />

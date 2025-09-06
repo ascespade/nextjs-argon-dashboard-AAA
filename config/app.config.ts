@@ -99,7 +99,8 @@ export const defaultConfig: AppConfig = {
   app: {
     name: 'NextJS Enterprise Dashboard',
     version: '1.1.0',
-    description: 'A modern, responsive dashboard built with Next.js and React 18',
+    description:
+      'A modern, responsive dashboard built with Next.js and React 18',
     url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
     supportEmail: 'support@example.com',
   },
@@ -211,15 +212,15 @@ const productionConfig: Partial<AppConfig> = {
 // Get configuration based on environment
 export const getConfig = (): AppConfig => {
   const baseConfig = { ...defaultConfig };
-  
+
   if (process.env.NODE_ENV === 'development') {
     return { ...baseConfig, ...developmentConfig };
   }
-  
+
   if (process.env.NODE_ENV === 'production') {
     return { ...baseConfig, ...productionConfig };
   }
-  
+
   return baseConfig;
 };
 
@@ -246,7 +247,10 @@ export const validateConfig = (config: AppConfig): string[] => {
     errors.push('Analytics tracking ID is required when analytics is enabled');
   }
 
-  if (config.services.googleMaps?.enabled && !config.services.googleMaps?.apiKey) {
+  if (
+    config.services.googleMaps?.enabled &&
+    !config.services.googleMaps?.apiKey
+  ) {
     errors.push('Google Maps API key is required when Google Maps is enabled');
   }
 
@@ -254,7 +258,9 @@ export const validateConfig = (config: AppConfig): string[] => {
 };
 
 // Configuration utilities
-export const isFeatureEnabled = (feature: keyof AppConfig['features']): boolean => {
+export const isFeatureEnabled = (
+  feature: keyof AppConfig['features']
+): boolean => {
   return config.features[feature];
 };
 

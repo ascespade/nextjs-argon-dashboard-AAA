@@ -5,7 +5,9 @@ function getSupabase(): SupabaseClient | null {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return null;
-  return createClient(url, key, { global: { headers: { 'x-from': 'server' } } });
+  return createClient(url, key, {
+    global: { headers: { 'x-from': 'server' } },
+  });
 }
 
 export async function GET() {
@@ -23,7 +25,7 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      data: data || []
+      data: data || [],
     });
   } catch (error) {
     console.error('Error fetching users:', error);
@@ -47,18 +49,16 @@ export async function POST(request: NextRequest) {
     const { email, full_name, role } = body;
 
     if (!email) {
-      return NextResponse.json(
-        { error: 'Email is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
     // Create user in Supabase Auth
-    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-      email,
-      password: 'temp_password_123', // User should change this on first login
-      email_confirm: true
-    });
+    const { data: authData, error: authError } =
+      await supabase.auth.admin.createUser({
+        email,
+        password: 'temp_password_123', // User should change this on first login
+        email_confirm: true,
+      });
 
     if (authError) throw authError;
 
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
         user_id: authData.user.id,
         email,
         full_name: full_name || '',
-        role: role || 'user'
+        role: role || 'user',
       })
       .select()
       .single();
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: profileData
+      data: profileData,
     });
   } catch (error) {
     console.error('Error creating user:', error);

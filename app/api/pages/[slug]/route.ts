@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     }
 
     const page = await readPage(slug);
-    
+
     if (!page) {
       return NextResponse.json({ error: 'Page not found' }, { status: 404 });
     }
@@ -25,7 +25,10 @@ export async function GET(request: NextRequest) {
 
     // For published mode, only return if status is published
     if (page.status !== 'published') {
-      return NextResponse.json({ error: 'Page not published' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'Page not published' },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json(page);

@@ -13,6 +13,7 @@ This checklist ensures all features are working correctly before deployment.
 ## Core Functionality
 
 ### Authentication & Admin
+
 - [ ] Admin login works with generated credentials
 - [ ] Admin dashboard accessible at `/admin/users`
 - [ ] User management (create, edit, delete users)
@@ -20,6 +21,7 @@ This checklist ensures all features are working correctly before deployment.
 - [ ] Password change functionality
 
 ### Editor Features
+
 - [ ] Editor loads at `/editor`
 - [ ] Left sidebar opens/closes with toggle
 - [ ] Right sidebar opens/closes with toggle
@@ -30,6 +32,7 @@ This checklist ensures all features are working correctly before deployment.
 - [ ] Components render correctly in iframe
 
 ### Canvas & Controls
+
 - [ ] Zoom in/out buttons work
 - [ ] Zoom percentage displays correctly
 - [ ] Reset zoom button works
@@ -38,6 +41,7 @@ This checklist ensures all features are working correctly before deployment.
 - [ ] Pan functionality (drag on gray background)
 
 ### Editing Features
+
 - [ ] Inline text editing works
 - [ ] Component selection highlights correctly
 - [ ] Undo/Redo functionality
@@ -47,6 +51,7 @@ This checklist ensures all features are working correctly before deployment.
 - [ ] Toast notifications for disabled navigation
 
 ### Theme & Internationalization
+
 - [ ] Dark/Light theme toggle works
 - [ ] Theme persists in localStorage
 - [ ] Arabic/English language toggle works
@@ -58,6 +63,7 @@ This checklist ensures all features are working correctly before deployment.
 ## Data Persistence
 
 ### Supabase Integration
+
 - [ ] Pages load from database
 - [ ] Components save to database
 - [ ] Page versions created on save
@@ -66,6 +72,7 @@ This checklist ensures all features are working correctly before deployment.
 - [ ] Public URLs generated for images
 
 ### API Endpoints
+
 - [ ] `GET /api/pages/[slug]` works
 - [ ] `POST /api/pages/[slug]/save` works
 - [ ] `POST /api/pages/[slug]/publish` works
@@ -79,6 +86,7 @@ This checklist ensures all features are working correctly before deployment.
 ## Component Library
 
 ### Component Categories
+
 - [ ] Hero components (3 variants)
 - [ ] Features components (4 variants)
 - [ ] Cards components (4 variants)
@@ -103,6 +111,7 @@ This checklist ensures all features are working correctly before deployment.
 - [ ] Client logos components (4 variants)
 
 ### Component Properties
+
 - [ ] Each component has preview thumbnail
 - [ ] Each component has props_template
 - [ ] Components support i18n props
@@ -112,6 +121,7 @@ This checklist ensures all features are working correctly before deployment.
 ## User Experience
 
 ### Responsive Design
+
 - [ ] Desktop layout works (1200px+)
 - [ ] Tablet layout works (768px-1199px)
 - [ ] Mobile layout works (<768px)
@@ -120,6 +130,7 @@ This checklist ensures all features are working correctly before deployment.
 - [ ] Canvas adapts to screen size
 
 ### Performance
+
 - [ ] Page loads quickly (<3 seconds)
 - [ ] Editor loads quickly (<2 seconds)
 - [ ] Component library loads quickly
@@ -128,6 +139,7 @@ This checklist ensures all features are working correctly before deployment.
 - [ ] No memory leaks in editor
 
 ### Accessibility
+
 - [ ] Keyboard navigation works
 - [ ] Screen reader compatible
 - [ ] Color contrast meets WCAG standards
@@ -137,12 +149,14 @@ This checklist ensures all features are working correctly before deployment.
 ## Browser Compatibility
 
 ### Desktop Browsers
+
 - [ ] Chrome (latest)
 - [ ] Firefox (latest)
 - [ ] Safari (latest)
 - [ ] Edge (latest)
 
 ### Mobile Browsers
+
 - [ ] Chrome Mobile
 - [ ] Safari Mobile
 - [ ] Firefox Mobile
@@ -150,18 +164,21 @@ This checklist ensures all features are working correctly before deployment.
 ## Security
 
 ### Authentication
+
 - [ ] Admin routes protected
 - [ ] User sessions work correctly
 - [ ] Logout functionality works
 - [ ] Password requirements enforced
 
 ### Data Security
+
 - [ ] RLS policies working
 - [ ] Service role key not exposed
 - [ ] User data properly isolated
 - [ ] File uploads validated
 
 ### XSS Prevention
+
 - [ ] User input sanitized
 - [ ] No script injection possible
 - [ ] Content Security Policy headers
@@ -169,12 +186,14 @@ This checklist ensures all features are working correctly before deployment.
 ## Error Handling
 
 ### User-Friendly Errors
+
 - [ ] Network errors show helpful messages
 - [ ] Validation errors show specific feedback
 - [ ] 404 pages styled consistently
 - [ ] 500 errors don't expose internals
 
 ### Error Recovery
+
 - [ ] Failed saves can be retried
 - [ ] Network interruptions handled gracefully
 - [ ] Editor state preserved on errors
@@ -183,6 +202,7 @@ This checklist ensures all features are working correctly before deployment.
 ## Final Verification
 
 ### End-to-End Test
+
 1. [ ] Login as admin
 2. [ ] Open editor
 3. [ ] Drag hero component to canvas
@@ -197,6 +217,7 @@ This checklist ensures all features are working correctly before deployment.
 12. [ ] Test device preview buttons
 
 ### Performance Test
+
 - [ ] Load homepage < 2 seconds
 - [ ] Editor loads < 3 seconds
 - [ ] Component library loads < 1 second
@@ -204,6 +225,7 @@ This checklist ensures all features are working correctly before deployment.
 - [ ] Image upload < 5 seconds
 
 ### Security Test
+
 - [ ] Cannot access admin without login
 - [ ] Cannot access editor without login
 - [ ] User data properly isolated
@@ -217,6 +239,6 @@ This checklist ensures all features are working correctly before deployment.
 - [ ] Browser compatibility confirmed
 - [ ] Ready for production deployment
 
-**QA Tester**: _________________  
-**Date**: _________________  
-**Version**: _________________
+**QA Tester**: ********\_********  
+**Date**: ********\_********  
+**Version**: ********\_********

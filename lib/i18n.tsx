@@ -89,7 +89,7 @@ const translations = {
     'seo.og_image': 'رابط صورة Open Graph',
     'seo.seo_score': 'نقاط SEO',
     'seo.issues': 'المشاكل',
-    'seo.suggestions': 'الاقتراحات'
+    'seo.suggestions': 'الاقتراحات',
   },
   en: {
     // Navigation
@@ -165,8 +165,8 @@ const translations = {
     'seo.og_image': 'Open Graph Image URL',
     'seo.seo_score': 'SEO Score',
     'seo.issues': 'Issues',
-    'seo.suggestions': 'Suggestions'
-  }
+    'seo.suggestions': 'Suggestions',
+  },
 };
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
@@ -197,7 +197,11 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
   };
 
   const t = (key: string, fallback?: string): string => {
-    return translations[locale][key as keyof typeof translations[typeof locale]] || fallback || key;
+    return (
+      translations[locale][key as keyof (typeof translations)[typeof locale]] ||
+      fallback ||
+      key
+    );
   };
 
   const isRTL = locale === 'ar';

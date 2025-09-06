@@ -84,8 +84,15 @@ export const APP_CONSTANTS = {
     MAX_SIZE: 10 * 1024 * 1024, // 10MB
     ALLOWED_TYPES: {
       IMAGES: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-      DOCUMENTS: ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
-      SPREADSHEETS: ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+      DOCUMENTS: [
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      ],
+      SPREADSHEETS: [
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      ],
     },
   },
 
@@ -150,7 +157,8 @@ export const APP_CONSTANTS = {
     NETWORK_ERROR: 'Network error. Please check your connection and try again.',
     SERVER_ERROR: 'Server error. Please try again later.',
     UNAUTHORIZED: 'You are not authorized to perform this action.',
-    FORBIDDEN: 'Access denied. You do not have permission to access this resource.',
+    FORBIDDEN:
+      'Access denied. You do not have permission to access this resource.',
     NOT_FOUND: 'The requested resource was not found.',
     VALIDATION_ERROR: 'Please check your input and try again.',
     UNKNOWN_ERROR: 'An unexpected error occurred. Please try again.',
@@ -190,8 +198,16 @@ export const APP_CONSTANTS = {
 
   // Chart colors
   CHART_COLORS: [
-    '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
-    '#06b6d4', '#84cc16', '#f97316', '#ec4899', '#6366f1',
+    '#3b82f6',
+    '#10b981',
+    '#f59e0b',
+    '#ef4444',
+    '#8b5cf6',
+    '#06b6d4',
+    '#84cc16',
+    '#f97316',
+    '#ec4899',
+    '#6366f1',
   ],
 
   // Default table columns
@@ -217,23 +233,23 @@ export const APP_CONSTANTS = {
     // Dashboard permissions
     VIEW_DASHBOARD: 'dashboard:view',
     EXPORT_DASHBOARD: 'dashboard:export',
-    
+
     // User management permissions
     VIEW_USERS: 'users:view',
     CREATE_USERS: 'users:create',
     UPDATE_USERS: 'users:update',
     DELETE_USERS: 'users:delete',
-    
+
     // Role management permissions
     VIEW_ROLES: 'roles:view',
     CREATE_ROLES: 'roles:create',
     UPDATE_ROLES: 'roles:update',
     DELETE_ROLES: 'roles:delete',
-    
+
     // Settings permissions
     VIEW_SETTINGS: 'settings:view',
     UPDATE_SETTINGS: 'settings:update',
-    
+
     // Logs permissions
     VIEW_LOGS: 'logs:view',
     EXPORT_LOGS: 'logs:export',

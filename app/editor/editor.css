@@ -15,8 +15,11 @@
 /* Canvas background styling */
 .canvas-bg {
   background-color: #f3f4f6;
-  background-image: 
-    radial-gradient(circle at 1px 1px, rgba(0,0,0,0.1) 1px, transparent 0);
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(0, 0, 0, 0.1) 1px,
+    transparent 0
+  );
   background-size: 20px 20px;
 }
 
@@ -109,7 +112,7 @@
     height: 40px;
     font-size: 14px;
   }
-  
+
   .device-btn {
     padding: 6px 12px;
     font-size: 12px;
@@ -119,8 +122,11 @@
 /* Dark mode support */
 .dark .canvas-bg {
   background-color: #1f2937;
-  background-image: 
-    radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 0);
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(255, 255, 255, 0.1) 1px,
+    transparent 0
+  );
 }
 
 .dark .toolbar-btn:hover {

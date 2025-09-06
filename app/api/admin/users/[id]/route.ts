@@ -5,7 +5,9 @@ function getSupabase(): SupabaseClient | null {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return null;
-  return createClient(url, key, { global: { headers: { 'x-from': 'server' } } });
+  return createClient(url, key, {
+    global: { headers: { 'x-from': 'server' } },
+  });
 }
 
 export async function PUT(request: NextRequest) {
@@ -28,7 +30,7 @@ export async function PUT(request: NextRequest) {
         email,
         full_name,
         role,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .eq('id', id)
       .select()
@@ -38,7 +40,7 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data
+      data,
     });
   } catch (error) {
     console.error('Error updating user:', error);
@@ -71,7 +73,9 @@ export async function DELETE(request: NextRequest) {
     if (profileError) throw profileError;
 
     // Delete from auth.users
-    const { error: authError } = await supabase.auth.admin.deleteUser(profile.user_id);
+    const { error: authError } = await supabase.auth.admin.deleteUser(
+      profile.user_id
+    );
     if (authError) throw authError;
 
     // Delete from users_profiles (should cascade from auth.users deletion)
@@ -83,7 +87,7 @@ export async function DELETE(request: NextRequest) {
     if (deleteError) throw deleteError;
 
     return NextResponse.json({
-      success: true
+      success: true,
     });
   } catch (error) {
     console.error('Error deleting user:', error);

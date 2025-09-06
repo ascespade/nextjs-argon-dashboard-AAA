@@ -20,12 +20,10 @@ export const SidebarProvider = ({ children }) => {
   const value = {
     isCollapsed,
     toggleSidebar,
-    setIsCollapsed
+    setIsCollapsed,
   };
 
   return (
-    <SidebarContext.Provider value={value}>
-      {children}
-    </SidebarContext.Provider>
+    <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>
   );
 };
