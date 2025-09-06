@@ -30,6 +30,20 @@ export default async function HomePage({ searchParams }: { searchParams?: { [key
             </div>
           </section>
         );
+      case 'hero_gradient':
+        return (
+          <section key={index} className='relative py-20 text-white' style={{ backgroundImage: `linear-gradient(90deg, ${props.gradientFrom || '#6366F1'}, ${props.gradientTo || '#8B5CF6'})` }}>
+            <div className='max-w-5xl mx-auto px-4 text-center'>
+              <h1 className='text-4xl font-bold mb-4'>{props.title?.en || props.title || 'Welcome'}</h1>
+              <p className='mb-6'>{props.subtitle?.en || props.subtitle || ''}</p>
+              <div className='flex justify-center gap-3'>
+                <a href={props.ctaHref || '/admin/dashboard'} className='bg-white text-indigo-600 px-6 py-3 rounded font-semibold hover:bg-gray-100 transition-colors'>
+                  {props.ctaText?.en || props.ctaText || 'Get Started'}
+                </a>
+              </div>
+            </div>
+          </section>
+        );
       case 'features_1':
         return (
           <section key={index} className='py-16'>
