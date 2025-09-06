@@ -35,6 +35,7 @@ export default function EditorPage() {
   const [components, setComponents] = useState<Component[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(true);
   const [rightSidebarOpen, setRightSidebarOpen] = useState(true);
   const [zoom, setZoom] = useState(100);
@@ -46,6 +47,24 @@ export default function EditorPage() {
   // Load components on mount
   useEffect(() => {
     loadComponents();
+  }, []);
+
+  // Responsive: initialize and listen for screen size to adapt sidebars
+  useEffect(() => {
+    const onResize = () => {
+      const small = window.innerWidth < 1024; // lg breakpoint
+      setIsSmallScreen(small);
+      if (small) {
+        setLeftSidebarOpen(false);
+        setRightSidebarOpen(false);
+      } else {
+        setLeftSidebarOpen(true);
+        setRightSidebarOpen(true);
+      }
+    };
+    onResize();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
   }, []);
 
   const loadComponents = async () => {
@@ -154,19 +173,19 @@ export default function EditorPage() {
   return (
     <div className="h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
       {/* Top Toolbar */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-2">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-2 sticky top-0 z-30">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <button
               onClick={handleSave}
-              className="flex items-center space-x-2 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors h-11"
+              className="flex items-center space-x-2 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors h-11 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-800"
             >
               <Save className="w-4 h-4" />
               <span>{t('editor.save')}</span>
             </button>
             <button
               onClick={handlePublish}
-              className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors h-11"
+              className="flex items-center space-x-2 px-3 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors h-11 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-800"
             >
               <Upload className="w-4 h-4" />
               <span>{t('editor.publish')}</span>
@@ -177,14 +196,14 @@ export default function EditorPage() {
             <button
               onClick={handleUndo}
               disabled={historyIndex <= 0}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed h-11"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed h-11 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             >
               <Undo className="w-4 h-4" />
             </button>
             <button
               onClick={handleRedo}
               disabled={historyIndex >= history.length - 1}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed h-11"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed h-11 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             >
               <Redo className="w-4 h-4" />
             </button>
@@ -193,20 +212,20 @@ export default function EditorPage() {
           <div className="flex items-center space-x-2">
             <button
               onClick={handleZoomOut}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 h-11"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 h-11 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             >
               <ZoomOut className="w-4 h-4" />
             </button>
             <span className="text-sm font-medium min-w-[3rem] text-center">{zoom}%</span>
             <button
               onClick={handleZoomIn}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 h-11"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 h-11 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             >
               <ZoomIn className="w-4 h-4" />
             </button>
             <button
               onClick={handleResetZoom}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 h-11"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 h-11 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             >
               <RotateCcw className="w-4 h-4" />
             </button>
@@ -251,13 +270,13 @@ export default function EditorPage() {
         {/* Left Sidebar */}
         <div className={`bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ${
           leftSidebarOpen ? 'w-64' : 'w-0'
-        } overflow-hidden`}>
-          <div className="p-4">
+        } overflow-hidden z-20 ${isSmallScreen ? 'fixed inset-y-0 left-0' : ''}`}>
+          <div className="p-4 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">{t('editor.components')}</h3>
               <button
                 onClick={() => setLeftSidebarOpen(false)}
-                className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -271,14 +290,14 @@ export default function EditorPage() {
                   placeholder={t('editor.search_components')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 />
               </div>
               
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
               >
                 {categories.map(category => (
                   <option key={category} value={category}>
@@ -287,6 +306,9 @@ export default function EditorPage() {
                 ))}
               </select>
             </div>
+            <div className="mt-4 text-xs text-gray-500 dark:text-gray-400">
+              {filteredComponents.length} items
+            </div>
           </div>
         </div>
 
@@ -294,10 +316,15 @@ export default function EditorPage() {
         {!leftSidebarOpen && (
           <button
             onClick={() => setLeftSidebarOpen(true)}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 p-2 rounded-r-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 p-2 rounded-r-lg hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
+        )}
+
+        {/* Mobile overlay for left sidebar */}
+        {isSmallScreen && leftSidebarOpen && (
+          <div className="fixed inset-0 bg-black/40 z-10 lg:hidden" onClick={() => setLeftSidebarOpen(false)} />
         )}
 
         {/* Main Canvas */}
@@ -328,13 +355,13 @@ export default function EditorPage() {
         {/* Right Sidebar */}
         <div className={`bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 transition-all duration-300 ${
           rightSidebarOpen ? 'w-80' : 'w-0'
-        } overflow-hidden`}>
-          <div className="p-4">
+        } overflow-hidden z-20 ${isSmallScreen ? 'fixed inset-y-0 right-0' : ''}`}>
+          <div className="p-4 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">{t('editor.components')}</h3>
               <button
                 onClick={() => setRightSidebarOpen(false)}
-                className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -346,7 +373,7 @@ export default function EditorPage() {
                   key={component.id}
                   draggable
                   onDragStart={(e) => handleDragStart(e, component)}
-                  className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-move transition-colors"
+                  className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-move transition-colors focus-within:ring-2 focus-within:ring-indigo-400"
                 >
                   <div className="flex items-start space-x-3">
                     <div className="w-16 h-12 bg-gray-100 dark:bg-gray-600 rounded flex items-center justify-center">
@@ -378,11 +405,16 @@ export default function EditorPage() {
           </div>
         </div>
 
+        {/* Mobile overlay for right sidebar */}
+        {isSmallScreen && rightSidebarOpen && (
+          <div className="fixed inset-0 bg-black/40 z-10 lg:hidden" onClick={() => setRightSidebarOpen(false)} />
+        )}
+
         {/* Right Sidebar Toggle */}
         {!rightSidebarOpen && (
           <button
             onClick={() => setRightSidebarOpen(true)}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 p-2 rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 p-2 rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
