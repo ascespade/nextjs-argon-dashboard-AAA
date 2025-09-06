@@ -712,7 +712,9 @@ export default function HomeEditorClient({
       )}
 
       {editorState.components.map((c, i) => (
-        <React.Fragment key={c.id || `cmp-${i}-${c.type}`}>{renderComponent(c)}</React.Fragment>
+        <React.Fragment key={c.id || `cmp-${i}-${c.type}`}>
+          {renderComponent(c)}
+        </React.Fragment>
       ))}
 
       {isEditMode && editorState.components.length === 0 && (

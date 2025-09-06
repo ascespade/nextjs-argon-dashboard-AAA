@@ -41,19 +41,42 @@ function buildFallbackLibrary() {
     },
   ];
   const cats = [
-    'features','cards','testimonials','gallery','stats','cta','headers','footers','forms','faq','pricing','team','contact','badges','banners','counters','image_blocks','sliders','accordions','maps','client_logos'
+    'features',
+    'cards',
+    'testimonials',
+    'gallery',
+    'stats',
+    'cta',
+    'headers',
+    'footers',
+    'forms',
+    'faq',
+    'pricing',
+    'team',
+    'contact',
+    'badges',
+    'banners',
+    'counters',
+    'image_blocks',
+    'sliders',
+    'accordions',
+    'maps',
+    'client_logos',
   ];
   cats.forEach(cat => {
     for (let i = 1; i <= 6; i++) {
       base.push({
         type: `${cat}_${i}`,
-        name: `${cat.charAt(0).toUpperCase()+cat.slice(1)} ${i}`,
+        name: `${cat.charAt(0).toUpperCase() + cat.slice(1)} ${i}`,
         category: cat,
         description: `${cat} variant ${i}`,
         preview_meta: { thumbnail: '' },
         props_template: {
           title: { ar: `${cat} ${i}`, en: `${cat} ${i}` },
-          description: { ar: `وصف ${cat} ${i}`, en: `Description for ${cat} ${i}` },
+          description: {
+            ar: `وصف ${cat} ${i}`,
+            en: `Description for ${cat} ${i}`,
+          },
           items: [],
         },
       });
@@ -88,12 +111,20 @@ export async function GET(request: NextRequest) {
     if (error) throw error;
     return NextResponse.json({ success: true, data: data || [] });
   } catch (error) {
-    console.warn('Components: falling back to default library:', (error as any)?.message || error);
+    console.warn(
+      'Components: falling back to default library:',
+      (error as any)?.message || error
+    );
     let data = buildFallbackLibrary();
-    if (category && category !== 'all') data = data.filter(d => d.category === category);
+    if (category && category !== 'all')
+      data = data.filter(d => d.category === category);
     if (search) {
       const q = search.toLowerCase();
-      data = data.filter(d => d.name.toLowerCase().includes(q) || (d.description||'').toLowerCase().includes(q));
+      data = data.filter(
+        d =>
+          d.name.toLowerCase().includes(q) ||
+          (d.description || '').toLowerCase().includes(q)
+      );
     }
     return NextResponse.json({ success: true, data });
   }
