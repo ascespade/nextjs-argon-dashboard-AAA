@@ -25,11 +25,30 @@
 
 .editor-root .canvas-container { background-color:#ffffff !important; }
 
-/* Specific iframe styling per user request */
+/* Windows 11-like frame styling */
+.editor-window-frame {
+  position: relative;
+  border-radius: 12px !important;
+  background-color: #f9fafb !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important; /* subtle stroke */
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08); /* soft elevation */
+}
+.editor-window-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  pointer-events: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6); /* highlight edge */
+}
+
+/* Specific iframe styling */
 .editor-canvas-iframe {
   background-color: #d1d5db !important; /* Tailwind gray-300 */
   border: none !important;
-  border-radius: 10px !important;
+  border-radius: 12px !important;
 }
 
 /* Editor-specific CSS fixes */
