@@ -1,3 +1,30 @@
+/* High-contrast Editor overrides */
+.editor-root { background:#ffffff !important; color:#000000 !important; }
+.editor-root * { color:#000000 !important; }
+.editor-root .bg-gray-100,
+.editor-root .bg-gray-200,
+.editor-root .dark\:bg-gray-900,
+.editor-root .dark\:bg-gray-800,
+.editor-root .dark\:bg-gray-700,
+.editor-root .dark\:bg-gray-600 { background-color:#ffffff !important; }
+.editor-root .border-gray-200,
+.editor-root .dark\:border-gray-700,
+.editor-root .dark\:border-gray-600 { border-color:#d1d5db !important; }
+.editor-root .hover\:bg-gray-100:hover,
+.editor-root .dark\:hover\:bg-gray-700:hover { background-color:#f3f4f6 !important; }
+.editor-root .text-gray-900,
+.editor-root .text-gray-700,
+.editor-root .text-gray-600,
+.editor-root .text-gray-500,
+.editor-root .text-gray-400,
+.editor-root .dark\:text-white,
+.editor-root .dark\:text-gray-400 { color:#000000 !important; }
+
+.editor-root .device-btn.active { background-color:#3b82f6 !important; color:#ffffff !important; }
+.editor-root .zoom-btn { background-color:#ffffff !important; border-color:#d1d5db !important; color:#000000 !important; }
+
+.editor-root .canvas-container { background-color:#ffffff !important; }
+
 /* Editor-specific CSS fixes */
 
 /* Ensure proper iframe styling */
