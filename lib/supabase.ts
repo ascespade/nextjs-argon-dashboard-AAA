@@ -24,14 +24,18 @@ if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 async function readPage(slug: string) {
   if (supabase) {
-    const { data, error } = await supabase
-      .from('pages')
-      .select('*')
-      .eq('slug', slug)
-      .limit(1)
-      .maybeSingle();
-    if (error) throw error;
-    return data;
+    try {
+      const { data, error } = await supabase
+        .from('pages')
+        .select('*')
+        .eq('slug', slug)
+        .limit(1)
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    } catch (e) {
+      console.warn('Supabase readPage failed, falling back to filesystem:', e);
+    }
   }
 
   const file = path.join(DATA_DIR, `${slug}.json`);
@@ -46,6 +50,7 @@ async function readPage(slug: string) {
 
 async function writePage(slug: string, data: any) {
   if (supabase) {
+    try {
     // Upsert page row and create a page_versions entry
     const { data: existing, error: selErr } = await supabase
       .from('pages')
@@ -107,6 +112,9 @@ async function writePage(slug: string, data: any) {
       if (verErr) throw verErr;
       return insData;
     }
+    } catch (e) {
+      console.warn('Supabase writePage failed, falling back to filesystem:', e);
+    }
   }
 
   const file = path.join(DATA_DIR, `${slug}.json`);
@@ -116,6 +124,7 @@ async function writePage(slug: string, data: any) {
 
 async function publishPage(slug: string) {
   if (supabase) {
+    try {
     const { data: existing, error: selErr } = await supabase
       .from('pages')
       .select('*')
@@ -145,6 +154,9 @@ async function publishPage(slug: string) {
     ]);
     if (verErr) throw verErr;
     return draft;
+    } catch (e) {
+      console.warn('Supabase publishPage failed, falling back to filesystem:', e);
+    }
   }
 
   const file = path.join(DATA_DIR, `${slug}.json`);
@@ -171,6 +183,7 @@ async function uploadImageFromBase64(filename: string, base64Data: string) {
   const filepath = `uploads/${filename}`;
 
   if (supabase) {
+    try {
     // Ensure bucket exists or rely on existing bucket
     const { error: upErr } = await supabase.storage
       .from(SUPABASE_BUCKET)
@@ -180,6 +193,9 @@ async function uploadImageFromBase64(filename: string, base64Data: string) {
       .from(SUPABASE_BUCKET)
       .getPublicUrl(filepath);
     return data.publicUrl;
+    } catch (e) {
+      console.warn('Supabase uploadImage failed, falling back to local storage:', e);
+    }
   }
 
   const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
@@ -191,6 +207,7 @@ async function uploadImageFromBase64(filename: string, base64Data: string) {
 
 async function ensureDemoPage() {
   if (supabase) {
+    try {
     const { data: existing, error: selErr } = await supabase
       .from('pages')
       .select('*')
@@ -236,6 +253,9 @@ async function ensureDemoPage() {
       },
     ]);
     return;
+    } catch (e) {
+      console.warn('Supabase ensureDemoPage failed, falling back to filesystem:', e);
+    }
   }
 
   const demo = await readPage('home');
