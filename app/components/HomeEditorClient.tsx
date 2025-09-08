@@ -141,12 +141,12 @@ export default function HomeEditorClient({
         const newComponents = prev.components.map(comp =>
           comp.id === componentId
             ? {
-                ...comp,
-                props: {
-                  ...comp.props,
-                  style: { ...comp.props.style, ...style },
-                },
-              }
+              ...comp,
+              props: {
+                ...comp.props,
+                style: { ...comp.props.style, ...style },
+              },
+            }
             : comp
         );
         undoRedoManager.addState(newComponents, 'apply_style');
@@ -279,6 +279,7 @@ export default function HomeEditorClient({
           );
           break;
         case 'ADD_COMPONENT':
+          console.log('Received ADD_COMPONENT message:', component);
           if (component) {
             addComponent(component);
           }
@@ -304,6 +305,25 @@ export default function HomeEditorClient({
           break;
         case 'PUBLISH_REQUEST':
           publishToServer();
+          break;
+        case 'APPLY_TEMPLATE':
+          console.log('Received APPLY_TEMPLATE message:', event.data.template);
+          if (event.data.template && event.data.template.components) {
+            // Clear existing components and apply template
+            setEditorState(prev => {
+              const newComponents = event.data.template.components.map((comp: any, index: number) => ({
+                id: `comp_${Date.now()}_${index}_${Math.random().toString(36).substr(2, 9)}`,
+                type: comp.type,
+                props: comp.props || {},
+              }));
+              undoRedoManager.addState(newComponents, 'apply_template');
+              return {
+                ...prev,
+                components: newComponents,
+                editingComponent: null,
+              };
+            });
+          }
           break;
         case 'SYNC_STATE':
           // Send current state to parent
